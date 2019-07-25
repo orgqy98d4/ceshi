@@ -1,0 +1,45 @@
+#配置数据源
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/house_rent
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123123
+# 关闭模板的缓存
+  thymeleaf:
+    cache: false
+# 允许重启
+  devtools:
+    remote:
+      restart:
+        enabled: true
+  resources:
+    static-locations: classpath:/templates/,classpath:/static/
+
+
+  # 配置时间格式
+  jackson:
+    date-format: yyyy-MM-dd
+
+#配置mybatis
+mybatis:
+  mapper-locations: mapping/*.xml
+  type-aliases-package: com.example.springboot1.entity
+
+
+#  配置端口号和上下文路径
+server:
+  port: 8888
+  servlet:
+    context-path: /demo4
+
+#配置日志
+#logging:
+#  level:
+#    com:
+#      example:
+#        springboot1:
+#          dao: debug
+
+
+
