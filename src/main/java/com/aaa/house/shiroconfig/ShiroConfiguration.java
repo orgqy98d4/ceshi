@@ -70,7 +70,7 @@ public class ShiroConfiguration {
         //验证token
         map.put("/checkToken", "anon");
         //对所有请求进行认证
-        map.put("/*.html","authc");
+        map.put("/**","authc");
         //可以匿名访问的地址
         //注销
         map.put("/logout","logout");
