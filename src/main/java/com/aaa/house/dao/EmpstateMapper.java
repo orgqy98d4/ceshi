@@ -7,8 +7,20 @@ import java.util.List;
 
 @Repository
 public interface EmpstateMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(Empstate record);
+
+    int insertSelective(Empstate record);
+
+    Empstate selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(Empstate record);
+
+    int updateByPrimaryKey(Empstate record);
+
     /**
-     * 查询出来状态数据
+     * 查询出来部门名称
      * @return
      */
     List<Empstate> queryState();
