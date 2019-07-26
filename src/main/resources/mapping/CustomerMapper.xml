@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.house.dao.CustomerDao">
+    <resultMap id="BaseResultMap" type="com.aaa.house.entity.Customer">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="cnumber" jdbcType="VARCHAR" property="cnumber" />
+        <result column="cname" jdbcType="VARCHAR" property="cname" />
+        <result column="csex" jdbcType="VARCHAR" property="csex" />
+        <result column="cphone" jdbcType="VARCHAR" property="cphone" />
+        <result column="ccard" jdbcType="VARCHAR" property="ccard" />
+        <result column="cusername" jdbcType="VARCHAR" property="cusername" />
+        <result column="cpassword" jdbcType="VARCHAR" property="cpassword" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+        <result column="cimg" jdbcType="VARCHAR" property="cimg" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id,cnumber,cname,csex,cphone,ccard,cusername,cpassword,state,cimg
+  </sql>
+    <select id="select" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from customer
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer">
+    delete from customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.aaa.house.entity.Customer">
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="cnumber != null">
+                cnumber,
+            </if>
+            <if test="cname != null">
+                cname,
+            </if>
+            <if test="csex != null">
+                csex,
+            </if>
+            <if test="cphone != null">
+                cphone,
+            </if>
+            <if test="ccard != null">
+                ccard,
+            </if>
+            <if test="cusername != null">
+                cusername,
+            </if>
+            <if test="cpassword != null">
+                cpassword,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="cimg != null">
+                cimg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="cnumber != null">
+                #{cnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cname != null">
+                #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="csex != null">
+                #{csex,jdbcType=VARCHAR},
+            </if>
+            <if test="cphone != null">
+                #{cphone,jdbcType=VARCHAR},
+            </if>
+            <if test="ccard != null">
+                #{ccard,jdbcType=VARCHAR},
+            </if>
+            <if test="cusername != null">
+                #{cusername,jdbcType=VARCHAR},
+            </if>
+            <if test="cpassword != null">
+                #{cpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="cimg != null">
+                #{cimg,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.aaa.house.entity.Customer">
+        update customer
+        <set>
+            <if test="cnumber != null">
+                cnumber = #{cnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cname != null">
+                cname = #{cname,jdbcType=VARCHAR},
+            </if>
+            <if test="csex != null">
+                csex = #{csex,jdbcType=VARCHAR},
+            </if>
+            <if test="cphone != null">
+                cphone = #{cphone,jdbcType=VARCHAR},
+            </if>
+            <if test="ccard != null">
+                ccard = #{ccard,jdbcType=VARCHAR},
+            </if>
+            <if test="cusername != null">
+                cusername = #{cusername,jdbcType=VARCHAR},
+            </if>
+            <if test="cpassword != null">
+                cpassword = #{cpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="cimg != null">
+                cimg = #{cimg,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <!--start计算出开始-->
+    <select id="queryAll" resultType="map">
+        select *
+        from customer
+        <where>
+            <if test="cname!=null and cname!=''">
+                and (cname like "%"#{cname}"%")
+            </if>
+            <if test="cusername!=null and cusername!=''">
+                and cusername = #{cusername}
+            </if>
+        </where>  limit ${start},${pageSize}
+    </select>
+    <select id="queryPageCount" resultType="int">
+        select count(*)
+        from customer
+        <where>
+            <if test="cname!=null and cname!=''">
+                and (cname like "%"#{cname}"%")
+            </if>
+        </where>
+    </select>
+</mapper>
