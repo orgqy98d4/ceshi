@@ -20,8 +20,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/emp")
 public class EmployeeController {
+    //员工业务层
     @Autowired
     private EmployeeService employeeService;
+    //员工状态
     @Autowired
     private EmpstateService empstateService;
     @RequestMapping("/test")

@@ -18,36 +18,10 @@ public class EmpstateServiceImpl implements EmpstateService {
     @Autowired
     private EmpstateMapper mapper;
 
-    @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return mapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public int insert(Empstate record) {
-        return mapper.insert(record);
-    }
-
-    @Override
-    public int insertSelective(Empstate record) {
-        return mapper.insertSelective(record);
-    }
-
-    @Override
-    public Empstate selectByPrimaryKey(Integer id) {
-        return mapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public int updateByPrimaryKeySelective(Empstate record) {
-        return mapper.updateByPrimaryKeySelective(record);
-    }
-
-    @Override
-    public int updateByPrimaryKey(Empstate record) {
-        return mapper.updateByPrimaryKey(record);
-    }
-
+    /**
+     * 查询出来员工在职状态
+     * @return
+     */
     @Override
     public List<Empstate> queryState() {
         return mapper.queryState();

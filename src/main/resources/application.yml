@@ -24,7 +24,7 @@ spring:
 #配置mybatis
 mybatis:
   mapper-locations: mapping/*.xml
-  type-aliases-package: com.example.springboot1.entity
+  type-aliases-package: com.aaa.house.entity
 
 
 #  配置端口号和上下文路径
@@ -34,12 +34,12 @@ server:
     context-path: /demo4
 
 #配置日志
-#logging:
-#  level:
-#    com:
-#      example:
-#        springboot1:
-#          dao: debug
+logging:
+  level:
+    com:
+      example:
+        springboot1:
+          dao: debug
 
 
 
