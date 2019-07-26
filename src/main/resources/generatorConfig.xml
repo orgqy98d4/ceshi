@@ -13,7 +13,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/db_studentms"
+                        connectionURL="jdbc:mysql://localhost:3306/house_rent"
                         userId="root"
                         password="123123">
         </jdbcConnection>
@@ -25,7 +25,7 @@
         </javaTypeResolver>
 
         <!--生成实体类-->
-        <javaModelGenerator targetPackage="com.example.springboot1.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.aaa.house.entity" targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
@@ -36,12 +36,12 @@
         </sqlMapGenerator>
 
         <!--生成mapper文件对应的dao-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.springboot1.dao"  targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.aaa.house.dao"  targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
         <!--配置表信息-->
-        <table tableName="dept" domainObjectName="Dept" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
-        <table tableName="Emp" domainObjectName="emp" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="employee" domainObjectName="Employee" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table tableName="empstate" domainObjectName="Empstate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
     </context>
 </generatorConfiguration>

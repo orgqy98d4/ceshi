@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.house.dao.EmployeeMapper">
+  <resultMap id="BaseResultMap" type="com.aaa.house.entity.Employee">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="enumber" jdbcType="INTEGER" property="enumber" />
+    <result column="ename" jdbcType="VARCHAR" property="ename" />
+    <result column="ephone" jdbcType="VARCHAR" property="ephone" />
+    <result column="stateid" jdbcType="INTEGER" property="stateid" />
+    <result column="roleid" jdbcType="INTEGER" property="roleid" />
+    <result column="eusername" jdbcType="VARCHAR" property="eusername" />
+    <result column="epassword" jdbcType="VARCHAR" property="epassword" />
+    <result column="credentials" jdbcType="VARCHAR" property="credentials" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="eqq" jdbcType="VARCHAR" property="eqq" />
+    <result column="eaddress" jdbcType="VARCHAR" property="eaddress" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, enumber, ename, ephone, stateid, roleid, eusername, epassword, credentials, email, 
+    eqq, eaddress
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aaa.house.entity.Employee">
+    insert into employee (id, enumber, ename, 
+      ephone, stateid, roleid, 
+      eusername, epassword, credentials, 
+      email, eqq, eaddress
+      )
+    values (#{id,jdbcType=INTEGER}, #{enumber,jdbcType=INTEGER}, #{ename,jdbcType=VARCHAR}, 
+      #{ephone,jdbcType=VARCHAR}, #{stateid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, 
+      #{eusername,jdbcType=VARCHAR}, #{epassword,jdbcType=VARCHAR}, #{credentials,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{eqq,jdbcType=VARCHAR}, #{eaddress,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aaa.house.entity.Employee">
+    insert into employee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="enumber != null">
+        enumber,
+      </if>
+      <if test="ename != null">
+        ename,
+      </if>
+      <if test="ephone != null">
+        ephone,
+      </if>
+      <if test="stateid != null">
+        stateid,
+      </if>
+      <if test="roleid != null">
+        roleid,
+      </if>
+      <if test="eusername != null">
+        eusername,
+      </if>
+      <if test="epassword != null">
+        epassword,
+      </if>
+      <if test="credentials != null">
+        credentials,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="eqq != null">
+        eqq,
+      </if>
+      <if test="eaddress != null">
+        eaddress,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="enumber != null">
+        #{enumber,jdbcType=INTEGER},
+      </if>
+      <if test="ename != null">
+        #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="ephone != null">
+        #{ephone,jdbcType=VARCHAR},
+      </if>
+      <if test="stateid != null">
+        #{stateid,jdbcType=INTEGER},
+      </if>
+      <if test="roleid != null">
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="eusername != null">
+        #{eusername,jdbcType=VARCHAR},
+      </if>
+      <if test="epassword != null">
+        #{epassword,jdbcType=VARCHAR},
+      </if>
+      <if test="credentials != null">
+        #{credentials,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="eqq != null">
+        #{eqq,jdbcType=VARCHAR},
+      </if>
+      <if test="eaddress != null">
+        #{eaddress,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aaa.house.entity.Employee">
+    update employee
+    <set>
+      <if test="enumber != null">
+        enumber = #{enumber,jdbcType=INTEGER},
+      </if>
+      <if test="ename != null">
+        ename = #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="ephone != null">
+        ephone = #{ephone,jdbcType=VARCHAR},
+      </if>
+      <if test="stateid != null">
+        stateid = #{stateid,jdbcType=INTEGER},
+      </if>
+      <if test="roleid != null">
+        roleid = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="eusername != null">
+        eusername = #{eusername,jdbcType=VARCHAR},
+      </if>
+      <if test="epassword != null">
+        epassword = #{epassword,jdbcType=VARCHAR},
+      </if>
+      <if test="credentials != null">
+        credentials = #{credentials,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="eqq != null">
+        eqq = #{eqq,jdbcType=VARCHAR},
+      </if>
+      <if test="eaddress != null">
+        eaddress = #{eaddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aaa.house.entity.Employee">
+    update employee
+    set enumber = #{enumber,jdbcType=INTEGER},
+      ename = #{ename,jdbcType=VARCHAR},
+      ephone = #{ephone,jdbcType=VARCHAR},
+      stateid = #{stateid,jdbcType=INTEGER},
+      roleid = #{roleid,jdbcType=INTEGER},
+      eusername = #{eusername,jdbcType=VARCHAR},
+      epassword = #{epassword,jdbcType=VARCHAR},
+      credentials = #{credentials,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      eqq = #{eqq,jdbcType=VARCHAR},
+      eaddress = #{eaddress,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+<!--  分页查询，start计算出开始-->
+  <select id="queryAll" resultType="map">
+    SELECT e.*,e1.name
+    FROM employee e join empstate e1 ON e.stateid=e1.id
+    <where>
+      <if test="ename!=null and ename!=''">
+        and (enumber like concat('%',#{ename},'%')
+        or e1.name like concat('%',#{ename},'%'))
+      </if>
+      <if test="id!=null and id!=''">
+        and e.stateid = #{id}
+      </if>
+    </where>
+    LIMIT #{start},#{pageSize}
+  </select>
+<!--  查询出总数量-->
+  <select id="queryPageCont" resultType="int">
+    SELECT count(*)
+    FROM employee e join empstate e1 ON e.stateid=e1.id
+    <where>
+      <if test="ename!=null and ename!=''">
+        and (enumber like concat('%',#{ename},'%')
+        or e1.name like concat('%',#{ename},'%'))
+      </if>
+      <if test="id!=null and id!=''">
+        and e.stateid = #{id}
+      </if>
+    </where>
+  </select>
+</mapper>
