@@ -1,4 +1,4 @@
-package com.aaa.house.controller;
+package com.aaa.house.controllers;
 
 import com.aaa.house.entity.Customer;
 import com.aaa.house.service.CustomerServic;
