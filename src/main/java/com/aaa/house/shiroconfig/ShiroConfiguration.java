@@ -69,8 +69,7 @@ public class ShiroConfiguration {
 
         //验证token
         map.put("/checkToken", "anon");
-        //对所有请求进行认证
-        map.put("/*.html","authc");
+
         //可以匿名访问的地址
         //注销
         map.put("/logout","logout");
@@ -78,6 +77,8 @@ public class ShiroConfiguration {
         map.put("/login","anon");
         //首页直接访问
         map.put("/index.html","anon");
+        //对所有请求进行认证
+        map.put("/**","authc");
         //登录页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         //登录成功跳转页面
