@@ -25,7 +25,7 @@ public interface EmployeeMapper {
      * @param map
      * @return
      */
-    List<Employee> queryAll(Map map);
+    List<Map> queryAll(Map map);
 
     /**
      * 查询出来总数量

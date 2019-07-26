@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <!--vue依赖的js-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--axios样式-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!--elemeentui依赖的css-->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+    <div id="app">
+                <el-form :model="form">
+                    <el-form-item label="账号">
+                        <el-input v-model="form.eusername" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input v-model="form.epassword" autocomplete="off" show-password></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="danger" @click="reset">重置</el-button>
+                    <el-button type="primary" @click="login">登录</el-button>
+                </div>
+    </div>
+    <script>
+        var vue=new Vue({
+            el:'#app',
+            data: {
+                form: {
+                    eusername: '',
+                    epassword: ''
+                }},
+                methods: {
+                    login: function () {
+                        var self = this;
+                        axios.post('/demo4/login', this.form)
+                            .then(function (response) {
+                                var msg=response.data.msg;
+                                if (msg=='suc'){
+                                    location.href="/demo4/index.html";
+                                } else {
+                                    self.$message.error(msg);
+                                }
+                            })
+                            .catch(function (error) {
+                                // handle error
+                                console.log(error);
+                            })
+                            .then(function () {
+                                // always executed
+                            });
+                    },
+                    reset: function () {
+                        this.form.eusername='';
+                        this.form.epassword='';
+                    }
+                }
+        });
+
+    </script>
+</body>
+</html>

@@ -50,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> queryAll(Map map) {
+    public List<Map> queryAll(Map map) {
         return mapper.queryAll(map);
     }
 

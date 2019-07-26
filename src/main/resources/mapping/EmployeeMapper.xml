@@ -175,19 +175,24 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 <!--  分页查询，start计算出开始-->
-  <select id="queryAll" resultType="map">
-    SELECT e.*,e1.name
-    FROM employee e join empstate e1 ON e.stateid=e1.id
+  <select id="queryAll" resultType="map" parameterType="map">
+    select e.*,e1.name
+    from employee e join empstate e1 ON e.stateid=e1.id
     <where>
       <if test="ename!=null and ename!=''">
-        and (enumber like concat('%',#{ename},'%')
+        and (e.enumber like concat('%',#{ename},'%')
         or e1.name like concat('%',#{ename},'%'))
       </if>
       <if test="id!=null and id!=''">
         and e.stateid = #{id}
       </if>
-    </where>
-    LIMIT #{start},#{pageSize}
+      <if test="eusername!=null and eusername!=''">
+        and e.eusername=#{eusername}
+      </if>
+      <if test="epassword!=null and epassword!=''">
+        and e.epassword=#{epassword}
+      </if>
+    </where> limit #{start},#{pageSize}
   </select>
 <!--  查询出总数量-->
   <select id="queryPageCont" resultType="int">
