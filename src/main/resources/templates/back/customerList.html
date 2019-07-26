@@ -169,13 +169,16 @@
             formLabelWidth: '120px',
             url:''
         },
+        created:function() {
+            this.loadData();
+        },
         methods: {
             loadData:function(){
                 var self = this;
                 //开始位置  (currentPage-1)*pageSize
                 var start = (this.currentPage-1)*this.pageSize;
                 axios.post('/demo4/customer/page',{start:start,pageSize:this.pageSize,
-                    cname:this.formInline.enameOrdname})
+                    cname:this.formInline.cname})
                     .then(function (response) {
                         // handle success
                         console.log(response);
@@ -216,7 +219,7 @@
             },
             toSave:function(){
                 this.title='员工添加';
-                this.url="/demo2/emp1/save";
+                this.url="/demo4/customer/insert";
                 this.form={id:'',
                     cnumber:'',
                     cname:'',
