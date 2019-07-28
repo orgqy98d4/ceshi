@@ -1,29 +1,29 @@
 package com.aaa.house.entity;
 
 public class Employee {
-    private Integer id;
+    private Integer id;//员工主键
 
-    private Integer enumber;
+    private Integer enumber;//员工编号
 
-    private String ename;
+    private String ename;//员工姓名
 
-    private String ephone;
+    private String ephone;//员工手机号
 
-    private Integer stateid;
+    private Integer stateid;//员工在职状态
 
-    private Integer roleid;
+    private Integer roleid;//角色id
 
-    private String eusername;
+    private String eusername;//员工后台登陆账号
 
-    private String epassword;
+    private String epassword;//员工后台登陆原始密码
 
-    private String credentials;
+    private String credentials;//加密后的密码
 
-    private String email;
+    private String email;//员工邮箱
 
-    private String eqq;
+    private String eqq;//员工qq号码
 
-    private String eaddress;
+    private String eaddress;//员工家庭住址
 
     public Integer getId() {
         return id;

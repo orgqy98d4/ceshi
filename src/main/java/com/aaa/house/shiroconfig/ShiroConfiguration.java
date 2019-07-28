@@ -69,19 +69,21 @@ public class ShiroConfiguration {
 
         //验证token
         map.put("/checkToken", "anon");
-        //对所有请求进行认证
-        map.put("/**","authc");
         //可以匿名访问的地址
         //注销
         map.put("/logout","logout");
         //登录的请求地址，可以直接访问
         map.put("/login","anon");
+        //静态资源直接访问
+        map.put("/images/**","anon");
         //首页直接访问
         map.put("/index.html","anon");
+        //对所有请求进行认证
+        map.put("/**","authc");
         //登录页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         //登录成功跳转页面
-        shiroFilterFactoryBean.setSuccessUrl("/index.html");
+        shiroFilterFactoryBean.setSuccessUrl("/list.html");
         //错误页面，认证不通过跳转页面(未授权)
         shiroFilterFactoryBean.setUnauthorizedUrl("/error.html");
         //将配置的map放进FilterChainDefinitionMap中

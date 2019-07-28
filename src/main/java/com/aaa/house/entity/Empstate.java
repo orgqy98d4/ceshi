@@ -3,7 +3,7 @@ package com.aaa.house.entity;
 public class Empstate {
     private Integer id;
 
-    private String name;
+    private String name;//员工在在职状态
 
     public Integer getId() {
         return id;

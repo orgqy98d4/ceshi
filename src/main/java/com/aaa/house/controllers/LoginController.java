@@ -38,7 +38,6 @@ public class LoginController {
             //构建认证的身份令牌
             UsernamePasswordToken token = new UsernamePasswordToken(eusername, epassword);
             try {
-
                 //将身份令牌放进去
                 subject.login(token);
                 msg="suc";
