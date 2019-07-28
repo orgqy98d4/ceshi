@@ -25,6 +25,12 @@ public class Employee {
 
     private String eaddress;//员工家庭住址
 
+    private String esex;//员工性别
+
+    private String headPic;//员工上传头像后的名字
+
+    private String headPicName;//员工头像原始名字
+
     public Integer getId() {
         return id;
     }
@@ -118,6 +124,31 @@ public class Employee {
     }
 
     public void setEaddress(String eaddress) {
+
         this.eaddress = eaddress == null ? null : eaddress.trim();
+    }
+
+    public String getEsex() {
+        return esex;
+    }
+
+    public void setEsex(String esex) {
+        this.esex = esex;
+    }
+
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
+    }
+
+    public String getHeadPicName() {
+        return headPicName;
+    }
+
+    public void setHeadPicName(String headPicName) {
+        this.headPicName = headPicName;
     }
 }

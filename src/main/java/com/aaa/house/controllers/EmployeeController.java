@@ -3,10 +3,13 @@ package com.aaa.house.controllers;
 import com.aaa.house.entity.Employee;
 import com.aaa.house.service.EmployeeService;
 import com.aaa.house.service.EmpstateService;
+import com.aaa.house.util.FtpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,13 +26,12 @@ public class EmployeeController {
     //员工业务层
     @Autowired
     private EmployeeService employeeService;
+    //注入FtpUtil类
+    @Autowired
+    private FtpUtil ftpUtil;
     //员工状态
     @Autowired
     private EmpstateService empstateService;
-    @RequestMapping("/test")
-    public String test(){
-        return "emp/list";
-    }
 
     /**
      * 查询出来所有结果
@@ -39,7 +41,6 @@ public class EmployeeController {
     @RequestMapping("/page")
     public Object queryAll(@RequestBody Map map){
         System.out.println(map+".........");
-
         Map mapResult=new HashMap();
         mapResult.put("empList",employeeService.queryAll(map));
         mapResult.put("total",employeeService.queryPageCont(map));
@@ -78,5 +79,21 @@ public class EmployeeController {
     @RequestMapping("/delete")
     public Object delete(Integer id){
         return employeeService.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 文件上传
+     * @param headPic
+     * @return
+     */
+    @RequestMapping("/uploadHeadPic")
+    public Object uploadHeadPic(@RequestParam MultipartFile headPic){
+        String newFileName = ftpUtil.upLoad(headPic);
+        String originalFilename = headPic.getOriginalFilename();
+        Map map=new HashMap();
+        map.put("newFileName",newFileName);
+        map.put("originalFilename",originalFilename);
+        return map;
+
     }
 }

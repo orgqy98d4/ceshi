@@ -11,6 +11,32 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+        }
+        .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
@@ -50,6 +76,10 @@
                     prop="ename"
                     label="员工姓名"
                     width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="sex"
+                    label="性别">
             </el-table-column>
             <el-table-column
                     prop="ephone"
@@ -114,6 +144,12 @@
                 <el-form-item label="员工姓名" :label-width="formLabelWidth">
                     <el-input v-model="form.ename" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="性别" :label-width="formLabelWidth">
+                    <template>
+                        <el-radio v-model="form.sex" label="男">男</el-radio>
+                        <el-radio v-model="form.sex" label="女">女</el-radio>
+                    </template>
+                </el-form-item>
                 <el-form-item label="员工手机号" :label-width="formLabelWidth">
                     <el-input v-model="form.ephone" autocomplete="off"></el-input>
                 </el-form-item>
@@ -125,6 +161,18 @@
                 </el-form-item>
                 <el-form-item label="员工家庭住址" :label-width="formLabelWidth">
                     <el-input v-model="form.eaddress" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="员工上传头像" :label-width="formLabelWidth">
+                    <el-upload
+                            name="headPic"
+                            class="avatar-uploader"
+                            action="/demo4/emp/uploadHeadPic"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="员工在职状态" :label-width="formLabelWidth">
                     <el-select v-model="form.stateid" placeholder="请选择">
@@ -167,10 +215,14 @@
                 email: '',
                 eqq: '',
                 eaddress: '',
+                esex:'男',
+                headPic:'',
+                headPicName:'',
                 name: '',
                 visible: false
             },
-            formLabelWidth: '120px'
+            formLabelWidth: '120px',
+            imageUrl:''
 
         },
         created:function(){
@@ -240,6 +292,7 @@
                         id:'',
                         enumber: '',
                         ename: '',
+                        esex:"",
                         ephone: '',
                         email: '',
                         eqq: '',
@@ -309,6 +362,25 @@
                         message:'已取消删除'
                     });
                 });
+            },
+            //头像上传成功的操作
+            handleAvatarSuccess:function(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+                this.form.headPicName = file.response.originalFilename;
+                this.form.headPic =file.response.newFileName;
+            },
+            //头像上传之前做的操作
+            beforeAvatarUpload:function(file) {
+                var isJPG = file.type === 'image/jpeg';
+                var isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
             }
         }
     });

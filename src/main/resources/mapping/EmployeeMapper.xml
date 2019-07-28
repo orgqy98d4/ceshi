@@ -14,10 +14,13 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="eqq" jdbcType="VARCHAR" property="eqq" />
     <result column="eaddress" jdbcType="VARCHAR" property="eaddress" />
+    <result column="esex" jdbcType="VARCHAR" property="esex" />
+    <result column="headPic" jdbcType="VARCHAR" property="headPic" />
+    <result column="headPicName" jdbcType="VARCHAR" property="headPicName" />
   </resultMap>
   <sql id="Base_Column_List">
     id, enumber, ename, ephone, stateid, roleid, eusername, epassword, credentials, email, 
-    eqq, eaddress
+    eqq, eaddress, esex, headPic, headPicName
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -33,12 +36,13 @@
     insert into employee (id, enumber, ename, 
       ephone, stateid, roleid, 
       eusername, epassword, credentials, 
-      email, eqq, eaddress
+      email, eqq, eaddress, sex, headPic, headPicName
       )
     values (#{id,jdbcType=INTEGER}, #{enumber,jdbcType=INTEGER}, #{ename,jdbcType=VARCHAR}, 
       #{ephone,jdbcType=VARCHAR}, #{stateid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, 
       #{eusername,jdbcType=VARCHAR}, #{epassword,jdbcType=VARCHAR}, #{credentials,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{eqq,jdbcType=VARCHAR}, #{eaddress,jdbcType=VARCHAR}
+      #{email,jdbcType=VARCHAR}, #{eqq,jdbcType=VARCHAR}, #{eaddress,jdbcType=VARCHAR}, #{esex,jdbcType=VARCHAR},
+      #{headPic,jdbcType=VARCHAR}, #{headPicName,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.aaa.house.entity.Employee">
@@ -80,6 +84,15 @@
       <if test="eaddress != null">
         eaddress,
       </if>
+      <if test="esex != null">
+        esex,
+      </if>
+      <if test="headPic != null">
+        headPic,
+      </if>
+      <if test="headPicName != null">
+        headPicName,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -117,6 +130,15 @@
       </if>
       <if test="eaddress != null">
         #{eaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="esex != null">
+        #{esex,jdbcType=VARCHAR},
+      </if>
+      <if test="headPic != null">
+        #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="headPicName != null">
+        #{headPicName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +178,15 @@
       <if test="eaddress != null">
         eaddress = #{eaddress,jdbcType=VARCHAR},
       </if>
+      <if test="esex != null">
+        esex = #{esex,jdbcType=VARCHAR},
+      </if>
+      <if test="headPic != null">
+        headPic = #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="headPicName != null">
+        headPicName = #{headPicName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -171,7 +202,10 @@
       credentials = #{credentials,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       eqq = #{eqq,jdbcType=VARCHAR},
-      eaddress = #{eaddress,jdbcType=VARCHAR}
+      eaddress = #{eaddress,jdbcType=VARCHAR},
+      esex = #{esex,jdbcType=VARCHAR},
+      headPic = #{headPic,jdbcType=VARCHAR},
+      headPicName = #{headPicName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 <!--  分页查询，start计算出开始-->

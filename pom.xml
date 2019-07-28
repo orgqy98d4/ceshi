@@ -108,6 +108,12 @@
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
         </dependency>
+        <!--ftp服务器组件，用于存放上传的图片及文件-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.3</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
