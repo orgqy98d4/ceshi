@@ -33,13 +33,6 @@ server:
   servlet:
     context-path: /demo4
 
-#配置日志
-logging:
-  level:
-    com:
-      example:
-        demo4:
-          dao: debug
 
 
 

@@ -40,7 +40,6 @@ public class EmployeeController {
      */
     @RequestMapping("/page")
     public Object queryAll(@RequestBody Map map){
-        System.out.println(map+".........");
         Map mapResult=new HashMap();
         mapResult.put("empList",employeeService.queryAll(map));
         mapResult.put("total",employeeService.queryPageCont(map));
