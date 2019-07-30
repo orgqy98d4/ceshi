@@ -15,7 +15,7 @@ import java.util.Map;
  * @create: 2019-07-26 10:47
  **/
 @Service
-public class CustomerServiceImpl implements CustomerServic {
+public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerDao customerDao;
@@ -51,4 +51,5 @@ public class CustomerServiceImpl implements CustomerServic {
     public int queryPageCount(Map map) {
         return customerDao.queryPageCount(map);
     }
+
 }

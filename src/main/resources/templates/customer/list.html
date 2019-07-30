@@ -11,17 +11,62 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+        }
+        .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
     <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="客户姓名">
-                <el-input v-model="formInline.cname" placeholder="客户姓名"></el-input>
+            <el-form-item label="客户姓名或客户类型">
+                <el-input v-model="formInline.cnameOrctype" placeholder="客户姓名或客户类型"></el-input>
             </el-form-item>
+            <el-form-item label="客户类型">
+                <el-select v-model="formInline.ctype" placeholder="请选择">
+                    <el-option
+                            v-for="item in options1"
+                            :key="item.ctype"
+                            :label="item.ctname"
+                            :value="item.ctype">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <!--<el-form-item label="客户状态">
+                <el-select v-model="formInline.state" placeholder="请选择">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.state"
+                            :label="item.csname"
+                            :value="item.state">
+                    </el-option>
+                </el-select>
+            </el-form-item>-->
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
-                <el-button type="primary" @click="toSave">添加</el-button>
+                <!--<el-button type="primary" @click="toSave">添加</el-button>-->
                 <el-button type="primary" @click="flush">刷新</el-button>
             </el-form-item>
         </el-form>
@@ -30,10 +75,10 @@
         <el-table
                 :data="tableData"
                 style="width: 100%">
-            <el-table-column
+            <!--<el-table-column
                     prop="id"
                     label="客户id">
-            </el-table-column>
+            </el-table-column>-->
             <el-table-column
                     prop="cnumber"
                     label="客户编号">
@@ -54,21 +99,33 @@
                     prop="ccard"
                     label="客户身份证号">
             </el-table-column>
-            <el-table-column
+            <!--<el-table-column
                     prop="cusername"
                     label="客户用户名">
             </el-table-column>
             <el-table-column
                     prop="cpassword"
                     label="客户密码">
-            </el-table-column>
+            </el-table-column>-->
             <el-table-column
-                    prop="state"
+                    prop="csname"
                     label="客户状态">
             </el-table-column>
-            <el-table-column
+            <!--<el-table-column
                     prop="cimg"
+                    label="客户头像地址">
+            </el-table-column>
+            <el-table-column
+                    prop="headPic"
+                    label="客户原头像">
+            </el-table-column>-->
+            <el-table-column
+                    prop="headPicName"
                     label="客户头像">
+            </el-table-column>
+            <el-table-column
+                    prop="ctname"
+                    label="客户类型">
             </el-table-column>
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
@@ -99,38 +156,54 @@
         <el-dialog :title="title" :visible.sync="dialogFormVisible">
             <el-form :model="form">
                 <!--隐藏主键-->
-                <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
-
+                <!--<el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
                 <el-form-item label="客户编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.cnumber" autocomplete="off"></el-input>
+                    <el-input v-model="form.cnumber" type="readonly" type="hidden" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cname" autocomplete="off"></el-input>
+                    <el-input v-model="form.cname" type="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户性别" :label-width="formLabelWidth">
-                    <template>
-                        <el-radio v-model="form.csex" label="男">男</el-radio>
-                        <el-radio v-model="form.csex" label="女">女</el-radio>
-                    </template>
+                    <el-input v-model="form.csex" type="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.cphone" autocomplete="off"></el-input>
+                    <el-input v-model="form.cphone" type="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户身份证号" :label-width="formLabelWidth">
-                    <el-input v-model="form.ccard" autocomplete="off"></el-input>
+                    <el-input v-model="form.ccard" type="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户用户名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cusername" autocomplete="off"></el-input>
+                    <el-input v-model="form.cusername" type="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户密码" :label-width="formLabelWidth">
-                    <el-input v-model="form.cpassword" autocomplete="off"></el-input>
-                </el-form-item>
+                    <el-input v-model="form.cpassword" type="hidden" autocomplete="off"></el-input>
+                </el-form-item>-->
                 <el-form-item label="客户状态" :label-width="formLabelWidth">
-                    <el-input v-model="form.state" autocomplete="off"></el-input>
+                    <el-select v-model="form.state" placeholder="请选择">
+                        <el-option
+                                v-for="item in options2"
+                                :key="item.state"
+                                :label="item.csname"
+                                :value="item.state">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+               <!-- <el-form-item label="客户头像地址" :label-width="formLabelWidth">
+                    <el-input v-model="form.cimg" type="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户头像" :label-width="formLabelWidth">
-                    <el-input v-model="form.cimg" autocomplete="off"></el-input>
+                    <el-input v-model="form.headPicName" type="readonly" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="客户类型" :label-width="formLabelWidth">
+                    <el-select v-model="form.ctype" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.ctype"
+                                :label="item.ctname"
+                                :value="item.ctype">
+                        </el-option>
+                    </el-select>
+                </el-form-item>-->
 
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -149,9 +222,11 @@
             pageSize:3,
             total:0,
             formInline: {
-                cname: ''
+                cnameOrctype: '',
+                ctype:''
             },
-            options:[],
+            options1:[],
+            options2:[],
             title:'',
             dialogFormVisible: false,
             form: {
@@ -163,14 +238,28 @@
                 ccard:'',
                 cusername:'',
                 cpassword:'',
-                state:'',
-                cimg:''
+                csname:'',
+                cimg:'',
+                headPic:'',
+                headPicName:'',
+                ctname:''
             },
             formLabelWidth: '120px',
             url:''
         },
         created:function() {
             this.loadData();
+            var self = this;
+            //获取所有部门
+            axios.post('/demo4/cusstate/queryState')
+                .then(function (response) {
+                    self.options2=response.data;
+                });
+            //获取所有部门
+            axios.post('/demo4/custype/queryType')
+                .then(function (response) {
+                    self.options1=response.data;
+                });
         },
         methods: {
             loadData:function(){
@@ -178,7 +267,7 @@
                 //开始位置  (currentPage-1)*pageSize
                 var start = (this.currentPage-1)*this.pageSize;
                 axios.post('/demo4/customer/page',{start:start,pageSize:this.pageSize,
-                    cname:this.formInline.cname})
+                    cname:this.formInline.cnameOrctype,ctype:this.formInline.ctype})
                     .then(function (response) {
                         // handle success
                         console.log(response);
@@ -214,11 +303,13 @@
             flush:function(){
                 this.pageSize=3;
                 this.currentPage=1;
-                this.formInline.cname='';
+                this.formInline.ctype='';
+                this.formInline.state='';
+                this.formInline.cnameOrctype='';
                 this.loadData();
             },
             toSave:function(){
-                this.title='员工添加';
+                this.title='客户添加';
                 this.url="/demo4/customer/insert";
                 this.form={id:'',
                     cnumber:'',
@@ -229,13 +320,16 @@
                     cusername:'',
                     cpassword:'',
                     state:'',
-                    cimg:''};
+                    cimg:'',
+                    headPic:'',
+                    headPicName:'',
+                    ctype:''};
                 //让弹出框显示
                 this.dialogFormVisible=true;
             },
             handleEdit:function(index, row) {
                 // console.log(index, row);
-                this.title='员工修改';
+                this.title='客户修改';
                 this.url="/demo4/customer/update";
                 //赋值
                 this.form=row;
@@ -290,6 +384,23 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            handleAvatarSuccess:function(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+                this.form.headPicName = file.response.originalFilename;
+                this.form.headPic =file.response.newFileName;
+            },
+            beforeAvatarUpload:function(file) {
+                var isJPG = file.type === 'image/jpeg';
+                var isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
             }
         }
     });

@@ -12,7 +12,7 @@ import java.util.Map;
  * @create: 2019-07-26 10:14
  **/
 
-public interface CustomerServic {
+public interface CustomerService {
 
     /**
      * 添加客户

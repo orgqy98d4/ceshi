@@ -17,39 +17,34 @@ public class Customer implements Serializable {
     private String ccard;       //客户身份证号
     private String cusername;   //客户用户名
     private String cpassword;   //客户密码
-    private Integer state;          //客户状态  1：房东  2：房客
-    private String cimg;        //客户头像
+    private Integer state;      //客户状态  1：房东  2：房客
+    private String cimg;        //客户头像地址
+    private String headPic;     //客户原头像
+    private String headPicName; //客户新头像
+    private String ctype;       //客户类型
 
-    public Customer(Integer id, String cnumber, String cname, String csex, String cphone, String ccard, String cusername, String cpassword, Integer state, String cimg) {
-        this.id = id;
-        this.cnumber = cnumber;
-        this.cname = cname;
-        this.csex = csex;
-        this.cphone = cphone;
-        this.ccard = ccard;
-        this.cusername = cusername;
-        this.cpassword = cpassword;
-        this.state = state;
-        this.cimg = cimg;
+    public String getCtype() {
+        return ctype;
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", cnumber='" + cnumber + '\'' +
-                ", cname='" + cname + '\'' +
-                ", csex='" + csex + '\'' +
-                ", cphone='" + cphone + '\'' +
-                ", ccard='" + ccard + '\'' +
-                ", cusername='" + cusername + '\'' +
-                ", cpassword='" + cpassword + '\'' +
-                ", state=" + state +
-                ", cimg='" + cimg + '\'' +
-                '}';
+    public void setCtype(String ctype) {
+        this.ctype = ctype;
     }
 
-    public Customer() {
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
+    }
+
+    public String getHeadPicName() {
+        return headPicName;
+    }
+
+    public void setHeadPicName(String headPicName) {
+        this.headPicName = headPicName;
     }
 
     public Integer getId() {
