@@ -65,8 +65,8 @@
                 </el-select>
             </el-form-item>-->
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
-                <!--<el-button type="primary" @click="toSave">添加</el-button>-->
+                <el-button type="primary" @click="onSubmit" icon="el-icon-search">查询</el-button>
+                <!--<el-button type="primary" @click="toSave"  class="el-icon-circle-plus-outline">添加</el-button>-->
                 <el-button type="primary" @click="flush">刷新</el-button>
             </el-form-item>
         </el-form>
@@ -119,9 +119,18 @@
                     prop="headPic"
                     label="客户原头像">
             </el-table-column>-->
-            <el-table-column
+            <!--<el-table-column
                     prop="headPicName"
-                    label="客户头像">
+                    label="客户原头像">
+            </el-table-column>-->
+            <el-table-column
+                    label="头像">
+                <template slot-scope="scope">
+                    <!--{{ scope.row.headPicName }}-->
+                    <img v-if="scope.row.headPic" :src="' /demo4/customer/show?fileName='+scope.row.headPic"
+                         height ="60px;"
+                         width ="60px;">
+                </template>
             </el-table-column>
             <el-table-column
                     prop="ctname"
@@ -131,11 +140,16 @@
                 <template slot-scope="scope">
                     <el-button type="primary"
                                size="mini"
-                               @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                               @click="handleEdit(scope.$index, scope.row)"
+                               type="primary"
+                               icon="el-icon-edit"></el-button>
                     <el-button
                             size="mini"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            @click="handleDelete(scope.$index, scope.row)"
+                            type="primary"
+                            icon="el-icon-delete"
+                            slot="reference"></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -156,28 +170,26 @@
         <el-dialog :title="title" :visible.sync="dialogFormVisible">
             <el-form :model="form">
                 <!--隐藏主键-->
-                <!--<el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
+                <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
                 <el-form-item label="客户编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.cnumber" type="readonly" type="hidden" autocomplete="off"></el-input>
+                    <el-input v-model="form.cnumber" readonly="readonly" type="hidden" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cname" type="readonly" autocomplete="off"></el-input>
+                    <el-input v-model="form.cname" readonly="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户性别" :label-width="formLabelWidth">
-                    <el-input v-model="form.csex" type="readonly" autocomplete="off"></el-input>
+                    <el-input v-model="form.csex" readonly="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.cphone" type="readonly" autocomplete="off"></el-input>
+                    <el-input v-model="form.cphone" readonly="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户身份证号" :label-width="formLabelWidth">
-                    <el-input v-model="form.ccard" type="readonly" autocomplete="off"></el-input>
+                    <el-input v-model="form.ccard" readonly="readonly" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户用户名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cusername" type="readonly" autocomplete="off"></el-input>
+                    <el-input v-model="form.cusername" type="hidden" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="客户密码" :label-width="formLabelWidth">
                     <el-input v-model="form.cpassword" type="hidden" autocomplete="off"></el-input>
-                </el-form-item>-->
                 <el-form-item label="客户状态" :label-width="formLabelWidth">
                     <el-select v-model="form.state" placeholder="请选择">
                         <el-option
@@ -188,22 +200,29 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-               <!-- <el-form-item label="客户头像地址" :label-width="formLabelWidth">
-                    <el-input v-model="form.cimg" type="readonly" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客户头像" :label-width="formLabelWidth">
-                    <el-input v-model="form.headPicName" type="readonly" autocomplete="off"></el-input>
+                    <el-input v-model="form.cimg" type="hidden" autocomplete="off"></el-input>
+                <el-form-item label="人员头像" :label-width="formLabelWidth">
+                    <el-upload
+                            name="headPic"
+                            class="avatar-uploader"
+                            action="/demo4/customer/uploadHeadPic"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="imageUrl" :src="imageUrl"  class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item label="客户类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.ctype" placeholder="请选择">
+                    <el-select v-model="form.ctname" readonly="readonly" placeholder="请选择">
                         <el-option
-                                v-for="item in options"
+                                v-for="item in options1"
                                 :key="item.ctype"
                                 :label="item.ctname"
                                 :value="item.ctype">
                         </el-option>
                     </el-select>
-                </el-form-item>-->
+                </el-form-item>
 
             </el-form>
             <div slot="footer" class="dialog-footer">

@@ -19,8 +19,8 @@ public class Customer implements Serializable {
     private String cpassword;   //客户密码
     private Integer state;      //客户状态  1：房东  2：房客
     private String cimg;        //客户头像地址
-    private String headPic;     //客户原头像
-    private String headPicName; //客户新头像
+    private String headPic;     //客户新头像
+    private String headPicName; //客户原头像
     private String ctype;       //客户类型
 
     public String getCtype() {
