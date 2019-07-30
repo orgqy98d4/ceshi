@@ -203,13 +203,14 @@
                     <el-input v-model="form.cimg" type="hidden" autocomplete="off"></el-input>
                 <el-form-item label="人员头像" :label-width="formLabelWidth">
                     <el-upload
+                            readonly="readonly"
                             name="headPic"
                             class="avatar-uploader"
                             action="/demo4/customer/uploadHeadPic"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl"  class="avatar">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
@@ -352,7 +353,6 @@
                 this.url="/demo4/customer/update";
                 //赋值
                 this.form=row;
-                this.imageUrl ='';
                 //让弹出框显示
                 this.dialogFormVisible=true;
             },
