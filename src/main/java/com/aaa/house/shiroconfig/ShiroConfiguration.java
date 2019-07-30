@@ -75,9 +75,12 @@ public class ShiroConfiguration {
         //登录的请求地址，可以直接访问
         map.put("/login","anon");
         //静态资源直接访问
-        map.put("/images/**","anon");
+        map.put("/css/**","anon");
+        map.put("/img/**","anon");
+        map.put("/js/**","anon");
+        map.put("/layui/**","anon");
         //首页直接访问
-        map.put("/index.html","anon");
+//        map.put("/index.html","anon");
         //对所有请求进行认证
         map.put("/**","authc");
         //登录页面
