@@ -162,7 +162,7 @@
         ephone = #{ephone,jdbcType=VARCHAR},
       </if>
       <if test="hiredate != null">
-        ephone = #{hiredate,jdbcType=DATE},
+        hiredate = #{hiredate,jdbcType=DATE},
       </if>
       <if test="stateid != null">
         stateid = #{stateid,jdbcType=INTEGER},
