@@ -1,5 +1,7 @@
 package com.aaa.house.entity;
 
+import java.util.Date;
+
 public class Employee {
     private Integer id;//员工主键
 
@@ -8,6 +10,8 @@ public class Employee {
     private String ename;//员工姓名
 
     private String ephone;//员工手机号
+
+    private Date hiredate;//入职日期
 
     private Integer stateid;//员工在职状态
 
@@ -30,6 +34,8 @@ public class Employee {
     private String headPic;//员工上传头像后的名字
 
     private String headPicName;//员工头像原始名字
+
+    private String rnmae;//角色名称
 
     public Integer getId() {
         return id;
@@ -61,6 +67,14 @@ public class Employee {
 
     public void setEphone(String ephone) {
         this.ephone = ephone == null ? null : ephone.trim();
+    }
+
+    public Date getHiredate() {
+        return hiredate;
+    }
+
+    public void setHiredate(Date hiredate) {
+        this.hiredate = hiredate;
     }
 
     public Integer getStateid() {
@@ -150,5 +164,13 @@ public class Employee {
 
     public void setHeadPicName(String headPicName) {
         this.headPicName = headPicName;
+    }
+
+    public String getRnmae() {
+        return rnmae;
+    }
+
+    public void setRnmae(String rnmae) {
+        this.rnmae = rnmae;
     }
 }

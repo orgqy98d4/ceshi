@@ -6,6 +6,7 @@
     <result column="enumber" jdbcType="INTEGER" property="enumber" />
     <result column="ename" jdbcType="VARCHAR" property="ename" />
     <result column="ephone" jdbcType="VARCHAR" property="ephone" />
+    <result column="hiredate" jdbcType="DATE" property="hiredate"/>
     <result column="stateid" jdbcType="INTEGER" property="stateid" />
     <result column="roleid" jdbcType="INTEGER" property="roleid" />
     <result column="eusername" jdbcType="VARCHAR" property="eusername" />
@@ -19,7 +20,7 @@
     <result column="headPicName" jdbcType="VARCHAR" property="headPicName" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, enumber, ename, ephone, stateid, roleid, eusername, epassword, credentials, email, 
+    id, enumber, ename, ephone, hiredate, stateid, roleid, eusername, epassword, credentials, email,
     eqq, eaddress, esex, headPic, headPicName
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -34,12 +35,12 @@
   </delete>
   <insert id="insert" parameterType="com.aaa.house.entity.Employee">
     insert into employee (id, enumber, ename, 
-      ephone, stateid, roleid, 
+      ephone, hiredate, stateid, roleid,
       eusername, epassword, credentials, 
       email, eqq, eaddress, sex, headPic, headPicName
       )
     values (#{id,jdbcType=INTEGER}, #{enumber,jdbcType=INTEGER}, #{ename,jdbcType=VARCHAR}, 
-      #{ephone,jdbcType=VARCHAR}, #{stateid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, 
+      #{ephone,jdbcType=VARCHAR}, #{hiredate,jdbcType=DATE}, #{stateid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER},
       #{eusername,jdbcType=VARCHAR}, #{epassword,jdbcType=VARCHAR}, #{credentials,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{eqq,jdbcType=VARCHAR}, #{eaddress,jdbcType=VARCHAR}, #{esex,jdbcType=VARCHAR},
       #{headPic,jdbcType=VARCHAR}, #{headPicName,jdbcType=VARCHAR}
@@ -59,6 +60,9 @@
       </if>
       <if test="ephone != null">
         ephone,
+      </if>
+      <if test="hiredate != null">
+        hiredate,
       </if>
       <if test="stateid != null">
         stateid,
@@ -107,6 +111,9 @@
       <if test="ephone != null">
         #{ephone,jdbcType=VARCHAR},
       </if>
+      <if test="hiredate != null">
+        #{hiredate,jdbcType=DATE},
+      </if>
       <if test="stateid != null">
         #{stateid,jdbcType=INTEGER},
       </if>
@@ -154,6 +161,9 @@
       <if test="ephone != null">
         ephone = #{ephone,jdbcType=VARCHAR},
       </if>
+      <if test="hiredate != null">
+        ephone = #{hiredate,jdbcType=DATE},
+      </if>
       <if test="stateid != null">
         stateid = #{stateid,jdbcType=INTEGER},
       </if>
@@ -195,6 +205,7 @@
     set enumber = #{enumber,jdbcType=INTEGER},
       ename = #{ename,jdbcType=VARCHAR},
       ephone = #{ephone,jdbcType=VARCHAR},
+      hiredate = #{hiredate,jdbcType=DATE},
       stateid = #{stateid,jdbcType=INTEGER},
       roleid = #{roleid,jdbcType=INTEGER},
       eusername = #{eusername,jdbcType=VARCHAR},
@@ -210,12 +221,13 @@
   </update>
 <!--  分页查询，start计算出开始-->
   <select id="queryAll" resultType="map" parameterType="map">
-    select e.*,e1.name
+    select e.*,e1.name,r.rname
     from employee e join empstate e1 ON e.stateid=e1.id
+    join role r on e.roleid=r.rid
     <where>
       <if test="ename!=null and ename!=''">
         and (e.enumber like concat('%',#{ename},'%')
-        or e1.name like concat('%',#{ename},'%'))
+        or e.ename like concat('%',#{ename},'%'))
       </if>
       <if test="id!=null and id!=''">
         and e.stateid = #{id}

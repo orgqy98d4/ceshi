@@ -42,8 +42,8 @@
 <div id="app">
     <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="员工编号或者在职状态">
-                <el-input v-model="formInline.enameOrDname" placeholder="员工编号或者在职状态"></el-input>
+            <el-form-item label="员工编号或员工名字">
+                <el-input v-model="formInline.enameOrDname" placeholder="员工编号或员工名字"></el-input>
             </el-form-item>
             <!--            下拉框的形式显示出内容-->
             <el-form-item label="在职状态">
@@ -86,20 +86,35 @@
                     label="员工手机号">
             </el-table-column>
             <el-table-column
-                    prop="email"
-                    label="员工邮箱">
+                    prop="hiredate"
+                    label="入职日期">
             </el-table-column>
+            <!--以下注释内容在详细信息中显示-->
+            <!--<el-table-column-->
+                    <!--prop="email"-->
+                    <!--label="员工邮箱">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+                    <!--prop="eqq"-->
+                    <!--label="员工qq号码">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+                    <!--prop="eaddress"-->
+                    <!--label="员工家庭住址">-->
+            <!--</el-table-column>-->
             <el-table-column
-                    prop="eqq"
-                    label="员工qq号码">
-            </el-table-column>
-            <el-table-column
-                    prop="eaddress"
-                    label="员工家庭住址">
+                    prop="rname"
+                    label="职位">
             </el-table-column>
             <el-table-column
                     prop="name"
                     label="在职状态">
+            </el-table-column>
+            <el-table-column
+                    label="头像">
+                <template slot-scope="scope">
+                    <img v-if="scope.row.headPic" :src="'/demo4/emp/show?fileName='+scope.row.headPic" height="50px;" width="50px;">
+                </template>
             </el-table-column>
             <!--            添加按钮-->
             <el-table-column label="操作">
@@ -139,7 +154,7 @@
                 <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
 
                 <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.enumber" autocomplete="off"></el-input>
+                    <el-input v-model="form.enumber" autocomplete="off" readonly="readonly" id="aaa"></el-input>
                 </el-form-item>
                 <el-form-item label="员工姓名" :label-width="formLabelWidth">
                     <el-input v-model="form.ename" autocomplete="off"></el-input>
@@ -150,8 +165,27 @@
                         <el-radio v-model="form.esex" label="女">女</el-radio>
                     </template>
                 </el-form-item>
+                <el-form-item label="员工职位" :label-width="formLabelWidth">
+                    <el-select v-model="form.roleid" placeholder="请选择">
+                        <el-option
+                                v-for="item in optionsrole"
+                                :key="item.roleid"
+                                :label="item.rname"
+                                :value="item.rid">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="员工手机号" :label-width="formLabelWidth">
                     <el-input v-model="form.ephone" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="入职日期" :label-width="formLabelWidth">
+                    <el-date-picker
+                            v-model="form.hiredate"
+                            align="right"
+                            type="date"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="员工邮箱" :label-width="formLabelWidth">
                     <el-input v-model="form.email" autocomplete="off"></el-input>
@@ -161,6 +195,19 @@
                 </el-form-item>
                 <el-form-item label="员工家庭住址" :label-width="formLabelWidth">
                     <el-input v-model="form.eaddress" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="员工在职状态" :label-width="formLabelWidth">
+                    <el-select v-model="form.stateid" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.stateid"
+                                :label="item.name"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item v-if="form.headPic" label="原头像" :label-width="formLabelWidth">
+                    <img v-if="form.headPic" :src="'/demo4/emp/show?fileName='+form.headPic" height="160px;" width="160px;">
                 </el-form-item>
                 <el-form-item label="员工上传头像" :label-width="formLabelWidth">
                     <el-upload
@@ -173,16 +220,6 @@
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
-                </el-form-item>
-                <el-form-item label="员工在职状态" :label-width="formLabelWidth">
-                    <el-select v-model="form.stateid" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.stateid"
-                                :label="item.name"
-                                :value="item.id">
-                        </el-option>
-                    </el-select>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -205,6 +242,7 @@
                 id: ''
             },
             options: [],
+            optionsrole:[],
             title: '',
             dialogFormVisible: false,
             form: {
@@ -212,17 +250,46 @@
                 enumber: '',
                 ename: '',
                 ephone: '',
-                email: '',
-                eqq: '',
-                eaddress: '',
+                hiredate:'',
+                // email: '',
+                // eqq: '',
+                // eaddress: '',
                 esex:'男',
                 headPic:'',
                 headPicName:'',
+                headPicT:'',
+                rname:'',
                 name: '',
                 visible: false
             },
             formLabelWidth: '120px',
-            imageUrl:''
+            pickerOptions: {
+                disabledDate: function (time) {
+                    return time.getTime() > Date.now();
+                },
+                shortcuts: [{
+                    text: '今天',
+                    onClick: function (picker) {
+                        picker.$emit('pick', new Date());
+                    }
+                }, {
+                    text: '昨天',
+                    onClick: function (picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24);
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '一周前',
+                    onClick: function (picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', date);
+                    }
+                }]
+            },
+            imageUrl:'',
+            url:''
 
         },
         created:function(){
@@ -232,6 +299,11 @@
             axios.post('/demo4/emp/list')
                 .then(function (response) {
                     self.options=response.data;
+                });
+            //获取角色列表
+            axios.post('/demo4/emp/roleList')
+                .then(function (response) {
+                    self.optionsrole=response.data;
                 });
         },
         methods: {
@@ -285,22 +357,33 @@
             },
             //添加员工的方法
             toSave:function () {
+                //弹出框显示
+                this.dialogFormVisible=true;
+                //生成随机数
+                var Num="2019";
+                for (var i = 0; i < 4; i++) {
+                    Num+=Math.floor(Math.random()*10);
+                }
                 this.title='员工添加';
                 this.url="/demo4/emp/save";
+                this.imageUrl='';
                 //把缓存的数据清空
                 this. form= {
                         id:'',
-                        enumber: '',
+                        enumber: Num,
                         ename: '',
-                        esex:"",
+                        esex:'男',
                         ephone: '',
+                        hiredate:'',
                         email: '',
                         eqq: '',
                         eaddress: '',
-                        name: ''
+                        rname:'',
+                        name: '',
+                        headPic:'',
+                        headPicName:''
                 };
-                //弹出框显示
-                this.dialogFormVisible=true;
+
             },
             //修改的方法,index是下标，row是这一行显示的内容
             handleEdit:function (index,row) {
@@ -311,10 +394,12 @@
                 this.form=row;
                 //让弹出框显示
                 this.dialogFormVisible=true;
+                this.imageUrl='';
             },
             //添加或者修改成功提示一下
             saveData:function () {
                 var self=this;
+                this.form.headPic =this.form.headPicT;
                 axios.post(this.url,this.form)
                     .then(function (response) {
                         //如果添加或者修改成功
@@ -367,7 +452,7 @@
             handleAvatarSuccess:function(res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);
                 this.form.headPicName = file.response.originalFilename;
-                this.form.headPic =file.response.newFileName;
+                this.form.headPicT =file.response.newFileName;
             },
             //头像上传之前做的操作
             beforeAvatarUpload:function(file) {

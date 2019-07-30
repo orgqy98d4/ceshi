@@ -20,7 +20,7 @@ public interface EmpstateMapper {
     int updateByPrimaryKey(Empstate record);
 
     /**
-     * 查询出来部门名称
+     * 状态列表
      * @return
      */
     List<Empstate> queryState();
