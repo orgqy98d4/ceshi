@@ -201,9 +201,12 @@
                     </el-select>
                 </el-form-item>
                     <el-input v-model="form.cimg" type="hidden" autocomplete="off"></el-input>
-                <el-form-item label="人员头像" :label-width="formLabelWidth">
+                <el-form-item label="原头像" v-if="form.headPic" :label-width="formLabelWidth">
+                    <img v-if="form.headPic" :src="'/demo4/customer/show?fileName='+form.headPic" height="60px;"
+                         width="60px;">
+                </el-form-item>
+                <!--<el-form-item label="人员头像" :label-width="formLabelWidth">
                     <el-upload
-                            readonly="readonly"
                             name="headPic"
                             class="avatar-uploader"
                             action="/demo4/customer/uploadHeadPic"
@@ -213,7 +216,7 @@
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item label="客户类型" :label-width="formLabelWidth">
                     <el-select v-model="form.ctname" readonly="readonly" placeholder="请选择">
                         <el-option
@@ -344,6 +347,7 @@
                     headPic:'',
                     headPicName:'',
                     ctype:''};
+                this.imageUrl ='';
                 //让弹出框显示
                 this.dialogFormVisible=true;
             },
@@ -353,6 +357,7 @@
                 this.url="/demo4/customer/update";
                 //赋值
                 this.form=row;
+                this.imageUrl ='';
                 //让弹出框显示
                 this.dialogFormVisible=true;
             },
