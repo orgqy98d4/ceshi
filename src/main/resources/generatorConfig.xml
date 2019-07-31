@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <!-- 数据库驱动包位置 -->
-    <classPathEntry location="E:\maven\apache-maven-3.6.0\mysql\mysql-connector-java\5.1.6\mysql-connector-java-5.1.6.jar" />
+    <classPathEntry location="D:\maven\repository\mysql\mysql-connector-java\5.1.6\mysql-connector-java-5.1.6.jar" />
     <context id="oracle" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -13,7 +13,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/house_rent"
+                        connectionURL="jdbc:mysql://192.168.11.123:3306/house_rent"
                         userId="root"
                         password="123123">
         </jdbcConnection>
@@ -41,7 +41,8 @@
         </javaClientGenerator>
 
         <!--配置表信息-->
-        <table tableName="employee" domainObjectName="Employee" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
-        <table tableName="empstate" domainObjectName="Empstate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        <!--<table tableName="employee" domainObjectName="Employee" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />-->
+        <!--<table tableName="empstate" domainObjectName="Empstate" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />-->
+        <table tableName="house_state" domainObjectName="HouseState" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
     </context>
 </generatorConfiguration>

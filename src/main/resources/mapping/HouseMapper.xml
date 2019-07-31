@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.house.dao.HouseMapper">
+  <resultMap id="BaseResultMap" type="com.aaa.house.entity.House">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="houseid" jdbcType="INTEGER" property="houseid" />
+    <result column="landlord" jdbcType="INTEGER" property="landlord" />
+    <result column="htitle" jdbcType="VARCHAR" property="htitle" />
+    <result column="hadr" jdbcType="VARCHAR" property="hadr" />
+    <result column="hrent" jdbcType="INTEGER" property="hrent" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="headPic" jdbcType="VARCHAR" property="headPic" />
+    <result column="headPicName" jdbcType="VARCHAR" property="headPicName" />
+    <result column="hfloor" jdbcType="INTEGER" property="hfloor" />
+    <result column="harea" jdbcType="VARCHAR" property="harea" />
+    <result column="orientation" jdbcType="VARCHAR" property="orientation" />
+    <result column="releasedate" jdbcType="DATE" property="releasedate" />
+    <result column="hdesc" jdbcType="VARCHAR" property="hdesc" />
+    <result column="agentid" jdbcType="INTEGER" property="agentid" />
+    <result column="tenantid" jdbcType="INTEGER" property="tenantid" />
+    <result column="cimg" jdbcType="VARCHAR" property="cimg" />
+    <result column="examine" jdbcType="VARCHAR" property="examine" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, houseid, landlord, htitle, hadr, hrent, state, headPic,headPicName, hfloor, harea, orientation,
+    releasedate, hdesc, agentid, tenantid, cimg, examine
+  </sql>
+    <!--根据条件查询所有符合的房屋信息-->
+    <select id="queryHouses" resultType="map" parameterType="map">
+        select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+        <where>
+            <!--根据房屋租金查询-->
+            <if test="hrent!=null and hrent!=''">
+                and hrent=#{hrent}
+            </if>
+            <!--根据房屋地址查询-->
+            <if test="hadr!=null and hadr!=''">
+                and hadr=#{hadr}
+            </if>
+            <!--根据房屋格局查询-->
+            <if test="hdesc!=null and hdesc!=''">
+                and hdesc=#{hdesc}
+            </if>
+            <if test="orientation!=null and orientation!=''">
+                and orientation=#{orientation}
+            </if>
+        </where>
+        limit ${start},${pageSize}
+    </select>
+    <!--计算房屋总数-->
+    <select id="queryHouseCount" resultType="int">
+        select count(*) from house
+    </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from house
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from house
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aaa.house.entity.House">
+    insert into house (id, houseid, landlord, 
+      htitle, hadr, hrent, 
+      state, headPic,headPicName, hfloor,
+      harea, orientation, releasedate, 
+      hdesc, agentid, tenantid, 
+      cimg, examine)
+    values (#{id,jdbcType=INTEGER}, #{houseid,jdbcType=INTEGER}, #{landlord,jdbcType=INTEGER}, 
+      #{htitle,jdbcType=VARCHAR}, #{hadr,jdbcType=VARCHAR}, #{hrent,jdbcType=INTEGER}, 
+      #{state,jdbcType=INTEGER}, #{headPic,jdbcType=VARCHAR}, #{headPicName,jdbcType=VARCHAR},#{hfloor,jdbcType=INTEGER},
+      #{harea,jdbcType=VARCHAR}, #{orientation,jdbcType=VARCHAR}, #{releasedate,jdbcType=DATE}, 
+      #{hdesc,jdbcType=VARCHAR}, #{agentid,jdbcType=INTEGER}, #{tenantid,jdbcType=INTEGER}, 
+      #{cimg,jdbcType=VARCHAR}, #{examine,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aaa.house.entity.House">
+    insert into house
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="houseid != null">
+        houseid,
+      </if>
+      <if test="landlord != null">
+        landlord,
+      </if>
+      <if test="htitle != null">
+        htitle,
+      </if>
+      <if test="hadr != null">
+        hadr,
+      </if>
+      <if test="hrent != null">
+        hrent,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="headPic != null">
+        headPic,
+      </if>
+      <if test="headPicName != null">
+        headPicName,
+      </if>
+      <if test="hfloor != null">
+        hfloor,
+      </if>
+      <if test="harea != null">
+        harea,
+      </if>
+      <if test="orientation != null">
+        orientation,
+      </if>
+      <if test="releasedate != null">
+        releasedate,
+      </if>
+      <if test="hdesc != null">
+        hdesc,
+      </if>
+      <if test="agentid != null">
+        agentid,
+      </if>
+      <if test="tenantid != null">
+        tenantid,
+      </if>
+      <if test="cimg != null">
+        cimg,
+      </if>
+      <if test="examine != null">
+        examine,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="houseid != null">
+        #{houseid,jdbcType=INTEGER},
+      </if>
+      <if test="landlord != null">
+        #{landlord,jdbcType=INTEGER},
+      </if>
+      <if test="htitle != null">
+        #{htitle,jdbcType=VARCHAR},
+      </if>
+      <if test="hadr != null">
+        #{hadr,jdbcType=VARCHAR},
+      </if>
+      <if test="hrent != null">
+        #{hrent,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="headPic != null">
+        #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="headPicName != null">
+        #{headPicName,jdbcType=VARCHAR},
+      </if>
+      <if test="hfloor != null">
+        #{hfloor,jdbcType=INTEGER},
+      </if>
+      <if test="harea != null">
+        #{harea,jdbcType=VARCHAR},
+      </if>
+      <if test="orientation != null">
+        #{orientation,jdbcType=VARCHAR},
+      </if>
+      <if test="releasedate != null">
+        #{releasedate,jdbcType=DATE},
+      </if>
+      <if test="hdesc != null">
+        #{hdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="agentid != null">
+        #{agentid,jdbcType=INTEGER},
+      </if>
+      <if test="tenantid != null">
+        #{tenantid,jdbcType=INTEGER},
+      </if>
+      <if test="cimg != null">
+        #{cimg,jdbcType=VARCHAR},
+      </if>
+      <if test="examine != null">
+        #{examine,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aaa.house.entity.House">
+    update house
+    <set>
+      <!--<if test="houseid != null">-->
+        <!--houseid = #{houseid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="landlord != null">-->
+        <!--landlord = #{landlord,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="htitle != null">-->
+        <!--htitle = #{htitle,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="hadr != null">-->
+        <!--hadr = #{hadr,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="hrent != null">-->
+        <!--hrent = #{hrent,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="headPic != null">
+        headPic = #{headPic,jdbcType=VARCHAR},
+      </if>
+      <if test="headPicName != null">
+        headPicName = #{headPicName,jdbcType=VARCHAR},
+      </if>
+      <!--<if test="hfloor != null">-->
+        <!--hfloor = #{hfloor,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="harea != null">-->
+        <!--harea = #{harea,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="orientation != null">-->
+        <!--orientation = #{orientation,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="releasedate != null">-->
+        <!--releasedate = #{releasedate,jdbcType=DATE},-->
+      <!--</if>-->
+      <!--<if test="hdesc != null">-->
+        <!--hdesc = #{hdesc,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="agentid != null">-->
+        <!--agentid = #{agentid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="tenantid != null">-->
+        <!--tenantid = #{tenantid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="cimg != null">-->
+        <!--cimg = #{cimg,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="examine != null">-->
+        <!--examine = #{examine,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aaa.house.entity.House">
+    update house
+    set houseid = #{houseid,jdbcType=INTEGER},
+      landlord = #{landlord,jdbcType=INTEGER},
+      htitle = #{htitle,jdbcType=VARCHAR},
+      hadr = #{hadr,jdbcType=VARCHAR},
+      hrent = #{hrent,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      headPic = #{headPic,jdbcType=VARCHAR},
+      headPicName = #{headPicName,jdbcType=VARCHAR},
+      hfloor = #{hfloor,jdbcType=INTEGER},
+      harea = #{harea,jdbcType=VARCHAR},
+      orientation = #{orientation,jdbcType=VARCHAR},
+      releasedate = #{releasedate,jdbcType=DATE},
+      hdesc = #{hdesc,jdbcType=VARCHAR},
+      agentid = #{agentid,jdbcType=INTEGER},
+      tenantid = #{tenantid,jdbcType=INTEGER},
+      cimg = #{cimg,jdbcType=VARCHAR},
+      examine = #{examine,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
