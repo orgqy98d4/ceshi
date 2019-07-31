@@ -1,6 +1,7 @@
 package com.aaa.house.dao;
 
 import com.aaa.house.entity.Customer;
+import javafx.scene.paint.PhongMaterial;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -45,5 +46,20 @@ public interface CustomerDao {
      * 查询分页总数量
      * */
     int queryPageCount(Map map);
+
+    /**
+     * 登录
+     * */
+    Customer cusLogin(Customer customer);
+
+    /**
+     * 用户注册
+     */
+    int registerCus(Customer customer);
+
+    /**
+     * 检测手机号获取验证码
+     * */
+    Customer getUsableGetPhone(Customer customer);
 
 }
