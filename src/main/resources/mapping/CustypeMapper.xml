@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.house.dao.CustypeDao">
+    <resultMap id="BaseResultMap" type="com.aaa.house.entity.Custype">
+        <id column="ctype" jdbcType="INTEGER" property="ctype" />
+        <result column="ctname" jdbcType="VARCHAR" property="ctname" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    ctype,ctname
+  </sql>
+    <select id="queryType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from cus_type
+    </select>
+</mapper>

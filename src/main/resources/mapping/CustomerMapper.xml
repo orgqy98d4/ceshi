@@ -12,9 +12,12 @@
         <result column="cpassword" jdbcType="VARCHAR" property="cpassword" />
         <result column="state" jdbcType="INTEGER" property="state" />
         <result column="cimg" jdbcType="VARCHAR" property="cimg" />
+        <result column="headPic" jdbcType="VARCHAR" property="headPic" />
+        <result column="headPicName" jdbcType="VARCHAR" property="headPicName" />
+        <result column="ctype" jdbcType="VARCHAR" property="ctype" />
     </resultMap>
     <sql id="Base_Column_List">
-    id,cnumber,cname,csex,cphone,ccard,cusername,cpassword,state,cimg
+    id,cnumber,cname,csex,cphone,ccard,cusername,cpassword,state,cimg,headPic,headPicName,ctype
   </sql>
     <select id="select" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -59,6 +62,15 @@
             <if test="cimg != null">
                 cimg,
             </if>
+            <if test="headPic != null">
+                headPic,
+            </if>
+            <if test="headPicName != null">
+                headPicName,
+            </if>
+            <if test="ctype != null">
+                ctype,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -90,6 +102,15 @@
             </if>
             <if test="cimg != null">
                 #{cimg,jdbcType=VARCHAR},
+            </if>
+            <if test="headPic != null">
+                #{headPic,jdbcType=VARCHAR},
+            </if>
+            <if test="headPicName != null">
+                #{headPicName,jdbcType=VARCHAR},
+            </if>
+            <if test="ctype != null">
+                #{ctype,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -123,16 +144,29 @@
             <if test="cimg != null">
                 cimg = #{cimg,jdbcType=VARCHAR},
             </if>
+            <if test="headPic != null">
+                headPic= #{headPic,jdbcType=VARCHAR},
+            </if>
+            <if test="headPicName != null">
+                headPicName= #{headPicName,jdbcType=VARCHAR},
+            </if>
+            <if test="ctype != null">
+                ctype= #{ctype,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <!--start计算出开始-->
     <select id="queryAll" resultType="map">
-        select *
-        from customer
+        select c.*,cs.csname,ct.ctname
+        from customer c join cus_state cs on c.state=cs.state join cus_type ct on c.ctype=ct.ctype
         <where>
             <if test="cname!=null and cname!=''">
-                and (cname like "%"#{cname}"%")
+                and (cname like "%"#{cname}"%"
+                or ct.ctname like "%"#{cname}"%")
+            </if>
+            <if test="ctype!=null and ctype!=''">
+                and ct.ctype = #{ctype}
             </if>
             <if test="cusername!=null and cusername!=''">
                 and cusername = #{cusername}
@@ -141,10 +175,17 @@
     </select>
     <select id="queryPageCount" resultType="int">
         select count(*)
-        from customer
+        from customer c join cus_state cs on c.state=cs.state join cus_type ct on c.ctype=ct.ctype
         <where>
             <if test="cname!=null and cname!=''">
-                and (cname like "%"#{cname}"%")
+                and (cname like "%"#{cname}"%"
+                or ct.ctname like "%"#{cname}"%")
+            </if>
+            <if test="ctype!=null and ctype!=''">
+                and ct.ctype = #{ctype}
+            </if>
+            <if test="state!=null and state!=''">
+                and cs.state = #{state}
             </if>
         </where>
     </select>

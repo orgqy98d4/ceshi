@@ -1,11 +1,17 @@
 package com.aaa.house.controllers;
 
 import com.aaa.house.entity.Customer;
-import com.aaa.house.service.CustomerServic;
+import com.aaa.house.service.CustomerService;
+import com.aaa.house.util.FtpConfig;
+import com.aaa.house.util.FtpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +27,16 @@ import java.util.Map;
 public class CustomerController {
 
     @Autowired
-    private CustomerServic customerServic;
+    private CustomerService customerServic;
+
+    @Autowired
+    private FtpUtil ftpUtil;
+
+    @Autowired
+    private FtpConfig ftpConfig;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     /**
      * 添加
@@ -64,6 +79,30 @@ public class CustomerController {
         mapResult.put("customerList",customerServic.queryAll(map));
         mapResult.put("total",customerServic.queryPageCount(map));
         return mapResult;
+    }
+
+    /**
+     * 文件上传
+     * @param headPic
+     * @return
+     */
+    @RequestMapping("/uploadHeadPic")
+    public Object uploadHeadPic(@RequestParam MultipartFile headPic){
+        System.out.println("......................");
+        String originalFilename = headPic.getOriginalFilename();
+        String newFileName = ftpUtil.upLoad(headPic);
+        Map map  = new HashMap();
+        map.put("originalFilename",originalFilename);
+        map.put("newFileName",newFileName);
+        return map;
+    }
+
+    /**
+     * 显示头像
+     * */
+    @RequestMapping("/show")
+    public ResponseEntity show(String fileName){
+        return ResponseEntity.ok(resourceLoader.getResource("ftp://"+ftpConfig.getFtpUserName()+":"+ftpConfig.getFtpPassWord()+"@"+ftpConfig.getRemoteIp()+ftpConfig.getRemotePath()+"/"+fileName));
     }
 
 }
