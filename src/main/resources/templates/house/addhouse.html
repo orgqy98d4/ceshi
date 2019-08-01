@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发布房源</title>
+    <link rel="icon" href="../../resources/images/favicon.ico"/>
+    <!--先引入vue.js库-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+        }
+        .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+        }
+        .el-form-item__content {
+            line-height: 40px;
+            position: relative;
+            font-size: 14px;
+            width: 200px;
+        }
+        /* 设置穿梭框的 宽高 */
+        .el-transfer-panel{
+            width : 350px;
+            height: 400px;
+        }
+        .el-transfer-panel__list {
+            margin: 0;
+            padding: 6px 0;
+            list-style: none;
+            height: 390px;
+            overflow: auto;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .el-transfer__buttons {
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+
+    <el-form-item  prop="houseid">
+        <div>
+            房屋编号<el-input  v-model="ruleForm.houseid" readonly="readonly"></el-input>
+            房屋描述<el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>
+        </div>
+    </el-form-item>
+
+    <!--<el-form-item label="房屋描述" prop="htitle">-->
+        <!---->
+    <!--</el-form-item>-->
+
+    <el-form-item prop="hadr">
+        <div>详细地址<el-input  v-model="ruleForm.hadr"placeholder="如:区名，某小区"></el-input>
+            <!--详细地址：应该做一个级联-->
+            设定租金<el-input v-model="ruleForm.hrent"></el-input></div>
+    </el-form-item>
+    <!--房东编号，应该是在跳转页面后直接显示出来的-->
+    <!--房东姓名，应该是在跳转页面后直接显示出来的-->
+    <!--<el-form-item label="设定租金" prop="hrent">-->
+        <!---->
+    <!--</el-form-item>-->
+    <el-form-item prop="hfloor">
+        <div>房屋楼层<el-input v-model="ruleForm.hfloor"></el-input>
+            占地面积<el-input v-model="ruleForm.harea"></el-input>
+        </div>
+    </el-form-item>
+    <!--<el-form-item label="占地面积" prop="harea">-->
+        <!---->
+    <!--</el-form-item>-->
+    <el-form-item  prop="orientation">
+        <div>房屋朝向<el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>
+
+        </div>
+    </el-form-item>
+
+    <el-form-item label="发布日期" :label-width="formLabelWidth">
+        <el-date-picker
+                v-model="ruleForm.releasedate"
+                align="right"
+                type="date"
+                placeholder="选择日期"
+                :picker-options="pickerOptions" >
+        </el-date-picker>
+    </el-form-item>
+
+    <!--上传房屋图片-->
+    <el-form-item label="原房屋图片" v-if="ruleForm.headPicName" :label-width="formLabelWidth">
+        <img v-if="ruleForm.headPicName" :src="'/demo4/house/show?fileName='+ruleForm.headPicName" height="160px;" width="160px;">
+    </el-form-item>
+    <el-form-item label="房屋图片" :label-width="formLabelWidth">
+        <el-upload
+                name="headPic"
+                class="avatar-uploader"
+                action="/demo4/house/uploadHeadPic"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+    </el-form-item>
+
+    <el-form-item :label-width="formLabelWidth">
+        <div style="width: 400px;">
+                <template style="width: 50%; margin-left: 0px;">
+                    <el-card class="box-card" shadow="never" style="height: 400px; width: 400px;">
+                        <div slot="header" class="clearfix" style="height:25px">
+                            <div style="float:left ">
+                                <span class="titel_font">配备家具</span>
+                            </div>
+                        </div>
+                        <div style="margin-left:20%;margin-top:20px;" >
+                            <el-transfer
+                                    v-model="handleSelectedValue"
+                                    :data="ruleForm.furnitures"
+                                    :titles="['待选家具', '已有家具']"
+                                    :button-texts="['移除', '添加']"
+                            ></el-transfer>
+                        </div>
+                    </el-card>
+                </template>
+
+        </div>
+
+    </el-form-item>
+
+
+
+    <el-form-item>
+        <el-button type="primary" @click="saveData">提交</el-button>
+        <!--<el-button  @click="resetForm('ruleForm')">重置</el-button>-->
+        <el-button type="primary" @click="loadData">重置</el-button>
+    </el-form-item>
+</el-form>
+</div>
+<script>
+   var vue=new Vue({
+       el: "#app",
+       data: {
+           ruleForm: {
+               houseid:'',
+               htitle: '',
+               hadr: '',
+               hrent: '',
+               hfloor: '',
+               harea: '',
+               orientation: '',
+               releasedate:'',
+               furnitures:[],
+
+               headPic:'',
+               headPicName:''
+           },
+           imageUrl:'',
+           rules: {
+               htitle: [
+                   {required: true, message: '请输入房屋描述', trigger: 'blur'},
+               ],
+               hadr: [
+                   {required: true, message: '请选择房屋详细地址', trigger: 'blur'}
+               ],
+               hrent: [
+                   {required: true, message: '请设定房屋租金', trigger: 'blur'}
+               ],
+               harea: [
+                   {required: true, message: '请描述房屋面积', trigger: 'blur'}
+               ]
+           },
+           pickerOptions:{
+               disabledDate:function(time) {
+                   return time.getTime() > Date.now();
+               },
+               shortcuts: [{
+                   text: '今天',
+                   onClick:function(picker) {
+                       picker.$emit('pick', new Date());
+                   }
+               }, {
+                   text: '昨天',
+                   onClick:function(picker) {
+                       const date = new Date();
+                       date.setTime(date.getTime() - 3600 * 1000 * 24);
+                       picker.$emit('pick', date);
+                   }
+               }, {
+                   text: '一周前',
+                   onClick:function(picker) {
+                       const date = new Date();
+                       date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                       picker.$emit('pick', date);
+                   }
+               }]
+           },
+
+       },
+       created: function () {
+           this.loadData();
+           var self = this;
+           axios.post('/demo4/part/furnitures')
+               .then(function (response) {
+                   self.furnitures = response.data;
+                   // alert('家具列表'+self.furnitures);
+               })
+       },
+       methods: {
+           loadData:function(){
+               var Num="";
+               for (var i = 0; i < 8; i++) {
+                   Num+=Math.floor(Math.random()*10);
+               }
+               this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',
+                   hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
+                   releasedate:'', hdesc:''
+               };
+
+           },
+           saveData:function () {
+               var self=this;
+               axios.post("/demo4/house/save",this.ruleForm)
+                   .then(function (response) {
+                       if (response.data==1){
+                           self.$message({
+                               message: '恭喜你，操作成功',
+                               type: 'success',
+                           });
+                           self.loadData();
+                       }else{
+                           self.$message.error('错了哦，操作失败');
+                       }
+                   })
+               this.imageUrl='';
+           },
+           resetForm: function (formName) {
+               this.$refs[formName].resetFields();
+           },
+           handleAvatarSuccess:function(res, file) {
+               this.imageUrl = URL.createObjectURL(file.raw);
+               this.ruleForm.headPicName=file.response.originalFilename;
+               this.ruleForm.headPic=file.response.newFileName;
+           },
+           beforeAvatarUpload:function(file) {
+               const isJPG = file.type === 'image/jpeg';
+               const isLt2M = file.size / 1024 / 1024 < 2;
+
+               if (!isJPG) {
+                   this.$message.error('上传头像图片只能是 JPG 格式!');
+               }
+               if (!isLt2M) {
+                   this.$message.error('上传头像图片大小不能超过 2MB!');
+               }
+               return isJPG && isLt2M;
+           }
+       }
+   })
+
+
+</script>
+
+</body>
+</html>
