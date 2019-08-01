@@ -2,6 +2,7 @@ package com.aaa.house.service;
 
 import com.aaa.house.dao.CustomerDao;
 import com.aaa.house.entity.Customer;
+import com.aaa.house.util.CusUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public int queryPageCount(Map map) {
         return customerDao.queryPageCount(map);
+    }
+
+    @Override
+    public Customer getCusFromSession() {
+        return CusUtil.getCusFromSession();
     }
 
 }
