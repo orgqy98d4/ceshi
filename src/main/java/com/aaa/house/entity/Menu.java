@@ -7,6 +7,10 @@ public class Menu {
 
     private String mdesc;
 
+//    private int pid;
+//
+//    private String url;
+
     public Integer getMid() {
         return mid;
     }

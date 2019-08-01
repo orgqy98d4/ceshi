@@ -108,7 +108,7 @@
             </el-table-column>
             <el-table-column
                     prop="name"
-                    label="在职状态">
+                    label="状态">
             </el-table-column>
             <el-table-column
                     label="头像">
@@ -196,7 +196,7 @@
                 <el-form-item label="员工家庭住址" :label-width="formLabelWidth">
                     <el-input v-model="form.eaddress" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="员工在职状态" :label-width="formLabelWidth">
+                <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="form.stateid" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
