@@ -270,5 +270,24 @@
       examine = #{examine,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <insert id="saveFurniture" parameterType="com.aaa.house.entity.HouseFurniture">
+    insert into house_furniture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="houseid != null">
+        houseid,
+      </if>
+      <if test="furnitureid != null">
+        furnitureid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="houseid != null">
+        #{houseid,jdbcType=INTEGER},
+      </if>
+      <if test="furnitureid != null">
+        #{furnitureid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
 
 </mapper>

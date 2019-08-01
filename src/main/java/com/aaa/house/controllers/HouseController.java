@@ -1,6 +1,7 @@
 package com.aaa.house.controllers;
 
 import com.aaa.house.entity.House;
+import com.aaa.house.entity.HouseFurniture;
 import com.aaa.house.service.HouseFurnitureService;
 import com.aaa.house.service.HouseService;
 import com.aaa.house.service.HouseStateService;
@@ -98,6 +99,17 @@ public class HouseController {
         return ResponseEntity.ok(resourceLoader.getResource("ftp://"+ftpConfig.getFtpUserName()+":"+
                 ftpConfig.getFtpPassWord()+"@"+ftpConfig.getRemoteIp()+ftpConfig.getRemotePath()+"/"+fileName));
     }
+
+    /**
+     * 配置家具
+     * @param houseFurniture
+     * @return
+     */
+    @RequestMapping("/saveFurniture")
+    public Object saveFurniture(@RequestParam HouseFurniture houseFurniture){
+        return houseService.saveFurniture(houseFurniture);
+    }
+
 //    /**
 //     * 头像下载
 //     * @param fileName

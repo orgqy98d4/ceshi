@@ -1,6 +1,7 @@
 package com.aaa.house.dao;
 
 import com.aaa.house.entity.House;
+import com.aaa.house.entity.HouseFurniture;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,11 @@ public interface HouseMapper {
     int updateByPrimaryKeySelective(House record);
 
     int updateByPrimaryKey(House record);
+
+    /**
+     * 保存家具信息
+     * @param houseFurniture
+     * @return
+     */
+    int saveFurniture(HouseFurniture houseFurniture);
 }
