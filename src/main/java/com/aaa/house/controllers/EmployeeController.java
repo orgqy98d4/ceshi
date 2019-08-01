@@ -3,8 +3,12 @@ package com.aaa.house.controllers;
 import com.aaa.house.entity.Employee;
 import com.aaa.house.service.EmployeeService;
 import com.aaa.house.service.EmpstateService;
+import com.aaa.house.service.RoleService;
+import com.aaa.house.util.FtpConfig;
 import com.aaa.house.util.FtpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +36,15 @@ public class EmployeeController {
     //员工状态
     @Autowired
     private EmpstateService empstateService;
+    //角色
+    @Autowired
+    private RoleService roleService;
+
+    //spring core包里面童工的资源加载器类
+    @Autowired
+    private ResourceLoader resourceLoader;
+    @Autowired
+    private FtpConfig ftpConfig;
 
     /**
      * 查询出来所有结果
@@ -49,6 +62,12 @@ public class EmployeeController {
     @RequestMapping("/list")
     public Object list(){
         return empstateService.queryState();
+    }
+
+    //查询角色列表
+    @RequestMapping("/roleList")
+    public Object roleList(){
+        return roleService.queryAll();
     }
     /**
      * 添加内容
@@ -94,5 +113,17 @@ public class EmployeeController {
         map.put("originalFilename",originalFilename);
         return map;
 
+    }
+
+    /**
+     * 显示头像
+     * @param fileName
+     * @return
+     */
+    @RequestMapping("/show")
+    public ResponseEntity show(String fileName){
+        //格式：ftp://admin:tiger@192.168.11.128/imgs/424a3c8b-590a-47ac-ac2e-d29597f2e57d.jpg
+        return ResponseEntity.ok(resourceLoader.getResource("ftp://"+ftpConfig.getFtpUserName()+":"+
+                ftpConfig.getFtpPassWord()+"@"+ftpConfig.getRemoteIp()+ftpConfig.getRemotePath()+"/"+fileName));
     }
 }

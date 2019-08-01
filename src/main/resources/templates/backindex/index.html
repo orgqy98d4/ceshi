@@ -56,8 +56,8 @@
                 </li>
                 <li class="layui-nav-item">
                     <a href="#">房源管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" target="change">添加房源</a></dd>
+                    <dl class="layui-nav-child" id="app">
+                        <dd><a href="/demo4/house/addhouse.html" target="change" @click="toSave">添加房源</a></dd>
                         <dd><a href="javascript:;" target="change">房源审核</a></dd>
                     </dl>
                 </li>
@@ -72,5 +72,54 @@
         </div>
     </div>
 </div>
+<script>
+    new Vue({
+        el:"#app",
+        data: {
+            form:{
+                id:'',
+                houseid:'',
+                htitle:'',
+                hadr:'',
+                hrent:'',
+                headPic:'',
+                hfloor:'',
+                harea:'',
+                orientation:'',
+                releasedate:'',
+                hdesc:'',
+                state:'',
+                name:'',
+                headPicName:'',
+                furnitures:[]
+            },
+            url:''
+        },
+        created: function () {
+            this.loadData();
+            var self = this;
+            axios.post('/demo4/part/furnitures')
+                .then(function (response) {
+                    self.furnitures = response.data;
+                })
+        },
+
+
+        method:{
+            toSave:function () {
+                this.url="/demo4/house/addhouse.html";
+                //随机数
+                var Num="";
+                for (var i = 0; i < 8; i++) {
+                    Num+=Math.floor(Math.random()*10);
+                }
+                this.form={id:'', houseid:Num, htitle:'', hadr:'',
+                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
+                    releasedate:'', hdesc:''
+                };
+            },
+        }
+    })
+</script>
 </body>
 </html>

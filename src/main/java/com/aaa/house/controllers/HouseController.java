@@ -78,7 +78,7 @@ public class HouseController {
      */
     @RequestMapping("/uploadHeadPic")
     public Object uploadHimg(@RequestParam MultipartFile headPic){
-        System.out.println("图片："+headPic);
+//        System.out.println("图片："+headPic);
         //原始文件名
         String originalFilename = headPic.getOriginalFilename();
         //上传文件后得到一个新的文件名
@@ -93,7 +93,7 @@ public class HouseController {
      */
     @RequestMapping("/show")
     public ResponseEntity show(String fileName){
-        System.out.println("文件名："+fileName);
+//        System.out.println("文件名："+fileName);
         //ftp://admin:admin@192.168.11.116/ftp-dir-xn/84c7f5ed-17e1-4f9a-a775-552254d66386.jpg
         return ResponseEntity.ok(resourceLoader.getResource("ftp://"+ftpConfig.getFtpUserName()+":"+
                 ftpConfig.getFtpPassWord()+"@"+ftpConfig.getRemoteIp()+ftpConfig.getRemotePath()+"/"+fileName));

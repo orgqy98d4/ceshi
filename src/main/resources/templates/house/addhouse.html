@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>发布房源</title>
+    <link rel="icon" href="../../resources/images/favicon.ico"/>
     <!--先引入vue.js库-->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!--axios-->
@@ -97,27 +98,39 @@
     <!--</el-form-item>-->
     <el-form-item  prop="orientation">
         <div>房屋朝向<el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>
-            发布日期<el-input v-model="ruleForm.releasedate">{{timenow}}</el-input>
+
         </div>
     </el-form-item>
-    <!--<el-form-item label="发布日期" >-->
-        <!---->
-    <!--</el-form-item>-->
+
+    <el-form-item label="发布日期" :label-width="formLabelWidth">
+        <el-date-picker
+                v-model="form.releasedate"
+                align="right"
+                type="date"
+                placeholder="选择日期"
+                :picker-options="pickerOptions" >
+        </el-date-picker>
+    </el-form-item>
 
     <!--上传房屋图片-->
-    <el-form-item :label-width="formLabelWidth">
-        <div>房屋图片
+    <el-form-item label="原房屋图片" v-if="form.headPic" :label-width="formLabelWidth">
+        <img v-if="form.headPic" :src="'/demo4/house/show?fileName='+form.headPic" height="160px;" width="160px;">
+    </el-form-item>
+    <el-form-item label="房屋图片" :label-width="formLabelWidth">
         <el-upload
-                name="himg"
+                name="headPic"
                 class="avatar-uploader"
-                action="/demo4/house/uploadHimg"
+                action="/demo4/house/uploadHeadPic"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
+    </el-form-item>
 
+    <el-form-item :label-width="formLabelWidth">
+        <div>
                 <template style="width: 50%; margin-left: 0px;">
                     <el-card class="box-card" shadow="never" style="height: 400px; width: 400px;">
                         <div slot="header" class="clearfix" style="height:25px">
@@ -162,10 +175,12 @@
                harea: '',
                orientation: '',
                releasedate:'',
-               furnitures: [],
-               imageUrl:'',
+               furnitures:[],
 
+               headPic:'',
+               headPicName:''
            },
+           imageUrl:'',
            rules: {
                htitle: [
                    {required: true, message: '请输入房屋描述', trigger: 'blur'},
@@ -179,16 +194,41 @@
                harea: [
                    {required: true, message: '请描述房屋面积', trigger: 'blur'}
                ]
-           }
+           },
+           pickerOptions:{
+               disabledDate:function(time) {
+                   return time.getTime() > Date.now();
+               },
+               shortcuts: [{
+                   text: '今天',
+                   onClick:function(picker) {
+                       picker.$emit('pick', new Date());
+                   }
+               }, {
+                   text: '昨天',
+                   onClick:function(picker) {
+                       const date = new Date();
+                       date.setTime(date.getTime() - 3600 * 1000 * 24);
+                       picker.$emit('pick', date);
+                   }
+               }, {
+                   text: '一周前',
+                   onClick:function(picker) {
+                       const date = new Date();
+                       date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                       picker.$emit('pick', date);
+                   }
+               }]
+           },
 
        },
        created: function () {
            this.loadData();
-           this.timeNow();
            var self = this;
            axios.post('/demo4/part/furnitures')
                .then(function (response) {
                    self.furnitures = response.data;
+                   // alert('家具列表'+self.furnitures);
                })
        },
        methods: {
@@ -197,14 +237,18 @@
                for (var i = 0; i < 8; i++) {
                    Num+=Math.floor(Math.random()*10);
                }
-               this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',
-                   hrent:'', himg:'', hfloor:'', harea:'', orientation:'',
+               this.form={id:'', houseid:Num, htitle:'', hadr:'',
+                   hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
                    releasedate:'', hdesc:''
                };
+
            },
            saveData:function () {
+               var Num="";
+               for (var i = 0; i < 8; i++) {
+                   Num+=Math.floor(Math.random()*10);
+               }
                var self=this;
-
                axios.post("/demo4/house/save",this.ruleForm)
                    .then(function (response) {
                        if (response.data==1){
@@ -218,15 +262,18 @@
                            self.$message.error('错了哦，操作失败');
                        }
                    })
+               this.form={id:'', houseid:Num, htitle:'', hadr:'',
+                   hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
+                   releasedate:'', hdesc:''
+               };
                this.imageUrl='';
            },
            resetForm: function (formName) {
                this.$refs[formName].resetFields();
            },
-           timeNow: function () {
-               var self=this;
-               self.timenow= moment().utc().format('YYYY-MM-DD' + ' ' + moment().utc().format('dddd'))
-           },
+           // timeNow: function () {
+           //     this.timenow= moment().utc().format('YYYY-MM-DD' + ' ' + moment().utc().format('dddd'))
+           // },
            handleAvatarSuccess:function(res, file) {
                this.imageUrl = URL.createObjectURL(file.raw);
                this.form.headPicName=file.response.originalFilename;
