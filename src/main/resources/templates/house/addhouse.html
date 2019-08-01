@@ -104,7 +104,7 @@
 
     <el-form-item label="发布日期" :label-width="formLabelWidth">
         <el-date-picker
-                v-model="form.releasedate"
+                v-model="ruleForm.releasedate"
                 align="right"
                 type="date"
                 placeholder="选择日期"
@@ -113,8 +113,8 @@
     </el-form-item>
 
     <!--上传房屋图片-->
-    <el-form-item label="原房屋图片" v-if="form.headPic" :label-width="formLabelWidth">
-        <img v-if="form.headPic" :src="'/demo4/house/show?fileName='+form.headPic" height="160px;" width="160px;">
+    <el-form-item label="原房屋图片" v-if="ruleForm.headPicName" :label-width="formLabelWidth">
+        <img v-if="ruleForm.headPicName" :src="'/demo4/house/show?fileName='+ruleForm.headPicName" height="160px;" width="160px;">
     </el-form-item>
     <el-form-item label="房屋图片" :label-width="formLabelWidth">
         <el-upload
@@ -130,7 +130,7 @@
     </el-form-item>
 
     <el-form-item :label-width="formLabelWidth">
-        <div>
+        <div style="width: 400px;">
                 <template style="width: 50%; margin-left: 0px;">
                     <el-card class="box-card" shadow="never" style="height: 400px; width: 400px;">
                         <div slot="header" class="clearfix" style="height:25px">
@@ -141,7 +141,7 @@
                         <div style="margin-left:20%;margin-top:20px;" >
                             <el-transfer
                                     v-model="handleSelectedValue"
-                                    :data="furnitures"
+                                    :data="ruleForm.furnitures"
                                     :titles="['待选家具', '已有家具']"
                                     :button-texts="['移除', '添加']"
                             ></el-transfer>
@@ -157,7 +157,8 @@
 
     <el-form-item>
         <el-button type="primary" @click="saveData">提交</el-button>
-        <el-button  @click="resetForm('ruleForm')">重置</el-button>
+        <!--<el-button  @click="resetForm('ruleForm')">重置</el-button>-->
+        <el-button type="primary" @click="loadData">重置</el-button>
     </el-form-item>
 </el-form>
 </div>
@@ -165,7 +166,6 @@
    var vue=new Vue({
        el: "#app",
        data: {
-           timenow:"",
            ruleForm: {
                houseid:'',
                htitle: '',
@@ -237,17 +237,13 @@
                for (var i = 0; i < 8; i++) {
                    Num+=Math.floor(Math.random()*10);
                }
-               this.form={id:'', houseid:Num, htitle:'', hadr:'',
+               this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',
                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
                    releasedate:'', hdesc:''
                };
 
            },
            saveData:function () {
-               var Num="";
-               for (var i = 0; i < 8; i++) {
-                   Num+=Math.floor(Math.random()*10);
-               }
                var self=this;
                axios.post("/demo4/house/save",this.ruleForm)
                    .then(function (response) {
@@ -255,29 +251,21 @@
                            self.$message({
                                message: '恭喜你，操作成功',
                                type: 'success',
-
                            });
                            self.loadData();
                        }else{
                            self.$message.error('错了哦，操作失败');
                        }
                    })
-               this.form={id:'', houseid:Num, htitle:'', hadr:'',
-                   hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-                   releasedate:'', hdesc:''
-               };
                this.imageUrl='';
            },
            resetForm: function (formName) {
                this.$refs[formName].resetFields();
            },
-           // timeNow: function () {
-           //     this.timenow= moment().utc().format('YYYY-MM-DD' + ' ' + moment().utc().format('dddd'))
-           // },
            handleAvatarSuccess:function(res, file) {
                this.imageUrl = URL.createObjectURL(file.raw);
-               this.form.headPicName=file.response.originalFilename;
-               this.form.headPic=file.response.newFileName;
+               this.ruleForm.headPicName=file.response.originalFilename;
+               this.ruleForm.headPic=file.response.newFileName;
            },
            beforeAvatarUpload:function(file) {
                const isJPG = file.type === 'image/jpeg';
@@ -291,8 +279,6 @@
                }
                return isJPG && isLt2M;
            }
-
-
        }
    })
 
