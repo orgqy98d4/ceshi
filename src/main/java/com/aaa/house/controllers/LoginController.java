@@ -8,6 +8,7 @@ import com.aaa.house.util.ISysConstants;
 import com.aaa.house.util.Result;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,6 +61,8 @@ public class LoginController {
                     //构建认证的身份令牌
                     UsernamePasswordToken token = new UsernamePasswordToken(eusername, epassword);
                     try {
+                        Session session = SecurityUtils.getSubject().getSession();
+                        session.setAttribute("eusername",map1);
                         //将身份令牌放进去
                         subject.login(token);
                         msg="suc";
@@ -88,6 +91,18 @@ public class LoginController {
         Map maptmp=new HashMap();
         maptmp.put("msg",msg);
         return maptmp;
+    }
+
+    /**
+     * 获取登录的用户信息
+     * @param session
+     * @return
+     */
+    @RequestMapping("/getName")
+    public Object getUserName(HttpSession session){
+        Map map=new HashMap();
+        map.put("emp",session.getAttribute("eusername"));
+        return map;
     }
 
 /*=====================================客户登录部分(开始)=====================================*/
