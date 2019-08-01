@@ -189,4 +189,7 @@
             </if>
         </where>
     </select>
+    <select id="cusLogin" resultMap="BaseResultMap">
+        select * from customer where cphone=#{cphone} and cpassword=#{cpassword} and state=1
+    </select>
 </mapper>

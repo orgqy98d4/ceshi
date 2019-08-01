@@ -20,7 +20,7 @@ function judgeCusLogin() {
     $.ajax({
         type: "post",
         dataType: "json",
-        url: "/login/judgeCusLogin",
+        url: "/demo4/judgeCusLogin",
         success: function (data) {
             if (data.code == 200) {
                 //alert(data.code);
@@ -40,9 +40,9 @@ function killCusSession() {
     $.ajax({
         type: "post",
         dataType: "json",
-        url: "/login/killCusSession",
+        url: "/demo4/killCusSession",
         success: function () {
-            window.location.href = "index.html";
+                window.location.href = "index.html";
         }
     });
 }
@@ -72,7 +72,7 @@ function settime() {
 function selephonecodetext() {
     $.ajax({
         type: "post",
-        url: "/login/getUsableGetPhone",
+        url: "/demo4/getUsableGetPhone",
         data: $("#reForm").serialize(),
         contentType: "application/json; charset=utf-8",
         success: function (data) {
@@ -90,7 +90,7 @@ function selephonecodetext() {
 function logintext() {
     $.ajax({
         type: "post",
-        url: "/login/cusLogin",
+        url: "/demo4/cusLogin",
         data: $("#loform").serialize(),
         dataType: "json",
         success: function (data) {
