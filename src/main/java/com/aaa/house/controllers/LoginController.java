@@ -90,16 +90,6 @@ public class LoginController {
         return maptmp;
     }
 
-    /**
-     * 注销
-     * @param session
-     * @return
-     */
-    @RequestMapping("/logout")
-    public Object logouut(HttpSession session){
-        session.invalidate();
-        return 1;
-    }
 /*=====================================客户登录部分(开始)=====================================*/
 
     @Autowired
