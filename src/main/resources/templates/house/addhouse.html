@@ -139,7 +139,9 @@
             <el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>
         </el-form-item>
         <!--</el-col>-->
-
+        <el-form-item label="" prop="state">
+            <el-input v-model="ruleForm.state" type="hidden"></el-input>
+        </el-form-item>
     </el-form>
     <!--房东编号，应该是在跳转页面后直接显示出来的-->
     <!--房东姓名，应该是在跳转页面后直接显示出来的-->
@@ -185,6 +187,7 @@
         </el-form-item>
     <!--</el-col>-->
     </el-form>
+
 
     <!--配置家具第2版-->
     <!--<el-form :inline="true" :model="furnitureForm" class="demo-form-inline" margin-left="30px">-->
@@ -270,6 +273,7 @@
                houseid:'',
                htitle: '',
                hadr: '',
+               state:'2',
                // hadr:[],
                // value:[],
                // options:[
@@ -357,7 +361,7 @@
            for (var i = 0; i < 8; i++) {
                Num+=Math.floor(Math.random()*10);
            }
-           self.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',
+           self.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
                hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
                releasedate:'', hdesc:''
            };
@@ -370,7 +374,7 @@
                for (var i = 0; i < 8; i++) {
                    Num+=Math.floor(Math.random()*10);
                }
-               this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',
+               this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
                    releasedate:'', hdesc:''
                };
