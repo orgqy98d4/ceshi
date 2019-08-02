@@ -80,6 +80,19 @@
             margin-top: 70px;
             margin-left: 100px;
         }
+        body .el-container {
+            height: 100%;
+            margin-bottom: 40px;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+        }
+        .el-header
+        .el-main {
+            height: 510px;
+            background-color: #EBEEF5;
+            color: #333;
+            text-align: center;
+        }
 
     </style>
 </head>
@@ -88,39 +101,44 @@
 
 
 <div id="app" class="div1">
-
-<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+<el-container>
+    <el-header>
+        <el-icon icon="el-icon-office-building"></el-icon>
+        <h1>房源添加</h1>
+    </el-header>
+    <el-main>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
     <!--<el-form-item label="房屋编号" type="hidden" prop="houseid">-->
         <el-input  v-model="ruleForm.houseid" type="hidden"  readonly="readonly"></el-input>
     <!--</el-form-item>-->
 
     <el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">
-        <!--<el-col :span="8">-->
+        <el-col :span="4">
             <el-form-item label="房屋描述" prop="htitle">
                 <el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>
             </el-form-item>
-        <!--</el-col>-->
-        <!--<el-col :span="8">-->
+        </el-col>
+        <el-col :span="4">
             <el-form-item label="房屋楼层" prop="hfloor">
                 <el-input v-model="ruleForm.hfloor"></el-input>
             </el-form-item>
-        <!--</el-col>-->
-        <!--<el-col :span="8">-->
+        </el-col>
+        <el-col :span="4">
             <el-form-item label="设定租金" prop="hrent">
                 <el-input v-model="ruleForm.hrent"></el-input>
             </el-form-item>
-        <!--</el-col>-->
+        </el-col>
     </el-form>
 
     <!--第二行-->
     <el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">
-        <!--<el-col :span="8">-->
+        <el-col :span="4">
         <el-form-item label="详细地址" prop="hadr">
             <!--详细地址：应该做一个级联-->
             <el-input  v-model="ruleForm.hadr"placeholder="如:区名，某小区"></el-input>
         </el-form-item>
-        <!--</el-col>-->
+        </el-col>
         <!--尝试级联-->
         <!--<el-form-item label="详细地址" prop="hadr">-->
             <!--<el-cascader-->
@@ -128,17 +146,17 @@
                     <!--:options="options"-->
                     <!--@change="handleChange"></el-cascader>-->
         <!--</el-form-item>-->
-        <!--<el-col :span="8">-->
+        <el-col :span="4">
         <el-form-item label="占地面积" prop="harea">
             <el-input v-model="ruleForm.harea"></el-input>
         </el-form-item>
-        <!--</el-col>-->
+        </el-col>
 
-        <!--<el-col :span="8">-->
+        <el-col :span="4">
         <el-form-item label="房屋朝向" prop="orientation">
             <el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>
         </el-form-item>
-        <!--</el-col>-->
+        </el-col>
         <el-form-item label="" prop="state">
             <el-input v-model="ruleForm.state" type="hidden"></el-input>
         </el-form-item>
@@ -147,7 +165,7 @@
     <!--房东姓名，应该是在跳转页面后直接显示出来的-->
 
     <el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">
-        <!--<el-col :span="8">-->
+        <el-col :span="4">
             <el-form-item label="发布日期" :label-width="formLabelWidth">
                 <el-date-picker
                         v-model="ruleForm.releasedate"
@@ -157,9 +175,10 @@
                         :picker-options="pickerOptions" >
                 </el-date-picker>
             </el-form-item>
-        <!--</el-col>-->
+        </el-col>
 
-        <!--<el-col :span="8">-->
+
+        <el-col :span="4">
         <!--上传房屋图片-->
         <el-form-item label="房屋图片" :label-width="formLabelWidth" margin-left="30px">
             <el-upload
@@ -173,19 +192,19 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
         </el-form-item>
-        <!--</el-col>-->
+        </el-col>
 
     </el-form>
 
 
     <!--配置家具:inline="true"class="demo-form-inline"-->
     <el-form :inline="true" :model="furnitureForm"  margin-left="30px"class="demo-form-inline">
-        <!--<el-col :span="8">-->
+        <el-col :span="4">
         <el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">
             <span id="tbd" style="width: 1000px;"></span>
 
         </el-form-item>
-    <!--</el-col>-->
+    </el-col>
     </el-form>
 
 
@@ -218,6 +237,8 @@
 </el-form>
 
 </el-form>
+</el-main>
+</el-container>
 </div>
 
 <script>

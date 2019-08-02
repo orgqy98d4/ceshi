@@ -29,24 +29,40 @@
   </sql>
     <!--根据条件查询所有符合的房屋信息-->
     <select id="queryHouses" resultType="map" parameterType="map">
-        select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+--         select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+      select hhs.*,cu.cname from
+      (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+      hhs join customer cu on hhs.landlord=cu.id
         <where>
             <!--根据房屋租金查询-->
             <if test="hrent!=null and hrent!=''">
-                and hrent=#{hrent}
+                and hhs.hrent like "%"#{hrent}"%"
+                or hhs.hadr like "%"#{hrent}"%"
+                or hhs.hdesc like "%"#{hrent}"%"
+--                 and releasedate like "%"#{hrent}"%"
             </if>
-            <!--根据房屋地址查询-->
-            <if test="hadr!=null and hadr!=''">
-                and hadr=#{hadr}
-            </if>
-            <!--根据房屋格局查询-->
-            <if test="hdesc!=null and hdesc!=''">
-                and hdesc=#{hdesc}
-            </if>
-            <if test="orientation!=null and orientation!=''">
-                and orientation=#{orientation}
-            </if>
+            <!--<if test="hrent!=null and hrent!=''">-->
+                <!--and hrent=#{hrent}-->
+            <!--</if>-->
+            <!--&lt;!&ndash;根据房屋地址查询&ndash;&gt;-->
+            <!--<if test="hadr!=null and hadr!=''">-->
+                <!--and hadr=#{hadr}-->
+            <!--</if>-->
+            <!--&lt;!&ndash;根据房屋格局查询&ndash;&gt;-->
+            <!--<if test="hdesc!=null and hdesc!=''">-->
+                <!--and hdesc=#{hdesc}-->
+            <!--</if>-->
+            <!--<if test="releasedate!=null and releasedate!=''">-->
+                <!--and releasedate=#{releasedate}-->
+            <!--</if>-->
+          <if test="state!=null and state!=''">
+            and hhs.state=#{state}
+          </if>
+          <!--<if test="hdesc!=null and hdesc!=''">-->
+           <!--and state=0-->
+          <!--</if>-->
         </where>
+--         ORDER BY releasedate DESC
         limit ${start},${pageSize}
     </select>
     <!--计算房屋总数-->
