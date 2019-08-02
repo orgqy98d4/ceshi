@@ -97,8 +97,9 @@ public class House {
         return hadr;
     }
 
+
     public void setHadr(String hadr) {
-        this.hadr = hadr == null ? null : hadr.trim();
+        this.hadr = hadr    == null ? null : hadr.trim();
     }
 
     public Integer getHrent() {

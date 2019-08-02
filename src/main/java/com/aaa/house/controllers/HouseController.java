@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +53,8 @@ public class HouseController {
      */
     @RequestMapping("/save")
     public Object save(@RequestBody House house){
+        Map map=new HashMap();
+        map.put("house",house);
         return houseService.insertSelective(house);
     }
     /**
@@ -102,12 +105,37 @@ public class HouseController {
 
     /**
      * 配置家具
-     * @param houseFurniture
+     * 参数有：自动生成的房屋编号
+     * @param
      * @return
      */
     @RequestMapping("/saveFurniture")
-    public Object saveFurniture(@RequestParam HouseFurniture houseFurniture){
-        return houseService.saveFurniture(houseFurniture);
+    public Object saveFurniture(HttpServletRequest request){
+        int result=0;
+        //通过参数名获取家具的编号，进行分割
+        String str=request.getParameter("furnitures");
+        //房子编号
+        int houseid = Integer.parseInt(request.getParameter("houseid"));
+        String[] strings = str.split(",");
+        System.out.println(strings);
+
+        //生成一个HouseFurniture对象，设置houseid
+        //每次循环都会创建一个HouseFurniture对象，然后设房间编号，家具编号，再同时存入数据
+        HouseFurniture houseFurniture1=null;
+        for (String string : strings) {
+            houseFurniture1=new HouseFurniture();
+            houseFurniture1.setHouseid(houseid);
+            houseFurniture1.setFurnitureid(Integer.valueOf(string));
+            result=houseService.saveFurniture(houseFurniture1);
+        }
+        //将家具编号存入HouseFurniture对象
+//        houseFurniture1.setFurnitureid(strings);
+        if (result>0){
+            return "true";
+        }else{
+            return "false";
+        }
+
     }
 
 //    /**
