@@ -77,33 +77,48 @@
             margin-left: 30px;
         }
         .div1{
-            margin-top: 70px;
-            margin-left: 100px;
+            height: 1000px;
         }
-        body .el-container {
+        .el-container {
             height: 100%;
             margin-bottom: 40px;
             border-radius: 2px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
         }
         .el-header
-        .el-main {
+        body .el-main {
             height: 510px;
             background-color: #EBEEF5;
             color: #333;
             text-align: center;
         }
+        html,body{
+            margin:0px;
+            height:100%;
+        }
+        /*img{*/
+            /*width:50px;*/
+            /*height: 50px;*/
+        /*}*/
 
     </style>
 </head>
 <body>
 <!--<script src="../layui/layui.js" charset="utf-8"></script>-->
+<script>
 
+</script>
 
 <div id="app" class="div1">
 <el-container>
     <el-header>
-        <el-icon icon="el-icon-office-building"></el-icon>
+        <!--<i class="el-icon-office-building"></i>../demo4/images/houses2/6.jpg-->
+        <!--<img src="../images/houses2/6.jpg" height="50" width="50"/>-->
+        <!--<img src="../images/houses2/6.jpg" height="50" width="50"/>-->
+        <!--<image src="../resources/images/houses2/6.jpg"></image>-->
+        <!--<img src="../images/houses/zufang1.jpg" height="50" width="50"/>-->
+        <!--<el-input icon="el-icon-office-building"></el-input>-->
+        <!--<img src="../images/houses2/6.jpg" height="488" width="500"/>-->
         <h1>房源添加</h1>
     </el-header>
     <el-main>
@@ -112,33 +127,40 @@
     <!--<el-form-item label="房屋编号" type="hidden" prop="houseid">-->
         <el-input  v-model="ruleForm.houseid" type="hidden"  readonly="readonly"></el-input>
     <!--</el-form-item>-->
-
-    <el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">
-        <el-col :span="4">
+<el-row :gutter="20">
+    <!--<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">-->
+        <el-col :span="8">
             <el-form-item label="房屋描述" prop="htitle">
                 <el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>
             </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="8">
             <el-form-item label="房屋楼层" prop="hfloor">
                 <el-input v-model="ruleForm.hfloor"></el-input>
             </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="8">
             <el-form-item label="设定租金" prop="hrent">
                 <el-input v-model="ruleForm.hrent"></el-input>
             </el-form-item>
         </el-col>
-    </el-form>
-
+    <!--</el-form>-->
+</el-row>
     <!--第二行-->
-    <el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">
-        <el-col :span="4">
+<el-row :gutter="20">
+    <!--<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">-->
+        <!--<el-col :span="8">-->
+        <!--<el-form-item label="详细地址" prop="hadr">-->
+            <!--&lt;!&ndash;详细地址：应该做一个级联&ndash;&gt;-->
+            <!--<el-input  v-model="ruleForm.hadr" placeholder="如:区名，某小区"></el-input>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+
+    <el-col :span="8">
         <el-form-item label="详细地址" prop="hadr">
-            <!--详细地址：应该做一个级联-->
-            <el-input  v-model="ruleForm.hadr"placeholder="如:区名，某小区"></el-input>
+            <el-input v-model="ruleForm.hadr" placeholder="如:某区-某街道-某小区"></el-input>
         </el-form-item>
-        </el-col>
+    </el-col>
         <!--尝试级联-->
         <!--<el-form-item label="详细地址" prop="hadr">-->
             <!--<el-cascader-->
@@ -146,26 +168,46 @@
                     <!--:options="options"-->
                     <!--@change="handleChange"></el-cascader>-->
         <!--</el-form-item>-->
-        <el-col :span="4">
+        <el-col :span="8">
         <el-form-item label="占地面积" prop="harea">
             <el-input v-model="ruleForm.harea"></el-input>
         </el-form-item>
         </el-col>
 
-        <el-col :span="4">
+        <el-col :span="8">
         <el-form-item label="房屋朝向" prop="orientation">
             <el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>
         </el-form-item>
         </el-col>
-        <el-form-item label="" prop="state">
-            <el-input v-model="ruleForm.state" type="hidden"></el-input>
-        </el-form-item>
-    </el-form>
+    <!--</el-form>-->
+   </el-row>
+
+
     <!--房东编号，应该是在跳转页面后直接显示出来的-->
     <!--房东姓名，应该是在跳转页面后直接显示出来的-->
+<!--第三行-->
+<el-row :gutter="20">
+    <el-col :span="8">
+        <el-form-item label="经纪人" prop="agentid">
+            <el-select v-model="ruleForm.agentid" >
+                <el-option
+                        v-for="item in agents"
+                        :key="item.id"
+                        :label="item.ename"
+                        :value="item.id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+    </el-col>
 
-    <el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">
-        <el-col :span="4">
+
+    <el-col :span="8">
+        <el-form-item label="出租方式" prop="leaseWay">
+            <el-input v-model="ruleForm.leaseWay" placeholder="如:合租/单租"></el-input>
+        </el-form-item>
+    </el-col>
+    <!--<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">-->
+        <el-col :span="8">
             <el-form-item label="发布日期" :label-width="formLabelWidth">
                 <el-date-picker
                         v-model="ruleForm.releasedate"
@@ -176,9 +218,25 @@
                 </el-date-picker>
             </el-form-item>
         </el-col>
+    <!--</el-form>-->
+</el-row>
 
+<!--第四行-->
+<el-row :gutter="20">
+    <!--配置家具:inline="true"class="demo-form-inline"-->
+    <!--<el-form :inline="true" :model="furnitureForm"  margin-left="30px"class="demo-form-inline">-->
+    <el-col >
+        <el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">
+            <span id="tbd" style="width: 1000px;"></span>
+        </el-form-item>
+    </el-col>
+    <!--</el-form>-->
+</el-row>
 
-        <el-col :span="4">
+<!--第五行-->
+<!--使居中：type="flex" justify="center"-->
+<el-row :gutter="20" >
+    <el-col :span="8">
         <!--上传房屋图片-->
         <el-form-item label="房屋图片" :label-width="formLabelWidth" margin-left="30px">
             <el-upload
@@ -192,22 +250,22 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
         </el-form-item>
-        </el-col>
-
-    </el-form>
-
-
-    <!--配置家具:inline="true"class="demo-form-inline"-->
-    <el-form :inline="true" :model="furnitureForm"  margin-left="30px"class="demo-form-inline">
-        <el-col :span="4">
-        <el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">
-            <span id="tbd" style="width: 1000px;"></span>
-
+    </el-col>
+    <el-col :span="8">
+        <el-form-item label="房屋状态" prop="state">
+            <el-select v-model="ruleForm.state" >
+                <el-option
+                        v-for="item in states"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                </el-option>
+            </el-select>
         </el-form-item>
     </el-col>
-    </el-form>
 
 
+</el-row>
     <!--配置家具第2版-->
     <!--<el-form :inline="true" :model="furnitureForm" class="demo-form-inline" margin-left="30px">-->
         <!--<el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">-->
@@ -227,14 +285,19 @@
     <!--<el-form-item label="原房屋图片" v-if="ruleForm.headPicName" :label-width="formLabelWidth">-->
         <!--<img v-if="ruleForm.headPicName" :src="'/demo4/house/show?fileName='+ruleForm.headPicName" height="160px;" width="160px;">-->
     <!--</el-form-item>-->
-<el-form :inline="true" :model="furnitureForm" class="demo-form-inline" margin-left="30px">
+<!--第六行-->
+<el-row :gutter="20" type="flex" justify="center">
+    <el-col :span="8" >
+<!--<el-form :inline="true" :model="furnitureForm" class="demo-form-inline" margin-left="30px">-->
     <el-form-item>
     <el-button type="primary" @click="saveData">
         <el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">提交</el-button>
     </el-button>
     <el-button type="primary" @click="loadData">重置</el-button>
 </el-form-item>
-</el-form>
+<!--</el-form>-->
+    </el-col>
+</el-row>
 
 </el-form>
 </el-main>
@@ -294,7 +357,9 @@
                houseid:'',
                htitle: '',
                hadr: '',
-               state:'2',
+               state:'',
+               leaseWay:'',
+               agentid:'',
                // hadr:[],
                // value:[],
                // options:[
@@ -329,6 +394,8 @@
                headPic:'',
                headPicName:''
            },
+           states:[],
+           agents:[],
            furnitureForm:{
                houseid:'',
                furnitureid:''
@@ -339,7 +406,7 @@
                    {required: true, message: '请输入房屋描述', trigger: 'blur'},
                ],
                hadr: [
-                   {required: true, message: '请选择房屋详细地址', trigger: 'blur'}
+                   {required: true, message: '某区-某道路-某小区', trigger: 'blur'}
                ],
                hrent: [
                    {required: true, message: '请设定房屋租金', trigger: 'blur'}
@@ -357,20 +424,6 @@
                    onClick:function(picker) {
                        picker.$emit('pick', new Date());
                    }
-               }, {
-                   text: '昨天',
-                   onClick:function(picker) {
-                       const date = new Date();
-                       date.setTime(date.getTime() - 3600 * 1000 * 24);
-                       picker.$emit('pick', date);
-                   }
-               }, {
-                   text: '一周前',
-                   onClick:function(picker) {
-                       const date = new Date();
-                       date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                       picker.$emit('pick', date);
-                   }
                }]
            },
 
@@ -382,12 +435,24 @@
            for (var i = 0; i < 8; i++) {
                Num+=Math.floor(Math.random()*10);
            }
-           self.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
+           self.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'',
                hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-               releasedate:'', hdesc:''
+               releasedate:'', hdesc:'',leaseWay:'',agentid:''
            };
            // 向房子家具中间表中存入的数据
-           self.furnitureForm={houseid:Num,furnitureid:''}
+           self.furnitureForm={houseid:Num,furnitureid:''};
+
+           //只查出“待审核”这一条状态
+           axios.post('/demo4/part/state2')
+               .then(function (response) {
+                   self.states=response.data;
+               })
+
+           // 查询出所有的经纪人，放在下拉框
+           axios.post('/demo4/part/agents')
+               .then(function (response) {
+                   self.agents=response.data;
+               })
        },
        methods: {
            loadData:function(){
@@ -395,9 +460,9 @@
                for (var i = 0; i < 8; i++) {
                    Num+=Math.floor(Math.random()*10);
                }
-               this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
+               this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'',
                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-                   releasedate:'', hdesc:''
+                   releasedate:'', hdesc:'',leaseWay:'',agentid:''
                };
                // 向房子家具中间表中存入的数据
                this.furnitureForm={houseid:Num,furnitureid:''};

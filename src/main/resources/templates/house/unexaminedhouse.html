@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="../js/jquery-2.1.3.js"></script>
     <style>
         .avatar-uploader .el-upload {
             border: 1px dashed #d9d9d9;
@@ -47,20 +48,9 @@
 <body>
 <div id="app">
     <el-row>
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-
-            <!--<el-form-item>-->
-            <!--<el-button type="primary" @click="toSave" >发布房源</el-button>-->
-            <!--</el-form-item>-->
-
-        </el-form>
-    </el-row>
-
-    <el-row>
         <template>
-
             <el-table
-                    :data="houseData"
+                    :data="uncheckedHouses"
                     style="width: 100%"
                     :row-class-name="tableRowClassName">
                 <el-table-column
@@ -83,16 +73,10 @@
                         label="租金"
                         width="180">
                 </el-table-column>
-
-                <!--<el-table-column-->
-                <!--prop="headPicName"-->
-                <!--label="原房屋图片名称">-->
-                <!--</el-table-column>-->
                 <el-table-column
                         label="房屋图片">
                     <template slot-scope="scope">
                         <img v-if="scope.row.headPic" :src="'/demo4/house/show?fileName='+scope.row.headPic" height="100px;" width="100px;">
-                        <!--<a  v-if="scope.row.headPic" :href="'/demo4/house/downLoad?fileName='+scope.row.headPic+'&originalName='+scope.row.headPicName">下载</a>-->
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -116,194 +100,72 @@
                         width="180">
                 </el-table-column>
 
-                <el-table-column label="操作">
+                <!--<el-col type="hidden">-->
+                    <!--<el-table-column-->
+                            <!--prop="id"-->
+                            <!--label=""-->
+                            <!--width="180" >-->
+                    <!--</el-table-column>-->
+                <!--</el-col>-->
+                <el-table-column label="审核房源">
                     <template slot-scope="scope">
                         <el-button
-                                size="mini"
-                                type="primary"
-                                @click="handleEdit(scope.$index, scope.row)" icon="el-icon-edit"></el-button>
-                        <!--<el-button-->
-                        <!--size="mini"-->
-                        <!--type="danger"-->
-                        <!--@click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete">删除</el-button>-->
+                            type="primary"
+                            @click="beChecked(scope.$index, scope.row)">点击审核</el-button>
                     </template>
                 </el-table-column>
 
             </el-table>
         </template>
     </el-row>
-
     <!--分页-->
-    <el-row>
-        <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[5,10]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
-        </el-pagination>
-    </el-row>
-
-    <!--添加房屋或者更新房屋弹出框-->
-    <el-row>
-        <el-dialog :title="title" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-                <!--隐藏主键-->
-                <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
-
-                <el-form-item label="房屋编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.houseid" autocomplete="off" ></el-input>
-                </el-form-item>
-
-
-                <el-form-item label="房屋简述" :label-width="formLabelWidth" placeholder="如:小区名称，房屋格局">
-                    <el-input v-model="form.htitle" autocomplete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="房屋地址" :label-width="formLabelWidth" placeholder="详细地址">
-                    <el-input v-model="form.hadr" autocomplete="off" ></el-input>
-                </el-form-item>
-
-                <el-form-item label="设定租金" :label-width="formLabelWidth">
-                    <el-input v-model="form.hrent" autocomplete="off" ></el-input>
-                </el-form-item>
-
-                <el-form-item label="所在楼层" :label-width="formLabelWidth">
-                    <el-input v-model="form.hfloor" autocomplete="off" ></el-input>
-                </el-form-item>
-
-                <el-form-item label="整体面积" :label-width="formLabelWidth">
-                    <el-input v-model="form.harea" autocomplete="off"></el-input>
-                </el-form-item>
-
-                <el-form-item label="房屋朝向" :label-width="formLabelWidth">
-                    <el-input v-model="form.orientation" autocomplete="off" ></el-input>
-                </el-form-item>
-
-
-                <el-form-item label="发布日期" :label-width="formLabelWidth">
-                    <el-date-picker
-                            v-model="form.releasedate"
-                            align="right"
-                            type="date"
-                            placeholder="选择日期"
-                            :picker-options="pickerOptions" >
-                    </el-date-picker>
-                </el-form-item>
-
-                <el-form-item label="原房屋图片" v-if="form.headPic" :label-width="formLabelWidth">
-                    <img v-if="form.headPic" :src="'/demo4/house/show?fileName='+form.headPic" height="160px;" width="160px;">
-                </el-form-item>
-                <el-form-item label="房屋图片" :label-width="formLabelWidth">
-                    <el-upload
-                            name="headPic"
-                            class="avatar-uploader"
-                            action="/demo4/house/uploadHeadPic"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
-
-
-                <el-form-item label="房屋状态" :label-width="formLabelWidth">
-                    <!--v-model="form.state"是向数据库中存入的数据-->
-                    <el-select v-model="form.state" filterable placeholder="请选择">
-                        <!--el-option是从数据库中查出来待选择的东西-->
-                        <el-option
-                                v-for="item in options"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-
-
-            </el-form>
-
-            <div slot="footer" class="dialog-footer">
-                <el-button type="danger" @click="dialogFormVisible = false">取 消</el-button>
-                <!--保存或修改-->
-                <el-button type="primary" @click="handleData">确 定</el-button>
-            </div>
-        </el-dialog>
-    </el-row>
+    <!--<el-row>-->
+        <!--<el-pagination-->
+                <!--@size-change="handleSizeChange"-->
+                <!--@current-change="handleCurrentChange"-->
+                <!--:current-page="currentPage"-->
+                <!--:page-sizes="[3,5,10]"-->
+                <!--:page-size="pageSize"-->
+                <!--layout="total, sizes, prev, pager, next, jumper"-->
+                <!--:total="total">-->
+        <!--</el-pagination>-->
+    <!--</el-row>-->
 </div>
 <script>
-    var vue=new Vue({
+    new Vue({
         el:"#app",
         data:{
-            houseData:[],
+            // houseData:[],
             currentPage:1,
-            pageSize:5,
+            pageSize:3,
             total:0,
-            formInline:{
-                htitle:'',
-                hadr:'',
-                hdesc:''
-            },
-            options:[],
-            title:'',
-            dialogFormVisible:false,
-
-            form:{
-                id:'',
-                houseid:'',
-                htitle:'',
-                hadr:'',
-                hrent:'',
-                headPic:'',
-                hfloor:'',
-                harea:'',
-                orientation:'',
-                releasedate:'',
-                hdesc:'',
-                state:'',
-                name:'',
-                headPicName:''
-            },
+            uncheckedHouses:[],
+            id:'',
+            // form:{
+            //     id:'',
+            //     houseid:'',
+            //     htitle:'',
+            //     hadr:'',
+            //     hrent:'',
+            //     headPic:'',
+            //     hfloor:'',
+            //     harea:'',
+            //     orientation:'',
+            //     releasedate:'',
+            //     hdesc:'',
+            //     state:'',
+            //     name:'',
+            //     headPicName:''
+            // },
             formLabelWidth: '120px',
             url:'',
             imageUrl:'',
-            pickerOptions:{
-                disabledDate:function(time) {
-                    return time.getTime() > Date.now();
-                },
-                shortcuts: [{
-                    text: '今天',
-                    onClick:function(picker) {
-                        picker.$emit('pick', new Date());
-                    }
-                }, {
-                    text: '昨天',
-                    onClick:function(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24);
-                        picker.$emit('pick', date);
-                    }
-                }, {
-                    text: '一周前',
-                    onClick:function(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', date);
-                    }
-                }]
-            },
         },
+        
         created:function () {
+            //自动加载
             this.loadData();
-            var self = this;
-            //显示状态信息
-            axios.post('/demo4/part/states')
-                .then(function (response) {
-                    self.options = response.data;
-                })
+
         },
 
         methods: {
@@ -311,24 +173,71 @@
             loadData: function () {
                 var self = this;
                 //开始的位置：(pageNo-1)*pageSize
-                var start = (this.currentPage - 1) * this.pageSize;
-
-                axios.post('/demo4/part/queryByState',{
-                    start:start,
-                    pageSize:this.pageSize,
-                    state:'2'
+                // var start = (this.currentPage - 1) * this.pageSize;
+            // ,{
+            //         start:start,
+            //             pageSize:this.pageSize,
+            //     }
+                //查询出所有待审核的房源
+                axios.post('/demo4/part/queryUnchecked')
+                .then(function (response) {
+                    self.uncheckedHouses = response.data;
+                    // self.total = response.data.total;
                 })
-                    .then(function (response) {
-                        self.houseData = response.data.houseList;
-                        // alert(response.data.houseList);
-                        self.total = response.data.total;
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-                    .then(function () {
-                    });
+
+                // axios.post('/demo4/part/queryByState',{
+                //     start:start,
+                //     pageSize:this.pageSize,
+                //     state:'2'
+                // })
+                //     .then(function (response) {
+                //         self.houseData = response.data.houseList;
+                //         self.total = response.data.total;
+                //     })
+                //     .catch(function (error) {
+                //         console.log(error);
+                //     })
+
             },
+            //点击审核，成功后该条数据从本页面“消失”
+            //修改
+            beChecked:function(index, row) {
+                var self=this;
+                axios.post('/demo4/part/updateUnchecked',row)
+                    .then(function (response) {
+                        if (response.data==1){
+                            self.loadData();
+                        }else{
+                            self.$message.error('操作失败,请重试');
+                        }
+                    })
+            },
+            // beChecked:function(){
+            //     var self=this;
+            //     alert(this.uncheckedHouses.id)
+            //     $.ajax({
+            //         url:'/demo4/part/updateUnchecked',
+            //         type:'POST',
+            //         data:{id:self.uncheckedHouses.id},
+            //         dataType:'json',
+            //         success:function (data) {
+            //             if (data==1){
+            //                 self.loadData();
+            //             } else{
+            //                 self.$message.error('操作失败,请重试');
+            //             }
+            //         }
+            //     })
+                // axios.post('/demo4/part/updateUnchecked',this.uncheckedHouses.id)
+                //     .then(function (response) {
+                //         if (response.data==1){
+                //             self.loadData();
+                //         }else{
+                //             self.$message.error('操作失败,请重试');
+                //         }
+                //     })
+
+            // },
             //每页条数
             handleSizeChange: function (val) {
                 this.pageSize = val;
@@ -339,103 +248,26 @@
                 this.currentPage = val;
                 this.loadData();
             },
-            onSubmit: function () {
-                console.log('submit!');
-                this.loadData();
-            },
-            toSave:function () {
+            //点击修改为“已审核”,并将对应数据库中的房屋状态id修改
 
-                this.title='添加房屋';
-                this.url="/demo4/house/save";
-                //随机数
-                var Num="";
-                for (var i = 0; i < 8; i++) {
-                    Num+=Math.floor(Math.random()*10);
-                }
-                this.form={id:'', houseid:Num, htitle:'', hadr:'',
-                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-                    releasedate:'', hdesc:''
-                };
-                this.imageUrl='';
-                this.dialogFormVisible=true;
-            },
-            //修改
-            handleEdit:function(index, row) {
-                this.title='修改房屋信息';
-                this.url="/demo4/house/update";
-                //赋值，将查出来的数据显示在弹框里
-                this.form=row;
-                //让弹出框显示出来
-                this.dialogFormVisible=true;
-                //在编辑修改时，将缓存的其他原头像置空
-                this.imageUrl='';
-            },
-            // //保存或者修改的事件方法
-            handleData:function () {
-                var self=this;
-                axios.post(this.url,this.form)
-                    .then(function (response) {
-                        if (response.data==1){
-                            self.$message({
-                                message: '恭喜你，操作成功',
-                                type: 'success'
-                            });
-                            self.dialogFormVisible=false;
-                            self.loadData();
-                        }else{
-                            //添加或者修改错误
-                            self.$message.error('错了哦，操作失败');
-                        }
-                    })
-            },
-            // //确认框，删除时利用
-            handleDelete:function(index, row) {
-                var self=this;
-                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                })
-                    .then(function(){
-                        axios.post("/demo4/house/delete?houseid="+row.houseid)
-                            .then(function(response) {
-                                if (response.data==1){
-                                    self.$message({
-                                        type: 'success',
-                                        message: '删除成功!'
-                                    });
-                                    self.loadData();
-                                }else{
-                                    self.$message.error('错了哦，操作失败');
-                                }
-                            })
-                    })
-                    .catch(function() {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });
-                    });
-            },
-            handleAvatarSuccess:function(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
-                this.form.headPicName=file.response.originalFilename;
-                this.form.headPic=file.response.newFileName;
-            },
-            beforeAvatarUpload:function(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            }
+            // handleAvatarSuccess:function(res, file) {
+            //     this.imageUrl = URL.createObjectURL(file.raw);
+            //     this.form.headPicName=file.response.originalFilename;
+            //     this.form.headPic=file.response.newFileName;
+            // },
+            // beforeAvatarUpload:function(file) {
+            //     const isJPG = file.type === 'image/jpeg';
+            //     const isLt2M = file.size / 1024 / 1024 < 2;
+            //
+            //     if (!isJPG) {
+            //         this.$message.error('上传头像图片只能是 JPG 格式!');
+            //     }
+            //     if (!isLt2M) {
+            //         this.$message.error('上传头像图片大小不能超过 2MB!');
+            //     }
+            //     return isJPG && isLt2M;
+            // }
         }
-
     });
 </script>
 </body>

@@ -44,6 +44,15 @@ public class House {
 
     private Integer stateid; //房屋状态编号
     private String name;//房屋状态
+    private String leaseWay;//出租方式，如：合租、单租
+
+    public String getLeaseWay() {
+        return leaseWay;
+    }
+
+    public void setLeaseWay(String leaseWay) {
+        this.leaseWay = leaseWay;
+    }
 
     public Integer getStateid() {
         return stateid;

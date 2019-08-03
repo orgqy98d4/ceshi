@@ -9,9 +9,19 @@
     id, name
   </sql>
   <select id="queryStates" resultType="map">
-    select 
+    select
     <include refid="Base_Column_List" />
     from house_state
   </select>
 
+  <select id="queryState2" resultType="map">
+    select
+    <include refid="Base_Column_List" />
+    from house_state
+    where id=2
+  </select>
+
+  <select id="queryAgents" resultType="map">
+    select id,ename from employee
+  </select>
 </mapper>
