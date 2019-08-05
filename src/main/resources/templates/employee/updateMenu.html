@@ -126,7 +126,6 @@
                                data:{rid:rid},
                                dataType:'json',
                                success:function (msg) {
-                                   alert(msg);
                                    self.$refs.tree.setCheckedKeys([]);
                                    self.defaultSelected=msg;
                                }
@@ -147,7 +146,6 @@
                     var self=this;
                     var keys1=self.$refs.tree.getCheckedKeys();
                     //var keys2=self.$refs.tree.getHalfCheckedKeys();
-                    alert(keys1);
                     //alert(keys2);
                     var setKeys=[];
                     for (var i = 0; i < keys1.length; i++) {
@@ -156,7 +154,6 @@
                     // for (var i = 0; i < keys2.length; i++) {
                     //     setKeys.push(keys2[i]);
                     // }
-                    alert(setKeys);
                     $.ajax({
                        url:'/demo4/power/setPowerOrRole',
                        type:'post',
