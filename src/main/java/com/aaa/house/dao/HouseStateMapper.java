@@ -73,4 +73,12 @@ public interface HouseStateMapper {
      */
     @Update("update house set landlord=#{id} where houseid=#{houseid}")
     int setHostId(Integer id,Integer houseid);
+    /**
+     * 根据编号，书写驳回理由
+     * @param rejectReason
+     * @param houseid
+     * @return
+     */
+    @Update("update house set rejectReason=#{rejectReason},state=3 where houseid=#{houseid}")
+    int setRejectReason(String rejectReason,Integer houseid);
 }

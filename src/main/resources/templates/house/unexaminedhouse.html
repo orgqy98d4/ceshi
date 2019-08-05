@@ -100,23 +100,46 @@
                         width="180">
                 </el-table-column>
 
-                <!--<el-col type="hidden">-->
-                    <!--<el-table-column-->
-                            <!--prop="id"-->
-                            <!--label=""-->
-                            <!--width="180" >-->
-                    <!--</el-table-column>-->
-                <!--</el-col>-->
                 <el-table-column label="审核房源">
                     <template slot-scope="scope">
                         <el-button
                             type="primary"
                             @click="beChecked(scope.$index, scope.row)">点击审核</el-button>
+                        <el-button
+                                type="danger"
+                                @click="toReject">驳回</el-button>
                     </template>
                 </el-table-column>
 
             </el-table>
         </template>
+    </el-row>
+    <!--添加驳回理由-->
+    <el-row>
+        <el-dialog :title="title" :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+
+                <el-form-item label="房屋编号" :label-width="formLabelWidth">
+                    <el-input v-model="form.houseid" autocomplete="off" readonly="readonly"></el-input>
+                </el-form-item>
+                <el-form-item label="驳回理由" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            :rows="2"
+                            placeholder="请输入至少10字"
+                            v-model="form.rejectReason">
+                    </el-input>
+                </el-form-item>
+
+
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button type="danger" @click="dialogFormVisible = false">取 消</el-button>
+                <!--保存或修改-->
+                <el-button type="primary" @click="beRejected">提交</el-button>
+            </div>
+        </el-dialog>
     </el-row>
     <!--分页-->
     <!--<el-row>-->
@@ -141,31 +164,33 @@
             total:0,
             uncheckedHouses:[],
             id:'',
-            // form:{
-            //     id:'',
-            //     houseid:'',
-            //     htitle:'',
-            //     hadr:'',
-            //     hrent:'',
-            //     headPic:'',
-            //     hfloor:'',
-            //     harea:'',
-            //     orientation:'',
-            //     releasedate:'',
-            //     hdesc:'',
-            //     state:'',
-            //     name:'',
-            //     headPicName:''
-            // },
+            title:'',
+            form:{
+                // id:'',
+                houseid:'',
+                // htitle:'',
+                // hadr:'',
+                // hrent:'',
+                // headPic:'',
+                // hfloor:'',
+                // harea:'',
+                // orientation:'',
+                // releasedate:'',
+                // hdesc:'',
+                // state:'',
+                // name:'',
+                // headPicName:'',
+                rejectReason:''
+            },
             formLabelWidth: '120px',
             url:'',
             imageUrl:'',
+            dialogFormVisible:false,
         },
         
         created:function () {
             //自动加载
             this.loadData();
-
         },
 
         methods: {
@@ -209,6 +234,38 @@
                             self.loadData();
                         }else{
                             self.$message.error('操作失败,请重试');
+                        }
+                    })
+            },
+            toReject:function () {
+                var self=this;
+                this.title='添加驳回理由';
+                this.url="/demo4/part/setRejectReason";
+                //随机数
+                var Num=self.uncheckedHouses.houseid;
+                this.form={ houseid:Num,rejectReason:''
+                    // htitle:'', hadr:'', hrent:'', headPic:'',headPicName:'',
+                    // hfloor:'', harea:'', orientation:'',
+                    // releasedate:'', hdesc:'',cname:'',id:'',
+                };
+                this.imageUrl='';
+                this.dialogFormVisible=true;
+            },
+            //驳回房源，弹出一个框，输入驳回原因，向数据库rejectReason中存放
+            beRejected:function () {
+                var self=this;
+                axios.post(this.url,this.form)
+                    .then(function (response) {
+                        if (response.data==1){
+                            self.$message({
+                                message: '恭喜你，操作成功',
+                                type: 'success'
+                            });
+                            self.dialogFormVisible=false;
+                            self.loadData();
+                        }else{
+                            //添加或者修改错误
+                            self.$message.error('错了哦，操作失败');
                         }
                     })
             },

@@ -47,6 +47,15 @@ public class House {
     private String leaseWay;//出租方式，如：合租、单租
     private String cname;//房东姓名
     private String cphone;//房东电话
+    private String rejectReason;//驳回理由
+
+    public String getRejectReason() {
+        return rejectReason;
+    }
+
+    public void setRejectReason(String rejectReason) {
+        this.rejectReason = rejectReason;
+    }
 
     public String getCname() {
         return cname;

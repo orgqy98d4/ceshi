@@ -93,4 +93,14 @@ public class HouseStateServiceImpl implements HouseStateService {
     public int setHostId(Integer id, Integer houseid) {
         return houseStateMapper.setHostId(id,houseid);
     }
+    /**
+     * 根据编号，书写驳回理由
+     * @param rejectReason
+     * @param houseid
+     * @return
+     */
+    @Override
+    public int setRejectReason(String rejectReason,Integer houseid) {
+        return houseStateMapper.setRejectReason(rejectReason,houseid);
+    }
 }

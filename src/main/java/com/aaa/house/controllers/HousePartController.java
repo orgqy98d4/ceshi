@@ -121,5 +121,16 @@ public class HousePartController {
 //        house.setLandlord(id);
         return result;
     }
-
+    /**
+     *前台传过来驳回理由，再传来一个房子实体
+     * @param rejectReason
+     * @param house
+     * @return
+     */
+    @RequestMapping("/setRejectReason")
+    public int setRejectReason(@RequestBody String rejectReason,@RequestBody House house) {
+        Integer houseid = house.getHouseid();
+        int result=houseStateService.setRejectReason(rejectReason,houseid);
+        return result;
+    }
 }

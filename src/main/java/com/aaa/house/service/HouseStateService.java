@@ -61,4 +61,12 @@ public interface HouseStateService {
      * @return
      */
     int setHostId(Integer id,Integer houseid);
+
+    /**
+     * 根据编号，书写驳回理由
+     * @param rejectReason
+     * @param houseid
+     * @return
+     */
+    int setRejectReason(String rejectReason,Integer houseid);
 }
