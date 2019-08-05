@@ -44,9 +44,9 @@ public interface PowerMapper {
     /**
      * 为角色添加权限
      * @param rid
-     * @param pid
+     * @param mid
      * @return
      */
     @Insert("insert into role_menu (rid,mid) values(#{rid},#{mid})")
-    int addMenu(Integer rid,Integer pid);
+    int addMenu(Integer rid,Integer mid);
 }

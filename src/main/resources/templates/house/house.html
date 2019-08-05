@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>house_vue_elementui</title>
+    <title>所有房源</title>
     <link rel="icon" href="../../resources/images/favicon.ico"/>
     <!--先引入vue.js库-->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -46,19 +46,39 @@
 </head>
 <body>
 <div id="app">
+    <!--搜索框-->
     <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-
-            <el-form-item>
-                <el-button type="primary" @click="toSave" >发布房源</el-button>
+            <!--根据租金/地址/房屋格局进行查询-->
+            <!--/租金-->
+            <el-form-item label="">
+                <el-input v-model="formInline.hrent" placeholder="根据道路/小区名查询"></el-input>
             </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="queryBySome">查询</el-button>
+            </el-form-item>
+
+            <!--根据房屋状态查询-->
+            <!--<el-form-item label="">-->
+                <!--<el-select v-model="formInline.state" filterable placeholder="根据房屋状态查询">-->
+                    <!--<el-option-->
+                            <!--v-for="item in options"-->
+                            <!--:key="item.id"-->
+                            <!--:label="item.name"-->
+                            <!--:value="item.id">-->
+                    <!--</el-option>-->
+                <!--</el-select>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item>-->
+                <!--<el-button type="primary" @click="queryByState">查询</el-button>-->
+            <!--</el-form-item>-->
 
         </el-form>
     </el-row>
 
+    <!--显示框-->
     <el-row>
         <template>
-
             <el-table
                     :data="houseData"
                     style="width: 100%"
@@ -69,13 +89,18 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
+                        prop="cname"
+                        label="房东姓名"
+                        width="180">
+                </el-table-column>
+                <el-table-column
                         prop="htitle"
-                        label="房间标题"
+                        label="所在小区"
                         width="180">
                 </el-table-column>
                 <el-table-column
                         prop="hadr"
-                        label="房间地址"
+                        label="详细地址"
                         width="180" >
                 </el-table-column>
                 <el-table-column
@@ -84,10 +109,10 @@
                         width="180">
                 </el-table-column>
 
-                <el-table-column
-                        prop="headPicName"
-                        label="原房屋图片名称">
-                </el-table-column>
+                <!--<el-table-column-->
+                        <!--prop="headPicName"-->
+                        <!--label="原房屋图片名称">-->
+                <!--</el-table-column>-->
                 <el-table-column
                         label="房屋图片">
                     <template slot-scope="scope">
@@ -116,8 +141,8 @@
                         width="180">
                 </el-table-column>
 
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
+                <!--<el-table-column label="操作">-->
+                    <!--<template slot-scope="scope">-->
                         <el-button
                                 size="mini"
                                 type="primary"
@@ -126,8 +151,8 @@
                                 <!--size="mini"-->
                                 <!--type="danger"-->
                                 <!--@click="handleDelete(scope.$index, scope.row)" icon="el-icon-delete">删除</el-button>-->
-                    </template>
-                </el-table-column>
+                    <!--</template>-->
+                <!--</el-table-column>-->
 
             </el-table>
         </template>
@@ -139,7 +164,7 @@
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
                             :current-page="currentPage"
-                            :page-sizes="[5,10]"
+                            :page-sizes="[3,5,10]"
                             :page-size="pageSize"
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="total">
@@ -154,32 +179,35 @@
                             <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
 
                             <el-form-item label="房屋编号" :label-width="formLabelWidth">
-                                <el-input v-model="form.houseid" autocomplete="off" ></el-input>
+                                <el-input v-model="form.houseid" autocomplete="off" readonly="readonly"></el-input>
+                            </el-form-item>
+                            <el-form-item label="房东姓名" :label-width="formLabelWidth">
+                                <el-input v-model="form.cname" autocomplete="off" readonly="readonly"></el-input>
                             </el-form-item>
 
 
                             <el-form-item label="房屋简述" :label-width="formLabelWidth" placeholder="如:小区名称，房屋格局">
-                                <el-input v-model="form.htitle" autocomplete="off"></el-input>
+                                <el-input v-model="form.htitle" autocomplete="off"readonly="readonly"></el-input>
                             </el-form-item>
 
                             <el-form-item label="房屋地址" :label-width="formLabelWidth" placeholder="详细地址">
-                                <el-input v-model="form.hadr" autocomplete="off" ></el-input>
+                                <el-input v-model="form.hadr" autocomplete="off" readonly="readonly"></el-input>
                             </el-form-item>
 
                             <el-form-item label="设定租金" :label-width="formLabelWidth">
-                                <el-input v-model="form.hrent" autocomplete="off" ></el-input>
+                                <el-input v-model="form.hrent" autocomplete="off" readonly="readonly"></el-input>
                             </el-form-item>
 
                             <el-form-item label="所在楼层" :label-width="formLabelWidth">
-                                <el-input v-model="form.hfloor" autocomplete="off" ></el-input>
+                                <el-input v-model="form.hfloor" autocomplete="off" readonly="readonly"></el-input>
                             </el-form-item>
 
                             <el-form-item label="整体面积" :label-width="formLabelWidth">
-                                <el-input v-model="form.harea" autocomplete="off"></el-input>
+                                <el-input v-model="form.harea" autocomplete="off"readonly="readonly"></el-input>
                             </el-form-item>
 
                             <el-form-item label="房屋朝向" :label-width="formLabelWidth">
-                                <el-input v-model="form.orientation" autocomplete="off" ></el-input>
+                                <el-input v-model="form.orientation" autocomplete="off" readonly="readonly"></el-input>
                             </el-form-item>
 
 
@@ -189,7 +217,7 @@
                                         align="right"
                                         type="date"
                                         placeholder="选择日期"
-                                        :picker-options="pickerOptions" >
+                                        :picker-options="pickerOptions" readonly="readonly">
                                 </el-date-picker>
                             </el-form-item>
 
@@ -246,10 +274,14 @@
             pageSize:5,
             total:0,
             formInline:{
-                htitle:'',
-                hadr:'',
-                hdesc:''
+                hrent:'',
+                // hadr:'',
+                // hdesc:'',
+                // releasedate:'',
+                state:'',
+                // name:''
             },
+            states:[],
             options:[],
             title:'',
             dialogFormVisible:false,
@@ -268,7 +300,8 @@
                 hdesc:'',
                 state:'',
                 name:'',
-                headPicName:''
+                headPicName:'',
+                cname:''
             },
             formLabelWidth: '120px',
             url:'',
@@ -306,6 +339,7 @@
             axios.post('/demo4/part/states')
                 .then(function (response) {
                     self.options = response.data;
+                    self.states=response.data;
                 })
         },
 
@@ -341,9 +375,41 @@
                     this.currentPage = val;
                     this.loadData();
                 },
-                onSubmit: function () {
-                    console.log('submit!');
-                    this.loadData();
+            queryBySome: function () {
+                // this.loadData();
+                var self = this;
+                //开始的位置：(pageNo-1)*pageSize
+                var start = (this.currentPage - 1) * this.pageSize;
+
+                axios.post('/demo4/house/houselist',{
+                    start:start,
+                    pageSize:this.pageSize,
+                    hrent:self.formInline.hrent,
+                })
+                    .then(function (response) {
+
+                        self.houseData = response.data.houseList;
+                        // alert(response.data.houseList);
+                        self.total = response.data.total;
+                    })
+            },
+            //
+                queryByState: function () {
+                    // this.loadData();
+                    var self = this;
+                    //开始的位置：(pageNo-1)*pageSize
+                    var start = (this.currentPage - 1) * this.pageSize;
+
+                    axios.post('/demo4/house/houselist',{
+                        start:start,
+                        pageSize:this.pageSize,
+                        state:self.formInline.state
+                    })
+                        .then(function (response) {
+                            self.houseData = response.data.houseList;
+                            // alert(response.data.houseList);
+                            self.total = response.data.total;
+                        })
                 },
                 toSave:function () {
 
@@ -356,7 +422,7 @@
                     }
                     this.form={id:'', houseid:Num, htitle:'', hadr:'',
                         hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-                        releasedate:'', hdesc:''
+                        releasedate:'', hdesc:'',cname:''
                     };
                     this.imageUrl='';
                     this.dialogFormVisible=true;

@@ -2,11 +2,17 @@ package com.aaa.house.controllers;
 
 import com.aaa.house.service.PowerService;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.net.httpserver.HttpServerImpl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.sql.rowset.serial.SerialArray;
+import java.sql.Array;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +47,7 @@ public class PowerController {
      * @param rid
      * @return
      */
+    @RequestMapping("/getMidByRid")
     public Object getMidByRid(@RequestParam Integer rid){
         this.rid=rid;
         List<Integer> list = powerService.getMidByRid(rid);
@@ -52,15 +59,18 @@ public class PowerController {
      * @param mid
      * @return
      */
-    public Object setPowerOrRole(@RequestParam int[] mid){
+    @RequestMapping("/setPowerOrRole")
+    public Boolean setPowerOrRole(@RequestParam(value = "mid[]",required = false) int[] mid){
         //先删除原有的权限
-        int result = powerService.deleteMenuByRid(rid);
-        System.out.println(result);
+        powerService.deleteMenuByRid(rid);
         Map map=new HashMap();
         map.put("rid",rid);
         map.put("mid",mid);
         int i = powerService.addMenu(map);
-        return i;
+        if (i>0){
+            return true;
+        }
+        return false;
     }
 
 
