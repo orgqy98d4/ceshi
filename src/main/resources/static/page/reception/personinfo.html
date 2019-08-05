@@ -170,7 +170,6 @@
                 this.$confirm("确定移除?");
             },
             handleAvatarSuccess:function(res, file) {
-                alert(111);
                 this.imageUrl = URL.createObjectURL(file.raw);
                 this.person.headPicName = file.response.originalFilename;
                 this.person.headPicT =file.response.newFileName;
