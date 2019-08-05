@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Local com.aaa.house.service
@@ -48,7 +49,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> queryAll() {
-        return roleMapper.queryAll();
+    public List<Map> queryAll(Map map) {
+        return roleMapper.queryAll(map);
+    }
+
+    @Override
+    public Role getRoleByName(Map map) {
+        return roleMapper.getRoleByName(map);
+    }
+
+    @Override
+    public int queryPageCont(Map map) {
+        return roleMapper.queryPageCont(map);
     }
 }

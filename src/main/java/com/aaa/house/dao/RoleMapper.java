@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface RoleMapper {
     /**
@@ -54,6 +56,21 @@ public interface RoleMapper {
      * 角色列表
      * @return
      */
-    @Select("select * from role")
-    List<Role> queryAll();
+    List<Map> queryAll(Map map);
+
+    /**
+     * 根据角色名字或编号查询
+     * @param map
+     * @return
+     */
+    @Select("select * from role where rname like concat('%',#{rname},'%') or rid=#{rname}")
+    Role getRoleByName(Map map);
+
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    int queryPageCont(Map map);
 }
