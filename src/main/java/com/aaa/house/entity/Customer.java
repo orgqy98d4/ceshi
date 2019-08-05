@@ -126,4 +126,23 @@ public class Customer implements Serializable {
     public void setCimg(String cimg) {
         this.cimg = cimg;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", cnumber='" + cnumber + '\'' +
+                ", cname='" + cname + '\'' +
+                ", csex='" + csex + '\'' +
+                ", cphone='" + cphone + '\'' +
+                ", ccard='" + ccard + '\'' +
+                ", cusername='" + cusername + '\'' +
+                ", cpassword='" + cpassword + '\'' +
+                ", state=" + state +
+                ", cimg='" + cimg + '\'' +
+                ", headPic='" + headPic + '\'' +
+                ", headPicName='" + headPicName + '\'' +
+                ", ctype='" + ctype + '\'' +
+                '}';
+    }
 }

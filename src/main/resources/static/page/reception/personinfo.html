@@ -87,6 +87,7 @@
                         class="avatar-uploader"
                         action="/demo4/customer/uploadHeadPic"
                         :show-file-list="false"
+                        :auto-upload="true"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
                     <img v-if="imageUrl" :src="imageUrl" class="avatar" height="60px;"
@@ -139,7 +140,8 @@
                     { required: true, message: '请输入用户名', trigger: 'blur' },
                     { length:18, message: '长度为18位', trigger: 'blur' }
                 ]
-            }
+            },
+            imageUrl:''
         },
         mounted: function () {
             this.load();
@@ -160,6 +162,7 @@
                     success: function (data) {
                         //console.log(data);
                         _this.person=data.object;
+                        _this.person.ctype=parseInt(data.object.ctype);
                     }
                 });
             },
@@ -167,9 +170,11 @@
                 this.$confirm("确定移除?");
             },
             handleAvatarSuccess:function(res, file) {
+                alert(111);
                 this.imageUrl = URL.createObjectURL(file.raw);
                 this.person.headPicName = file.response.originalFilename;
                 this.person.headPicT =file.response.newFileName;
+                //this.load();
             },
             beforeAvatarUpload:function(file) {
                 var isJPG = file.type === 'image/jpeg';
@@ -182,7 +187,6 @@
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
-                this.load();
             },
             flush:function(){
                 this.load();
@@ -190,6 +194,7 @@
             save:function () {
                 var _this = this;
                 //console.log(_this.person)
+                this.person.headPic=this.person.headPicT;
                 $.ajax({
                     type: "post",
                     dataType: "json",

@@ -74,7 +74,16 @@ public class ShiroConfiguration {
         map.put("/logout","logout");
         //登录的请求地址，可以直接访问
         map.put("/login","anon");
-        //map.put("/cusLogin","anon");
+        map.put("/cusLogin","anon");
+        map.put("/judgeCusLogin","anon");
+        map.put("/customer/getCusFromSession","anon");
+        map.put("/custype/queryType","anon");
+        map.put("/customer/insert","anon");
+        map.put("/customer/uploadHeadPic","anon");
+        map.put("/customer/show","anon");
+        map.put("/killCusSession","anon");
+        map.put("/getUsableGetPhone","anon");
+        map.put("/registerCus","anon");
         //静态资源直接访问
         map.put("/css/**","anon");
         map.put("/img/**","anon");
