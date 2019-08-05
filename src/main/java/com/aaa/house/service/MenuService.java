@@ -1,9 +1,13 @@
 package com.aaa.house.service;
 
 import com.aaa.house.entity.Menu;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Local com.aaa.house.service
@@ -53,5 +57,78 @@ public interface MenuService {
      * 权限列表
      * @return
      */
-    List<Menu> queryAll();
+    List<Map> queryAll(Map map);
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    int queryPageCont(Map map);
+
+    /**
+     * 获取所有的父级菜单
+     * @return
+     */
+    List<Map> getFatherMenu(Map map);
+
+
+    /**
+     * 获取父级菜单的数量
+     */
+    int queryFatherCount(Map map);
+
+    /**
+     * 添加父菜单
+     * @param menu
+     * @return
+     */
+    int addFatherMenu(Menu menu);
+
+    /**
+     * 修改父菜单内容
+     * @param menu
+     * @return
+     */
+    int updateFatherMenu(Menu menu);
+
+    /**
+     * 删除父菜单及其子菜单
+     * @param mid
+     * @return
+     */
+    int deleteFatherMenu(Integer mid);
+
+    /**
+     * 获取所有的子菜单
+     * @return
+     */
+    List<Map> getSonMenu(Map map);
+
+    /**
+     * 获取子菜单的条数
+     *
+     */
+    int getSonMenuCount(Map map);
+
+    /**
+     * 添加子菜单
+     * @param menu
+     * @return
+     */
+    int addSonMenu(Menu menu);
+
+    /**
+     * 修改子菜单
+     * @param menu
+     * @return
+     */
+    int updateSonMenu(Menu menu);
+
+    /**
+     * 删除子菜单
+     * @param mid
+     * @return
+     */
+    int deleteSonMenu(Integer mid);
 }

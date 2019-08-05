@@ -67,7 +67,10 @@ public class EmployeeController {
     //查询角色列表
     @RequestMapping("/roleList")
     public Object roleList(){
-        return roleService.queryAll();
+        Map map=new HashMap();
+        map.put("start",0);
+        map.put("pageSize",100);
+        return roleService.queryAll(map);
     }
     /**
      * 添加内容

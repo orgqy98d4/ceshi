@@ -7,9 +7,9 @@ public class Menu {
 
     private String mdesc;
 
-//    private int pid;
-//
-//    private String url;
+    private int pid;
+
+    private String url;
 
     public Integer getMid() {
         return mid;
@@ -33,5 +33,21 @@ public class Menu {
 
     public void setMdesc(String mdesc) {
         this.mdesc = mdesc == null ? null : mdesc.trim();
+    }
+
+    public int getPid() {
+        return pid;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

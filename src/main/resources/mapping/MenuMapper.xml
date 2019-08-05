@@ -68,4 +68,86 @@
       mdesc = #{mdesc,jdbcType=VARCHAR}
     where mid = #{mid,jdbcType=INTEGER}
   </update>
+
+  <!--  权限列表，start计算出开始-->
+  <select id="queryAll" resultType="map" parameterType="map">
+    select m.* from menu m
+    <where>
+      <if test="mname!=null and mname!=''">
+        and (m.mname like concat('%',#{mname},'%')
+        or m.mid like concat('%',#{mname},'%'))
+      </if>
+      <if test="mid!=null and mid!=''">
+        and m.mid=#{mid}
+      </if>
+    </where>
+     order by m.pid,m.mid asc limit #{start},#{pageSize}
+  </select>
+  <!--  查询出权限的总数量-->
+  <select id="queryPageCont" resultType="int">
+    SELECT count(*)
+    FROM menu
+    <where>
+      <if test="mname!=null and mname!=''">
+        and (mname like concat('%',#{mname},'%')
+        or mid like concat('%',#{mname},'%'))
+      </if>
+      <if test="mid!=null and mid!=''">
+        and m.mid=#{mid}
+      </if>
+    </where>
+  </select>
+
+  <!--  父权限列表，start计算出开始-->
+  <select id="getFatherMenu" resultType="map" parameterType="map">
+    select m.* from menu m
+    <where>
+    m.pid=0
+      <if test="mname!=null and mname!=''">
+        and (m.mname like concat('%',#{mname},'%')
+        or m.mid=#{mname})
+      </if>
+    </where>
+    order by m.pid,m.mid asc limit #{start},#{pageSize}
+  </select>
+
+  <!--  查询出父权限的总数量-->
+  <select id="queryFatherCount" resultType="int">
+    SELECT count(*)
+    FROM menu
+    <where>
+    pid=0
+      <if test="mname!=null and mname!=''">
+        and (mname like concat('%',#{mname},'%')
+        or mid = #{mname})
+      </if>
+    </where>
+  </select>
+
+  <!--  子权限列表，start计算出开始-->
+  <select id="getSonMenu" resultType="map" parameterType="map">
+    select m1.mid  mid,m1.pid pid,m2.mname bmname,m1.mname mname,m1.mdesc mdesc
+    from menu m1,menu m2
+    <where>
+      m1.pid=m2.mid and m1.pid!=0
+      <if test="mname!=null and mname!=''">
+        and (m1.mname like concat('%',#{mname},'%')
+        or m1.mid=#{mname})
+      </if>
+    </where>
+    order by m1.pid,m1.mid asc limit #{start},#{pageSize}
+  </select>
+
+  <!--  查询出子权限的总数量-->
+  <select id="getSonMenuCount" resultType="int">
+    SELECT count(*)
+    FROM menu
+    <where>
+      pid!=0
+      <if test="mname!=null and mname!=''">
+        and (mname like concat('%',#{mname},'%')
+        or mid = #{mname})
+      </if>
+    </where>
+  </select>
 </mapper>
