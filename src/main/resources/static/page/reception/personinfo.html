@@ -1,4 +1,3 @@
-<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +7,8 @@
     <script src="../../resources/vue/vue.js"></script>
     <script src="../../resources/js/ele.js"></script>
     <link href="../../resources/css/ele.css" rel="stylesheet">
+    <!--axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <style>
     .cusInfo{
@@ -19,6 +20,29 @@
         margin-top: 30px;
         border-bottom: 1px solid lightgray;
     }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+    }
+    .avatar {
+        width: 60px;
+        height: 60px;
+        display: block;
+    }
 </style>
 <body>
 <div id="house">
@@ -29,29 +53,35 @@
     <div>
         <el-form :model="person" label-width="100px" :inline="true" :rules="rules">
             <input type="hidden" v-model="person.id"/>
-            <el-form-item label="用户名" prop="cusername">
-                <el-input v-model="person.cusername" clearable></el-input>
+            <el-form-item label="编号" :label-width="formLabelWidth">
+                <el-input v-model="person.cnumber" readonly="readonly" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="性别">
-                <el-select v-model="person.csex" style="width: 150px;" placeholder="请选择您的性别">
-                    <el-option label="男" value="1"></el-option>
-                    <el-option label="女" value="0"></el-option>
-                </el-select>
+            <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-input v-model="person.cname"  autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="手机号">
-                <el-input v-model="person.cphone" clearable style="width: 200px;"></el-input>
+            <el-form-item label="性别" :label-width="formLabelWidth">
+                <template>
+                    <el-radio v-model="person.csex" label="男">男</el-radio>
+                    <el-radio v-model="person.csex" label="女">女</el-radio>
+                </template>
             </el-form-item>
-            <el-form-item label="身份证号">
-                <el-input v-model="person.ccard" clearable style="width: 200px;"></el-input>
+            <el-form-item label="电话" :label-width="formLabelWidth">
+                <el-input v-model="person.cphone"  autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="真实姓名">
-                <el-input v-model="person.cname" clearable style="width: 140px;"></el-input>
+            <el-form-item label="身份证号" :label-width="formLabelWidth">
+                <el-input v-model="person.ccard" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="原头像" v-if="form.headPic" :label-width="formLabelWidth">
-                <img v-if="form.headPic" :src="'/demo4/customer/show?fileName='+form.headPic" height="60px;"
+            <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-input v-model="person.cusername" autocomplete="off"></el-input>
+            </el-form-item>
+            <!--<el-form-item label="密码" :label-width="formLabelWidth">
+                <el-input v-model="person.cpassword" autocomplete="off"></el-input>
+            </el-form-item>-->
+            <el-form-item label="头像" v-if="person.headPic" :label-width="formLabelWidth">
+                <img v-if="person.headPic" :src="'/demo4/customer/show?fileName='+person.headPic" height="60px;"
                      width="60px;">
             </el-form-item>
-            <el-form-item label="人员头像" :label-width="formLabelWidth">
+            <el-form-item label="" :label-width="formLabelWidth">
                 <el-upload
                         name="headPic"
                         class="avatar-uploader"
@@ -59,14 +89,15 @@
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar" height="60px;"
+                         width="60px;">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
             <el-form-item label="客户类型" :label-width="formLabelWidth">
-                <el-select v-model="form.ctname" readonly="readonly" placeholder="请选择">
+                <el-select v-model="person.ctype"  placeholder="请选择">
                     <el-option
-                            v-for="item in options1"
+                            v-for="item in options"
                             :key="item.ctype"
                             :label="item.ctname"
                             :value="item.ctype">
@@ -75,6 +106,7 @@
             </el-form-item>
         </el-form>
         <el-button type="primary" @click="save()" style="margin-left: 300px">确 定</el-button>
+        <el-button type="primary" @click="flush">刷新</el-button>
     </div>
 </div>
 </body>
@@ -82,7 +114,22 @@
     new Vue({
         el: "#house",
         data: {
-            person:{},
+            options:[],
+            person:{id:'',
+                cnumber:'',
+                cname:'',
+                csex:'男',
+                cphone:'',
+                ccard:'',
+                cusername:'',
+                cpassword:'',
+                state:'',
+                cimg:'',
+                headPic:'',
+                headPicName:'',
+                ctype:'',
+                headPicT:''},
+            formLabelWidth: '120px',
             rules:{
                 cusername:[
                     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -96,6 +143,12 @@
         },
         mounted: function () {
             this.load();
+            var _this = this;
+            //获取所有客户类型
+            axios.post('/demo4/custype/queryType')
+                .then(function (response) {
+                    _this.options=response.data;
+                });
         },
         methods: {
             load: function () {
@@ -113,23 +166,26 @@
             beforeRemove:function () {
                 this.$confirm("确定移除?");
             },
-            handleExceed:function (files, fileList) {
-                this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            handleAvatarSuccess:function(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+                this.person.headPicName = file.response.originalFilename;
+                this.person.headPicT =file.response.newFileName;
             },
-            handleAvatarSuccess:function(res) {
-                var _this=this;
-                //alert(res.success)
-                if (res.success){
-                    _this.$message({
-                        message: '上传成功！正在审核~',
-                        type: 'success'
-                    });
-                }else{
-                    _this.$message({
-                        message: '上传失败！',
-                        type: 'warning'
-                    });
+            beforeAvatarUpload:function(file) {
+                var isJPG = file.type === 'image/jpeg';
+                var isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
                 }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+                this.load();
+            },
+            flush:function(){
+                this.load();
             },
             save:function () {
                 var _this = this;
@@ -151,340 +207,4 @@
         }
     });
 </script>
-</html>-->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>客户显示</title>
-    <!--先引入vue.js库-->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!--axios-->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <!-- 引入样式 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <style>
-        .avatar-uploader .el-upload {
-            border: 1px dashed #d9d9d9;
-            border-radius: 6px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        .avatar-uploader .el-upload:hover {
-            border-color: #409EFF;
-        }
-        .avatar-uploader-icon {
-            font-size: 28px;
-            color: #8c939d;
-            width: 178px;
-            height: 178px;
-            line-height: 178px;
-            text-align: center;
-        }
-        .avatar {
-            width: 178px;
-            height: 178px;
-            display: block;
-        }
-    </style>
-</head>
-<body>
-<div id="house">
-    <div style="margin-bottom: 30px">
-        <h2 style="margin-bottom: 30px">我的账户信息</h2>
-        <span class="cusInfo">请完善个人信息</span>
-    </div>
-<div id="app">
-    <el-row>
-        <el-table
-                :data="tableData"
-                style="width: 100%">
-            <!--<el-table-column
-                    prop="id"
-                    label="客户id">
-            </el-table-column>-->
-            <el-table-column
-                    prop="cnumber"
-                    label="客户编号">
-            </el-table-column>
-            <el-table-column
-                    prop="cname"
-                    label="客户姓名">
-            </el-table-column>
-            <el-table-column
-                    prop="csex"
-                    label="客户性别">
-            </el-table-column>
-            <el-table-column
-                    prop="cphone"
-                    label="客户电话">
-            </el-table-column>
-            <el-table-column
-                    prop="ccard"
-                    label="客户身份证号">
-            </el-table-column>
-            <el-table-column
-                    prop="cusername"
-                    label="客户用户名">
-            </el-table-column>
-            <el-table-column
-                    prop="cpassword"
-                    label="客户密码">
-            </el-table-column>
-            <!--<el-table-column
-                    prop="csname"
-                    label="客户状态">
-            </el-table-column>-->
-            <!--<el-table-column
-                    prop="cimg"
-                    label="客户头像地址">
-            </el-table-column>
-            <el-table-column
-                    prop="headPic"
-                    label="客户原头像">
-            </el-table-column>-->
-            <!--<el-table-column
-                    prop="headPicName"
-                    label="客户原头像">
-            </el-table-column>-->
-            <el-table-column
-                    label="头像">
-                <template slot-scope="scope">
-                    <!--{{ scope.row.headPicName }}-->
-                    <img v-if="scope.row.headPic" :src="' /demo4/customer/show?fileName='+scope.row.headPic"
-                         height ="60px;"
-                         width ="60px;">
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="ctname"
-                    label="类型">
-            </el-table-column>
-            <el-table-column label="操作" width="200">
-                <template slot-scope="scope">
-                    <el-button type="primary"
-                               size="mini"
-                               @click="handleEdit(scope.$index, scope.row)"
-                               type="primary"
-                               icon="el-icon-edit"></el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-    </el-row>
-    <el-row>
-        <!--添加修改弹出框-->
-        <el-dialog :title="title" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-                <!--隐藏主键-->
-                <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
-                <el-form-item label="编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.cnumber" readonly="readonly"  type="hidden" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cname"  autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="性别" :label-width="formLabelWidth">
-                    <template>
-                        <el-radio v-model="form.csex" label="男">男</el-radio>
-                        <el-radio v-model="form.csex" label="女">女</el-radio>
-                    </template>
-                </el-form-item>
-                <el-form-item label="电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.cphone"  autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号" :label-width="formLabelWidth">
-                    <el-input v-model="form.ccard" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="用户名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cusername" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth">
-                    <el-input v-model="form.cpassword" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="原头像" v-if="form.headPic" :label-width="formLabelWidth">
-                    <img v-if="form.headPic" :src="'/demo4/customer/show?fileName='+form.headPic" height="60px;"
-                         width="60px;">
-                </el-form-item>
-                <el-form-item label="人员头像" :label-width="formLabelWidth">
-                    <el-upload
-                            name="headPic"
-                            class="avatar-uploader"
-                            action="/demo4/customer/uploadHeadPic"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="客户类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.ctname"  placeholder="请选择">
-                        <el-option
-                                v-for="item in options1"
-                                :key="item.ctype"
-                                :label="item.ctname"
-                                :value="item.ctype">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="danger" @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveData">确 定</el-button>
-            </div>
-        </el-dialog>
-    </el-row>
-</div>
-</div>
-<script>
-    var vue =new Vue({
-        el:"#app",
-        data:{
-            tableData:[],
-            currentPage:1,
-            pageSize:3,
-            total:0,
-            formInline: {
-                cnameOrctype: '',
-                ctype:''
-            },
-            options1:[],
-            options2:[],
-            title:'',
-            dialogFormVisible: false,
-            form: {
-                id:'',
-                cnumber:'',
-                cname:'',
-                csex:'男',
-                cphone:'',
-                ccard:'',
-                cusername:'',
-                cpassword:'',
-                csname:'',
-                cimg:'',
-                headPic:'',
-                headPicT:'',
-                headPicName:'',
-                ctname:''
-            },
-            formLabelWidth: '120px',
-            url:''
-        },
-        created:function() {
-            this.loadData();
-            var self = this;
-            //获取所有客户状态
-            axios.post('/demo4/cusstate/queryState')
-                .then(function (response) {
-                    self.options2=response.data;
-                });
-            //获取所有客户类型
-            axios.post('/demo4/custype/queryType')
-                .then(function (response) {
-                    self.options1=response.data;
-                });
-        },
-        methods: {
-            loadData:function(){
-                var self = this;
-                //开始位置  (currentPage-1)*pageSize
-                axios.post('/demo4/customer/select')
-                    .then(function (response) {
-                        // handle success
-                        console.log(response);
-                        //JSON.stringify  把json对象转换为json字符串
-                        console.log(JSON.stringify(response.data));
-                        //JSON.parse()把json字符串转换为json对象
-                        console.log(response);
-                        self.tableData=response.data.customerList;
-                        self.total=response.data.total;
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    })
-                    .then(function () {
-                        // always executed
-                    });
-            },
-            onSubmit:function() {
-                console.log('submit!');
-                this.loadData();
-            },
-            toSave:function(){
-                this.title='客户添加';
-                this.url="/demo4/customer/insert";
-                this.form={id:'',
-                    cnumber:'',
-                    cname:'',
-                    csex:'男',
-                    cphone:'',
-                    ccard:'',
-                    cusername:'',
-                    cpassword:'',
-                    state:'',
-                    cimg:'',
-                    headPic:'',
-                    headPicName:'',
-                    ctype:''};
-                this.imageUrl ='';
-                //让弹出框显示
-                this.dialogFormVisible=true;
-            },
-            handleEdit:function(index, row) {
-                // console.log(index, row);
-                this.title='客户修改';
-                this.url="/demo4/customer/update";
-                //赋值
-                this.form=row;
-                this.imageUrl ='';
-                //让弹出框显示
-                this.dialogFormVisible=true;
-            },
-            saveData:function(){
-                var self=this;
-                this.form.headPic=this.form.headPicT;
-                axios.post(this.url, this.form)
-                    .then(function (response) {
-                        //添加或者修改成功
-                        if(response.data==1){
-                            self.$message({
-                                message: '恭喜你， 操作成功',
-                                type: 'success'
-                            });
-                            //关闭弹出框
-                            self.dialogFormVisible=false;
-                            //刷新页面
-                            self.loadData();
-                        }else{ //添加或者修改错误
-                            self.$message.error('错了哦， 操作错误');
-                        }
-                    })
-            },
-            handleAvatarSuccess:function(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
-                this.form.headPicName = file.response.originalFilename;
-                this.form.headPicT =file.response.newFileName;
-            },
-            beforeAvatarUpload:function(file) {
-                var isJPG = file.type === 'image/jpeg';
-                var isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            }
-        }
-    });
-</script>
-</body>
 </html>

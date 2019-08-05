@@ -41,13 +41,33 @@ public class CustomerController {
     private ResourceLoader resourceLoader;
 
     /**
-     * 添加
+     * 添加修改
      * @param customer
      * @return
      */
     @RequestMapping("/insert")
-    public Object insert(@RequestBody Customer customer){
-        return customerService.insert(customer);
+    public Result insert(Customer customer){
+        Result result = new Result();
+        if (customer.getId() == null || customer.getId() == 0) {
+            int addCus = customerService.insert(customer);
+            if (addCus > 0) {
+                result.setCode(ISysConstants.SUCCESSCODE);
+                result.setMsg("添加成功");
+            } else {
+                result.setCode(ISysConstants.ERRORCODE);
+                result.setMsg("添加失败");
+            }
+        } else {
+            int updateCus = customerService.update(customer);
+            if (updateCus > 0) {
+                result.setCode(ISysConstants.SUCCESSCODE);
+                result.setMsg("修改成功");
+            } else {
+                result.setCode(ISysConstants.ERRORCODE);
+                result.setMsg("修改失败");
+            }
+        }
+        return result;
     }
 
     /**
@@ -55,10 +75,10 @@ public class CustomerController {
      * @param customer
      * @return
      */
-    @RequestMapping("/update")
+    /*@RequestMapping("/update")
     public Object update(@RequestBody Customer customer){
         return customerService.update(customer);
-    }
+    }*/
 
     /**
      * 删除
