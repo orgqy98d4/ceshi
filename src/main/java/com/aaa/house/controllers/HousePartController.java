@@ -1,6 +1,7 @@
 package com.aaa.house.controllers;
 
 
+import com.aaa.house.entity.House;
 import com.aaa.house.service.HouseFurnitureService;
 import com.aaa.house.service.HouseService;
 import com.aaa.house.service.HouseStateService;
@@ -94,6 +95,31 @@ public class HousePartController {
     @RequestMapping("/queryRented")
     public Object queryRented(){
         return houseStateService.queryRented();
+    }
+
+    /**
+     * 向房东表中添加一条信息
+     * 先通过传过来的房屋实体获取到该房东的姓名，
+     * 向房东表插入数据
+     * 在dao层根据该房东姓名得到在房东表中的编号id
+     * 房屋信息表中landlord即是该房东编号
+     *将id通过setter方法为landlord赋值，
+     * 以上步骤基本都发生在向房东表插入过数据之后，23333.....
+     * @param house
+     * @return
+     */
+    @RequestMapping("/addHost")
+    public int addHost(@RequestBody House house){
+        String cname = house.getCname();
+        Integer houseid = house.getHouseid();
+        int result=houseStateService.addHost(house);
+        //根据房东查询出对应房东的id
+        int id = houseStateService.getIdByCname(cname);
+//        System.out.println("房东id:"+id);
+//        System.out.println("房屋id:"+houseid);
+        houseStateService.setHostId(id,houseid);
+//        house.setLandlord(id);
+        return result;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.aaa.house.service;
 
 import com.aaa.house.dao.HouseStateMapper;
+import com.aaa.house.entity.House;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,5 +64,33 @@ public class HouseStateServiceImpl implements HouseStateService {
     @Override
     public List<Map> queryRented() {
         return houseStateMapper.queryRented();
+    }
+    /**
+     * 向房东表中添加一条信息
+     * @param house
+     * @return
+     */
+    @Override
+    public int addHost(House house) {
+        return houseStateMapper.addHost(house);
+    }
+    /**
+     * 根据房东姓名获取该房东对应的编号id
+     * @param cname
+     * @return
+     */
+    @Override
+    public int getIdByCname(String cname) {
+        return houseStateMapper.getIdByCname(cname);
+    }
+    /**
+     * 获取到房屋编号后为相应的房屋设置房东编号
+     * @param id
+     * @param houseid
+     * @return
+     */
+    @Override
+    public int setHostId(Integer id, Integer houseid) {
+        return houseStateMapper.setHostId(id,houseid);
     }
 }

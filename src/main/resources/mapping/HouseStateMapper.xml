@@ -24,4 +24,9 @@
   <select id="queryAgents" resultType="map">
     select id,ename from employee
   </select>
+
+  <!--向房东表中添加房东，并需要获取到该房东的编号插入到房屋表的landlord中-->
+  <insert id="addHost" parameterType="com.aaa.house.entity.House">
+    insert into customer(cname,cphone) values (#{cname,jdbcType=VARCHAR}, #{cphone,jdbcType=VARCHAR})
+  </insert>
 </mapper>

@@ -52,7 +52,7 @@
             <!--根据租金/地址/房屋格局进行查询-->
             <!--/租金-->
             <el-form-item label="">
-                <el-input v-model="formInline.hrent" placeholder="根据地址/格局查询"></el-input>
+                <el-input v-model="formInline.hrent" placeholder="根据道路/小区名查询"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="queryBySome">查询</el-button>
@@ -95,12 +95,12 @@
                 </el-table-column>
                 <el-table-column
                         prop="htitle"
-                        label="房间标题"
+                        label="所在小区"
                         width="180">
                 </el-table-column>
                 <el-table-column
                         prop="hadr"
-                        label="房间地址"
+                        label="详细地址"
                         width="180" >
                 </el-table-column>
                 <el-table-column

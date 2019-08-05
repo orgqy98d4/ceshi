@@ -45,6 +45,24 @@ public class House {
     private Integer stateid; //房屋状态编号
     private String name;//房屋状态
     private String leaseWay;//出租方式，如：合租、单租
+    private String cname;//房东姓名
+    private String cphone;//房东电话
+
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+
+    public String getCphone() {
+        return cphone;
+    }
+
+    public void setCphone(String cphone) {
+        this.cphone = cphone;
+    }
 
     public String getLeaseWay() {
         return leaseWay;

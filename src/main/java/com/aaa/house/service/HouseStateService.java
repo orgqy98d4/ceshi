@@ -1,5 +1,7 @@
 package com.aaa.house.service;
 
+import com.aaa.house.entity.House;
+
 import java.util.List;
 import java.util.Map;
 
@@ -39,4 +41,24 @@ public interface HouseStateService {
      * @return
      */
     List<Map> queryRented();
+
+    /**
+     * 向房东表中添加一条信息
+     * @param house
+     * @return
+     */
+    int addHost(House house);
+    /**
+     * 根据房东姓名获取该房东对应的编号id
+     * @param cname
+     * @return
+     */
+    int getIdByCname(String cname);
+    /**
+     * 获取到房屋编号后为相应的房屋设置房东编号
+     * @param id
+     * @param houseid
+     * @return
+     */
+    int setHostId(Integer id,Integer houseid);
 }

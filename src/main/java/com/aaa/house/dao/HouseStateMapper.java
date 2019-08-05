@@ -1,6 +1,8 @@
 package com.aaa.house.dao;
 
+import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseState;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -49,5 +51,26 @@ public interface HouseStateMapper {
      */
     @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=5")
     List<Map> queryRented();
+    /**
+     * 向房东表中添加一条信息
+     * @param house
+     * @return
+     */
+    int addHost(House house);
+    /**
+     * 根据房东姓名获取该房东对应的编号id
+     * @param cname
+     * @return
+     */
+    @Select("select id from customer where cname=#{cname}")
+    int getIdByCname(String cname);
 
+    /**
+     * 获取到房屋编号后为相应的房屋设置房东编号
+     * @param id
+     * @param houseid
+     * @return
+     */
+    @Update("update house set landlord=#{id} where houseid=#{houseid}")
+    int setHostId(Integer id,Integer houseid);
 }

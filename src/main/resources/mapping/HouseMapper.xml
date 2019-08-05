@@ -35,10 +35,9 @@
         <where>
             <!--根据房屋租金查询-->
             <if test="hrent!=null and hrent!=''">
-                and (hhs.hrent like "%"#{hrent}"%"
+                and (hhs.htitle like "%"#{hrent}"%"
                 or hhs.hadr like "%"#{hrent}"%"
                 or hhs.hdesc like "%"#{hrent}"%")
-
             </if>
             <!--<if test="hrent!=null and hrent!=''">-->
                 <!--and hrent=#{hrent}-->
@@ -54,9 +53,9 @@
             <!--<if test="releasedate!=null and releasedate!=''">-->
                 <!--and releasedate=#{releasedate}-->
             <!--</if>-->
-          <if test="state!=null and state!=''">
-             and hhs.state=#{state}
-          </if>
+          <!--<if test="state!=null and state!=''">-->
+             <!--and hhs.state=#{state}-->
+          <!--</if>-->
           <!--<if test="hdesc!=null and hdesc!=''">-->
            <!--and state=0-->
           <!--</if>-->
