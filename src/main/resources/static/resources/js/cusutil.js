@@ -43,7 +43,11 @@ function killCusSession() {
         url: "/demo4/killCusSession",
         success: function () {
                 window.location.href = "index.html";
+        },
+        error:function (data) {
+            window.location.href = "index.html";
         }
+
     });
 }
 
