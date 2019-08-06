@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>蜗壳</title>
+    <title>贝贝</title>
     <link rel="icon" href="../../resources/images/favicon.ico"/>
     <script src="../../resources/vue/vue.js"></script>
     <script src="../../resources/js/jquery.js"></script>
@@ -47,7 +47,7 @@
                         <template slot="content">
                             <img width="100px" height="100px" src="../../resources/images/wokezufang.png">
                         </template>
-                        <span><a href=""></a>蜗壳租房APP</span>
+                        <span><a href=""></a>贝贝租房APP</span>
                     </a-popover>
                 </a-menu-item>
                 <a-menu-item key="5" class="lr"><a href="register.html" style="margin-right: 220px;">注册</a></a-menu-item>
@@ -72,7 +72,9 @@
         </a-layout-header>
         <a-layout-content style="background-color: #fff;padding: 30px 250px;margin-top: 64px;">
             <a-layout-content v-model="cusInfo" style="width: 150px;margin-right:30px;border: 1px solid lightgray;float: left">
-                <div><a-avatar style="margin-top: 35px;margin-left: 35px;" :src="cusInfo.cimg" shape="square" :size="80" icon="user" /></div>
+                <div align="center"><img v-if="cusInfo.headPic"
+                                         :src="'/demo4/customer/show?fileName='+cusInfo.headPic" height="100px;"
+                                         width="100px;"></div>
                 <div style="text-align: center;margin: 10px 0;">欢迎您，{{cusInfo.cname}}</div>
                 <hr/>
                 <div>
@@ -113,7 +115,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/customer/getCusFromSession",
+                    url: "/demo4/customer/getCusFromSession",
                     success: function (data) {
                         //console.log(data);
                         _this.cusInfo=data.object;
@@ -140,7 +142,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/login/killCusSession",
+                    url: "/demo4/killCusSession",
                     success: function () {
                         window.location.href="houselist.html";
                     }
@@ -154,7 +156,7 @@
         $.ajax({
             type: "post",
             dataType: "json",
-            url: "/login/judgeCusLogin",
+            url: "/demo4/judgeCusLogin",
             success: function (data) {
                 if (data.code == 200) {
                     //alert(data.code);

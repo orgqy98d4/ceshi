@@ -29,7 +29,7 @@
     delete from customer
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.aaa.house.entity.Customer">
+    <insert id="registerCus" parameterType="com.aaa.house.entity.Customer">
         insert into customer
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -191,5 +191,8 @@
     </select>
     <select id="cusLogin" resultMap="BaseResultMap">
         select * from customer where cphone=#{cphone} and cpassword=#{cpassword} and state=1
+    </select>
+    <select id="getUsableGetPhone" resultMap="BaseResultMap">
+       select * from customer where cphone=#{cphone}
     </select>
 </mapper>

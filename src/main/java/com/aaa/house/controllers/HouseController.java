@@ -7,13 +7,11 @@ import com.aaa.house.service.HouseService;
 import com.aaa.house.service.HouseStateService;
 import com.aaa.house.util.FtpConfig;
 import com.aaa.house.util.FtpUtil;
+import com.aaa.house.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -148,5 +146,13 @@ public class HouseController {
 //        //调用封装方法
 //        ftpUtil.downLoad(fileName,response,originalName);
 //    }
+
+    /**
+     * 前台获取房源列表
+     */
+    @RequestMapping("/houseList/{current}/{pageSize}")
+    public Page houseList(House house, @PathVariable int current, @PathVariable int pageSize) {
+        return houseService.houseList(house, current, pageSize);
+    }
 
 }

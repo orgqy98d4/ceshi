@@ -44,4 +44,10 @@ public interface CustomerService {
      * */
     int queryPageCount(Map map);
 
+    /**
+     * 个人中心
+     * 从Session中取出用户信息
+     */
+     Customer getCusFromSession();
+
 }
