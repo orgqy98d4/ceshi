@@ -1,13 +1,12 @@
 package com.aaa.house.controllers;
 
+import com.aaa.house.entity.FollowHouse;
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseFurniture;
 import com.aaa.house.service.HouseFurnitureService;
 import com.aaa.house.service.HouseService;
 import com.aaa.house.service.HouseStateService;
-import com.aaa.house.util.FtpConfig;
-import com.aaa.house.util.FtpUtil;
-import com.aaa.house.util.Page;
+import com.aaa.house.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
@@ -153,6 +152,61 @@ public class HouseController {
     @RequestMapping("/houseList/{current}/{pageSize}")
     public Page houseList(House house, @PathVariable int current, @PathVariable int pageSize) {
         return houseService.houseList(house, current, pageSize);
+    }
+
+    /**
+     * 前台根据ID获取房屋详细信息
+     */
+    @RequestMapping("houseDetail")
+    public Map<String, Object> houseDetail(Integer id) {
+        return houseService.houseDetail(id);
+    }
+
+    /**
+     * 关注房源
+     */
+    @RequestMapping("followHouse")
+    public Result followHouse(Integer houseid) {
+        int i = houseService.followhouse(houseid);
+        if (i > 0) {
+            return new Result(ISysConstants.SUCCESSCODE, "已关注", null);
+        } else {
+            return new Result(ISysConstants.SUCCESSCODE, "关注失败", null);
+        }
+    }
+
+    /**
+     * 判断是否关注
+     */
+    @RequestMapping("isFollow")
+    public Result isFollow(Integer houseid) {
+        FollowHouse follow = houseService.isFollow(houseid);
+        if (follow != null) {
+            return new Result(ISysConstants.SUCCESSCODE, "", follow);
+        } else {
+            return new Result(ISysConstants.ERRORCODE, "", follow);
+        }
+    }
+
+    /**
+     * 用户关注的房源
+     */
+    @RequestMapping("myFollowHouse")
+    public Page myFollowHouse() {
+        return houseService.myFollowHouse();
+    }
+
+    /**
+     * 取消关注
+     */
+    @RequestMapping("unFollow")
+    public Result unFollow(Integer houseid) {
+        int i = houseService.delFollow(houseid);
+        if (i > 0) {
+            return new Result(ISysConstants.SUCCESSCODE, "", null);
+        } else {
+            return new Result(ISysConstants.ERRORCODE, "", null);
+        }
     }
 
 }

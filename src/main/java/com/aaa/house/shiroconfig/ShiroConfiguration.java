@@ -86,6 +86,12 @@ public class ShiroConfiguration {
         map.put("/registerCus","anon");
         map.put("/house/houseList/**","anon");
         map.put("/house/show","anon");
+        map.put("/house/houseDetail","anon");
+        map.put("/house/followHouse","anon");
+        map.put("/house/isFollow","anon");
+        map.put("/emp/show","anon");
+        map.put("/house/myFollowHouse","anon");
+        map.put("/house/unFollow","anon");
         //静态资源直接访问
         map.put("/css/**","anon");
         map.put("/img/**","anon");
