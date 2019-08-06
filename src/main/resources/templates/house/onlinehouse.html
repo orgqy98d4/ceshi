@@ -57,6 +57,7 @@
 </head>
 <body>
 <div id="app">
+    <h1>线上房源</h1>
     <!--搜索框-->
     <el-row>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -128,6 +129,18 @@
             </el-table>
         </template>
     </el-row>
+    <!--分页-->
+    <el-row>
+        <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[3,5,10]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
+        </el-pagination>
+    </el-row>
     <!--已发布列表结束-->
     <!--合同弹出框开始-->
     <el-row id="row1">
@@ -187,7 +200,8 @@
             <div slot="footer" class="dialog-footer">
                 <el-button type="danger" @click="dialogFormVisible = false">取 消</el-button>
                 <!--保存合同-->
-                <el-button type="primary" @click="saveContract">确 定</el-button>
+                <el-button type="primary" @click="saveContract">保存合同
+                </el-button>
             </div>
         </el-dialog>
     </el-row>
@@ -200,6 +214,9 @@
         el: "#app",
         data: {
             releasedHouses: [],
+            currentPage:1,
+            pageSize:3,
+            total:0,
             title: '',
             formLabelWidth: '120px',
             url: '',
@@ -251,13 +268,15 @@
         methods: {
             loadData: function () {
                 var self = this;
+                var start = (this.currentPage - 1) * this.pageSize;
                 //查询出所有已发布的房源
-                axios.post('/demo4/part/queryReleased')
+                axios.post('/demo4/part/queryReleased',{
+                    start:start,
+                    pageSize:this.pageSize
+                })
                     .then(function (response) {
-                        self.releasedHouses = response.data;
-                        // self.form.hmeter=response.data.harea;
-                        // self.form.hlocation=response.data.hadr;
-                        // self.form.houseid=response.data.houseid;
+                        self.releasedHouses = response.data.releasedList;
+                        self.total = response.data.total;
                     });
 
             },
@@ -300,6 +319,28 @@
                         }
                     })
             },
+            //每页条数
+            handleSizeChange: function (val) {
+                this.pageSize = val;
+                this.loadData();
+            },
+            //当前页
+            handleCurrentChange: function (val) {
+                this.currentPage = val;
+                this.loadData();
+            }
+            //签订合同，将房屋状态修改为已出租
+            // beRented:function(index, row) {
+            //     var self=this;
+            //     axios.post('/demo4/part/beRented',this.form.houseid)
+            //         .then(function (response) {
+            //             if (response.data==1){
+            //                 self.loadData();
+            //             }else{
+            //                 self.$message.error('保存失败,请重试');
+            //             }
+            //         })
+            // },
             queryBySome: function () {
                 // this.loadData();
                 var self = this;

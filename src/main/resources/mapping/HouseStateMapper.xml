@@ -30,6 +30,27 @@
     insert into customer(cname,cphone) values (#{cname,jdbcType=VARCHAR}, #{cphone,jdbcType=VARCHAR})
   </insert>
 
+  <!--已审核待发布开始-->
+    <!--根据条件查询所有已审核待发布的-->
+    <select id="queryChecked" resultType="map" parameterType="map">
+      select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+      <where>
+      h.state=4
+      <!--根据房屋小区、地址查询-->
+        <if test="hrent!=null and hrent!=''">
+          and (h.htitle like "%"#{hrent}"%"
+          or h.hadr like "%"#{hrent}"%")
+        </if>
+      </where>
+      limit ${start},${pageSize}
+    </select>
+    <!--计算所有已审核待发布的-->
+    <select id="checkedCount" resultType="int">
+      select count(*) from house h join house_state hs on h.state=hs.id where h.state=4
+    </select>
+  <!--已审核待发布结束-->
+
+  <!--已发布开始-->
   <!--根据条件查询所有已发布的-->
   <select id="queryReleased" resultType="map" parameterType="map">
     select h.*, hs.name from house h join house_state hs on h.state=hs.id
@@ -41,7 +62,33 @@
         or h.hadr like "%"#{hrent}"%")
       </if>
     </where>
+    limit ${start},${pageSize}
   </select>
+  <!--计算所有已发布的-->
+  <select id="releasedCount" resultType="int">
+      select count(*) from house h join house_state hs on h.state=hs.id where h.state=6
+  </select>
+  <!--已发布结束-->
+
+  <!--已出租开始-->
+  <!--根据条件查询所有已出租的-->
+  <select id="queryRented" resultType="map" parameterType="map">
+    select h.*, hs.name from house h join house_state hs on h.state=hs.id
+    <where>
+      h.state=5
+      <!--根据房屋小区、地址查询-->
+      <if test="hrent!=null and hrent!=''">
+        and (h.htitle like "%"#{hrent}"%"
+        or h.hadr like "%"#{hrent}"%")
+      </if>
+    </where>
+    limit ${start},${pageSize}
+  </select>
+  <!--计算所有已出租的-->
+  <select id="rentedCount" resultType="int">
+      select count(*) from house h join house_state hs on h.state=hs.id where h.state=5
+  </select>
+  <!--已出租结束-->
 
   <!--向合同表录入数据-->
   <insert id="addContract" parameterType="com.aaa.house.entity.HouseContract">
@@ -147,4 +194,5 @@
       </if>
     </trim>
   </insert>
+
 </mapper>

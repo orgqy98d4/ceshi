@@ -63,9 +63,15 @@ public class HouseStateServiceImpl implements HouseStateService {
      * @return
      */
     @Override
-    public List<Map> queryRented() {
-        return houseStateMapper.queryRented();
+    public List<Map> queryRented(Map map) {
+        return houseStateMapper.queryRented(map);
     }
+    //查询所有已出租的数量
+    @Override
+    public int rentedCount(Map map) {
+        return houseStateMapper.rentedCount(map);
+    }
+
     /**
      * 向房东表中添加一条信息
      * @param house
@@ -110,8 +116,16 @@ public class HouseStateServiceImpl implements HouseStateService {
      * @return
      */
     @Override
-    public List<Map> queryChecked() {
-        return houseStateMapper.queryChecked();
+    public List<Map> queryChecked(Map map) {
+        return houseStateMapper.queryChecked(map);
+    }
+    /**
+     * 查询出所有已审核的房源数量
+     * @return
+     */
+    @Override
+    public int checkedCount(Map map) {
+        return houseStateMapper.checkedCount(map);
     }
 
     /**
@@ -128,9 +142,15 @@ public class HouseStateServiceImpl implements HouseStateService {
      * @return
      */
     @Override
-    public List<Map> queryReleased() {
-        return houseStateMapper.queryReleased();
+    public List<Map> queryReleased(Map map) {
+        return houseStateMapper.queryReleased(map);
     }
+    //查询所有已发布的数量
+    @Override
+    public int releasedCount(Map map) {
+        return houseStateMapper.releasedCount(map);
+    }
+
     /**
      * 添加合同信息
      * @param houseContract
@@ -139,5 +159,12 @@ public class HouseStateServiceImpl implements HouseStateService {
     @Override
     public int addContract(HouseContract houseContract) {
         return houseStateMapper.addContract(houseContract);
+    }
+    /**
+     * 签订合同后将对应的房屋状态改为已出租
+     */
+    @Override
+    public int beRented(int houseid) {
+        return houseStateMapper.beRented(houseid);
     }
 }

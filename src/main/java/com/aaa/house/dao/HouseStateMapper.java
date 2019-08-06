@@ -50,8 +50,10 @@ public interface HouseStateMapper {
      * 查询出所有已出租的房源
      * @return
      */
-    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=5")
-    List<Map> queryRented();
+//    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=5")
+    List<Map> queryRented(Map map);
+    //查询所有已出租的数量
+    int rentedCount(Map map);
     /**
      * 向房东表中添加一条信息
      * @param house
@@ -83,11 +85,13 @@ public interface HouseStateMapper {
     int setRejectReason(House house);
 
     /**
-     * 查询出所有已审核的房源
+     * 查询出所有已审核待发布的房源
      * @return
      */
-    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=4")
-    List<Map> queryChecked();
+//    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=4 limit #{start},#{pageSize}")
+    List<Map> queryChecked(Map map);
+     //查询所有已审核待发布的数量
+    int checkedCount(Map map);
 
     /**
      * 修改待审核的房源状态为已发布
@@ -96,16 +100,22 @@ public interface HouseStateMapper {
     @Update("update house set state=6 where state=4 and houseid=#{houseid}")
     int updateChecked(int houseid);
 
-    /**
-     * 查询出所有已发布的房源
-     * @return
-     */
-//    @Select("select h.*, hs.name from house h join house_state hs on h.state=hs.id where h.state=6 and h.htitle like '%'#{hrent}'%' or h.hadr like '%'#{hrent}'%'")
-    List<Map> queryReleased();
+
+     //查询出所有已发布的房源
+    List<Map> queryReleased(Map map);
+    //查询所有已发布的数量
+    int releasedCount(Map map);
+
+
     /**
      * 添加合同信息
      * @param houseContract
      * @return
      */
     int addContract(HouseContract houseContract);
+    /**
+     * 签订合同后将对应的房屋状态改为已出租
+     */
+    @Update("update house set state=5 where state=6 and houseid=#{houseid}")
+    int beRented(int houseid);
 }

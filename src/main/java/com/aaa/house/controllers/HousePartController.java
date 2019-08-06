@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,8 +95,11 @@ public class HousePartController {
      * @return
      */
     @RequestMapping("/queryRented")
-    public Object queryRented(){
-        return houseStateService.queryRented();
+    public Object queryRented(Map map){
+        Map map1=new HashMap();
+        map1.put("rentedList",houseStateService.queryRented(map));
+        map1.put("total",houseStateService.rentedCount(map));
+        return map1;
     }
 
     /**
@@ -138,8 +142,11 @@ public class HousePartController {
      * @return
      */
     @RequestMapping("/queryChecked")
-    public Object queryChecked(){
-        return houseStateService.queryChecked();
+    public Object queryChecked(@RequestBody Map map){
+        Map map1=new HashMap();
+        map1.put("checkedList",houseStateService.queryChecked(map));
+        map1.put("total",houseStateService.checkedCount(map));
+        return map1;
     }
 
     /**
@@ -157,9 +164,11 @@ public class HousePartController {
      * @return
      */
     @RequestMapping("/queryReleased")
-    public Object queryReleased() {
-        System.out.println(houseStateService.queryReleased()+"....................");
-        return houseStateService.queryReleased();
+    public Object queryReleased(@RequestBody Map map) {
+        Map map1=new HashMap();
+        map1.put("releasedList",houseStateService.queryReleased(map));
+        map1.put("total",houseStateService.releasedCount(map));
+        return map1;
     }
     /**
      * 添加合同信息
@@ -168,7 +177,18 @@ public class HousePartController {
      */
     @RequestMapping("/addContract")
     public Object addContract(@RequestBody HouseContract houseContract){
+        Integer houseid = houseContract.getHouseid();
+        houseStateService.beRented(houseid);
         return houseStateService.addContract(houseContract);
     }
+    /**
+     * 签订合同后将对应的房屋状态改为已出租
+     * 这里要通过房屋编号修改状态，注意：保存时获取的是合同这个实体
+     */
+//    @RequestMapping("/beRented")
+//    public int beRented(@RequestBody Integer houseid){
+////        Integer houseid = houseContract.getHouseid();
+//        return houseStateService.beRented(houseid);
+//    }
 
 }

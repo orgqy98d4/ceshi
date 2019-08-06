@@ -41,7 +41,9 @@ public interface HouseStateService {
      * 查询出所有已出租的房源
      * @return
      */
-    List<Map> queryRented();
+    List<Map> queryRented(Map map);
+    //查询所有已出租的数量
+    int rentedCount(Map map);
 
     /**
      * 向房东表中添加一条信息
@@ -74,7 +76,8 @@ public interface HouseStateService {
      * 查询出所有已审核的房源
      * @return
      */
-    List<Map> queryChecked();
+    List<Map> queryChecked(Map map);
+    int checkedCount(Map map);
 
     /**
      * 修改待审核的房源状态为已发布
@@ -86,11 +89,17 @@ public interface HouseStateService {
      * 查询出所有已发布的房源
      * @return
      */
-    List<Map> queryReleased();
+    List<Map> queryReleased(Map map);
+    //查询所有已发布的数量
+    int releasedCount(Map map);
     /**
      * 添加合同信息
      * @param houseContract
      * @return
      */
     int addContract(HouseContract houseContract);
+    /**
+     * 签订合同后将对应的房屋状态改为已出租
+     */
+    int beRented(int houseid);
 }
