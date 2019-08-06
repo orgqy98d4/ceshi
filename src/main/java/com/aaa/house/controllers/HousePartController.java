@@ -2,6 +2,7 @@ package com.aaa.house.controllers;
 
 
 import com.aaa.house.entity.House;
+import com.aaa.house.entity.HouseContract;
 import com.aaa.house.service.HouseFurnitureService;
 import com.aaa.house.service.HouseService;
 import com.aaa.house.service.HouseStateService;
@@ -123,14 +124,51 @@ public class HousePartController {
     }
     /**
      *前台传过来驳回理由，再传来一个房子实体
-     * @param rejectReason
      * @param house
      * @return
      */
     @RequestMapping("/setRejectReason")
-    public int setRejectReason(@RequestBody String rejectReason,@RequestBody House house) {
-        Integer houseid = house.getHouseid();
-        int result=houseStateService.setRejectReason(rejectReason,houseid);
+    public int setRejectReason(@RequestBody House house) {
+//        Integer houseid = house.getHouseid();
+        int result=houseStateService.setRejectReason(house);
         return result;
     }
+    /**
+     * 查询出所有已审核过的房源
+     * @return
+     */
+    @RequestMapping("/queryChecked")
+    public Object queryChecked(){
+        return houseStateService.queryChecked();
+    }
+
+    /**
+     * 修改所有已审核过的房屋为已发布状态
+     * @param house
+     * @return
+     */
+    @RequestMapping("/updateChecked")
+    public int updateChecked(@RequestBody House house){
+        Integer houseid = house.getHouseid();
+        return houseStateService.updateChecked(houseid);
+    }
+    /**
+     * 查询出所有已发布的房源
+     * @return
+     */
+    @RequestMapping("/queryReleased")
+    public Object queryReleased() {
+        System.out.println(houseStateService.queryReleased()+"....................");
+        return houseStateService.queryReleased();
+    }
+    /**
+     * 添加合同信息
+     * @param houseContract
+     * @return
+     */
+    @RequestMapping("/addContract")
+    public Object addContract(@RequestBody HouseContract houseContract){
+        return houseStateService.addContract(houseContract);
+    }
+
 }

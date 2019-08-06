@@ -1,6 +1,7 @@
 package com.aaa.house.dao;
 
 import com.aaa.house.entity.House;
+import com.aaa.house.entity.HouseContract;
 import com.aaa.house.entity.HouseState;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -75,10 +76,36 @@ public interface HouseStateMapper {
     int setHostId(Integer id,Integer houseid);
     /**
      * 根据编号，书写驳回理由
-     * @param rejectReason
-     * @param houseid
+     * @param house
      * @return
      */
     @Update("update house set rejectReason=#{rejectReason},state=3 where houseid=#{houseid}")
-    int setRejectReason(String rejectReason,Integer houseid);
+    int setRejectReason(House house);
+
+    /**
+     * 查询出所有已审核的房源
+     * @return
+     */
+    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=4")
+    List<Map> queryChecked();
+
+    /**
+     * 修改待审核的房源状态为已发布
+     * @return
+     */
+    @Update("update house set state=6 where state=4 and houseid=#{houseid}")
+    int updateChecked(int houseid);
+
+    /**
+     * 查询出所有已发布的房源
+     * @return
+     */
+//    @Select("select h.*, hs.name from house h join house_state hs on h.state=hs.id where h.state=6 and h.htitle like '%'#{hrent}'%' or h.hadr like '%'#{hrent}'%'")
+    List<Map> queryReleased();
+    /**
+     * 添加合同信息
+     * @param houseContract
+     * @return
+     */
+    int addContract(HouseContract houseContract);
 }

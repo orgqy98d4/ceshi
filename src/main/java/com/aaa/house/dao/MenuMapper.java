@@ -113,7 +113,7 @@ public interface MenuMapper {
      * @param menu
      * @return
      */
-    @Insert("insert into menu (mname,pid,mdesc) values(#{mname},#{pid},#{mdesc})")
+    @Insert("insert into menu (mname,pid,url,mdesc) values(#{mname},#{pid},#{url},#{mdesc})")
     int addSonMenu(Menu menu);
 
     /**

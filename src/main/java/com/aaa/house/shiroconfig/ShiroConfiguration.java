@@ -84,6 +84,8 @@ public class ShiroConfiguration {
         map.put("/killCusSession","anon");
         map.put("/getUsableGetPhone","anon");
         map.put("/registerCus","anon");
+        map.put("/house/houseList/**","anon");
+        map.put("/house/show","anon");
         //静态资源直接访问
         map.put("/css/**","anon");
         map.put("/img/**","anon");
@@ -91,6 +93,7 @@ public class ShiroConfiguration {
         map.put("/layui/**","anon");
         map.put("/resources/**","anon");
         map.put("/page/**","anon");
+        map.put("/page/reception/**","anon");
         //首页直接访问
         map.put("/page/index.html","anon");
         //对所有请求进行认证
@@ -98,7 +101,7 @@ public class ShiroConfiguration {
         //登录页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         //登录成功跳转页面
-        shiroFilterFactoryBean.setSuccessUrl("/backindex/index.html");
+        shiroFilterFactoryBean.setSuccessUrl("/backindex/home.html");
         //错误页面，认证不通过跳转页面(未授权)
         shiroFilterFactoryBean.setUnauthorizedUrl("/error.html");
         //将配置的map放进FilterChainDefinitionMap中

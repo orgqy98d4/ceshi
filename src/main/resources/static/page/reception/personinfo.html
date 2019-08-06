@@ -51,7 +51,7 @@
         <span class="cusInfo">请完善个人信息</span>
     </div>
     <div>
-        <el-form :model="person" label-width="100px" :inline="true" :rules="rules">
+        <el-form :model="person" label-width="100px"  :rules="rules">
             <input type="hidden" v-model="person.id"/>
             <el-form-item label="编号" :label-width="formLabelWidth">
                 <el-input v-model="person.cnumber" readonly="readonly" autocomplete="off"></el-input>
@@ -130,7 +130,7 @@
                 headPicName:'',
                 ctype:'',
                 headPicT:''},
-            formLabelWidth: '120px',
+            formLabelWidth: '100px',
             rules:{
                 cusername:[
                     { required: true, message: '请输入用户名', trigger: 'blur' },

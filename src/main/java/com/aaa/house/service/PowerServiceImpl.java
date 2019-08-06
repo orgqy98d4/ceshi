@@ -20,6 +20,32 @@ public class PowerServiceImpl implements PowerService{
 
     @Autowired
     private PowerMapper powerMapper;
+
+    /**
+     * 根据员工id获取对应的权限
+     * @param id
+     * @return
+     */
+    @Override
+    public List<TreeNode> getPowersById(Integer id) {
+        //获取id对应的所有节点列表
+        List<TreeNode> powers = powerMapper.getPowersById(id);
+        //定义临时集合，用于存放拼装后的树数据
+        List<TreeNode> tmpTreeData = new ArrayList<>();
+        if(powers!=null&&powers.size()>0){
+            for (TreeNode power : powers) {
+                //判断是否是一级节点
+                if (power.getPid()==0){
+                    tmpTreeData.add(power);
+                    //查找孩子并且绑定
+                    bindChildren(power,powers);
+                }
+            }
+
+        }
+        return tmpTreeData;
+    }
+
     /**
      * 获取所有权限
      * @return
