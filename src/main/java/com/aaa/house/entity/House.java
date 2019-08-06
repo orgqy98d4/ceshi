@@ -3,6 +3,7 @@ package com.aaa.house.entity;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class House {
@@ -32,6 +33,8 @@ public class House {
 
     private Date releasedate;//房屋发布日期
 
+    private String newstime;//房屋发布日期至今
+
     private String hdesc;//房屋格局
 
     private Integer agentid;//经纪人编号
@@ -48,6 +51,24 @@ public class House {
     private String cname;//房东姓名
     private String cphone;//房东电话
     private String rejectReason;//驳回理由
+
+    public List<String> getInstallation() {
+        return installation;
+    }
+
+    public void setInstallation(List<String> installation) {
+        this.installation = installation;
+    }
+
+    private List<String> installation;//配套设施
+
+    public String getNewstime() {
+        return newstime;
+    }
+
+    public void setNewstime(String newstime) {
+        this.newstime = newstime;
+    }
 
     public String getRejectReason() {
         return rejectReason;
