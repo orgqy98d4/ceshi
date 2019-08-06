@@ -1,13 +1,17 @@
 package com.aaa.house.service;
 
 import com.aaa.house.dao.HouseMapper;
+import com.aaa.house.entity.Employee;
+import com.aaa.house.entity.FollowHouse;
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseFurniture;
+import com.aaa.house.util.CusUtil;
 import com.aaa.house.util.Page;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -120,5 +124,67 @@ public class HouseServiceImpl implements HouseService {
         }
         Integer count = houseMapper.count(house);
         return new Page(list, count);
+    }
+
+    /**
+     * 前台根据ID获取房屋详细信息
+     */
+    @Override
+    public Map<String, Object> houseDetail(Integer id) {
+        House house = houseMapper.houseDetail(id);
+        Map<String, Object> map = new HashMap<>();
+        //遍历list获取houseid，根据houseid获取对应的房屋设施
+        Integer houseid = house.getHouseid();
+        List<String> houseInstallation = houseMapper.houseInstallation(houseid);
+        house.setInstallation(houseInstallation);
+        //根据员工id获取员工信息
+        Integer agentid = house.getAgentid();
+        Employee employee = houseMapper.getAgentInfo(agentid);
+        map.put("object", house);
+        map.put("empinfo", employee);
+        return map;
+    }
+
+    /**
+     * 关注房源
+     */
+    @Override
+    public int followhouse(Integer houseid) {
+        Integer cid = CusUtil.getCusFromSession().getId();
+        return houseMapper.followhouse(cid, houseid);
+    }
+
+    /**
+     * 判断是否已经关注
+     */
+    @Override
+    public FollowHouse isFollow(Integer houseid) {
+        Integer cid = CusUtil.getCusFromSession().getId();
+        return houseMapper.isFollow(cid,houseid);
+    }
+
+    /**
+     * 用户关注的房源
+     */
+    @Override
+    public Page myFollowHouse() {
+        Integer cid = CusUtil.getCusFromSession().getId();
+        List<House> list = houseMapper.myFollowHouse(cid);
+        for (House h : list) {
+            Integer hid = h.getHouseid();
+            List<String> houseInstallation = houseMapper.houseInstallation(hid);
+            h.setInstallation(houseInstallation);
+        }
+        int count = houseMapper.myFollowHouseCount(cid);
+        return new Page(list,count);
+    }
+
+    /**
+     * 取消关注
+     */
+    @Override
+    public int delFollow(Integer houseid) {
+        Integer cid = CusUtil.getCusFromSession().getId();
+        return houseMapper.delFollow(cid,houseid);
     }
 }

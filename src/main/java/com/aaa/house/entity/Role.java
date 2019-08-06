@@ -7,6 +7,8 @@ public class Role {
 
     private String rdesc;
 
+    private Integer pid;
+
     public Integer getRid() {
         return rid;
     }
@@ -29,5 +31,13 @@ public class Role {
 
     public void setRdesc(String rdesc) {
         this.rdesc = rdesc == null ? null : rdesc.trim();
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 }

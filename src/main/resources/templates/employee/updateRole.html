@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>树状列表</title>
+    <title>角色分配</title>
     <!--vue依赖的js-->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!--axios样式-->
@@ -19,21 +19,11 @@
 <body>
 
     <div id="app">
-        <h1>&nbsp;权限分配</h1>
+        <h1>&nbsp;角色分配</h1>
         <el-row>
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="角色名称">
-                    <!--<el-input v-model="formInline.rname" placeholder="角色名称或编号"></el-input>-->
-
-                    <el-select v-model="formInline.rname" placeholder="请选择">
-                        <el-option
-                                v-for="item in options"
-                                :key="item.rid"
-                                :label="item.rname"
-                                :value="item.rid">
-                        </el-option>
-                    </el-select>
-
+                <el-form-item label="员工名称或编号">
+                    <el-input v-model="formInline.ename" placeholder="员工名称或编号"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" icon="el-icon-search">查询</el-button>
@@ -49,16 +39,16 @@
 
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
-                            <span>角色信息</span>
+                            <span>员工信息</span>
                         </div>
                         <div class="text item">
-                            <el-form :model="roleForm" label-width="80px">
-                                <input type="hidden" v-model="roleForm.rid"/>
-                                <el-form-item label="角色名字">
-                                    <el-input v-model="roleForm.rname" :disabled="true"></el-input>
+                            <el-form :model="form" label-width="80px">
+                                <input type="hidden" v-model="form.id"/>
+                                <el-form-item label="员工编号">
+                                    <el-input v-model="form.enumber" :disabled="true"></el-input>
                                 </el-form-item>
-                                <el-form-item label="角色介绍">
-                                    <el-input v-model="roleForm.rdesc" :disabled="true"></el-input>
+                                <el-form-item label="员工名字">
+                                    <el-input v-model="form.ename" :disabled="true"></el-input>
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -73,13 +63,13 @@
 
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
-                            <span>对应权限</span>
+                            <span>对应角色</span>
                         </div>
                         <div class="text item">
                             <el-tree
                                     :data="treeData"
                                     show-checkbox
-                                    node-key="mid"
+                                    node-key="rid"
                                     ref="tree"
                                     default-expand-all
                                     :default-checked-keys="defaultSelected"
@@ -95,29 +85,23 @@
         var vue=new Vue({
             el:'#app',
             data:{
-                treeData:[],//权限树
+                treeData:[],//角色树
                 defaultSelected:[],//默认选中状态
-                formInline: {//角色查询条件
-                    rname:''
+                formInline: {//员工查询条件
+                    ename:''
                 },
-                options:[],
-                roleForm:{
-                    rid:'',
-                    rname:'',
-                    rdesc:''
+                form:{//员工信息表
+                    id:'',
+                    ename:'',
+                    enumber:''
                 }
             },
             created:function(){
                 var self=this;
-                //获取权限树
-                axios.post("/demo4/power/tree", this.form)
+                //获取角色树
+                axios.post("/demo4/roleTree/tree", this.form)
                     .then(function (response) {
                         self.treeData=response.data;
-                    });
-                //获取所有角色名称
-                axios.post("/demo4/role/page",{start:0,pageSize:100,rname:self.formInline.rname})
-                    .then(function (response) {
-                        self.options=response.data.roleList;
                     })
             },
             methods: {
@@ -126,22 +110,26 @@
                         console.log(JSON.stringify(data));
                     }
                 },
-                //角色提交查询
+                //员工提交查询
                 onSubmit:function() {
                     var self=this;
                     console.log('submit!');
-                    //根据角色编号或名称查询角色信息
-                    axios.post("/demo4/role/getRoleByName",{rname:this.formInline.rname})
+                    //根据员工编号或名称查询员工信息
+                    axios.post("/demo4/emp/page",{start:0,pageSize:100,ename:this.formInline.ename})
                         .then(function (response) {
-                        var rid=response.data.roles.rid;
+                            //获取员工id
+                        var eid=response.data.empList[0].id;
+                        alert(eid);
+                        alert(response.data.empList);
                         //赋值
-                        self.roleForm=response.data.roles;
-                        //获取当前查询的角色对应的所有权限
+                        self.form=response.data.empList[0];
+                        //获取当前查询的员工对应的所有角色
                             $.ajax({
-                               url:'/demo4/power/getMidByRid',
-                               data:{rid:rid},
+                               url:'/demo4/roleTree/getRidByEid',
+                               data:{eid:eid},
                                dataType:'json',
                                success:function (msg) {
+                                   alert(msg);
                                    self.$refs.tree.setCheckedKeys([]);
                                    self.defaultSelected=msg;
                                }
@@ -151,13 +139,13 @@
                 //菜单刷新
                 flash:function () {
                     var self=this;
-                    self.formInline.rname='';
-                    self.roleForm.rid='';
-                    self.roleForm.rname='';
-                    self.roleForm.rdesc='';
+                    self.formInline.ename='';
+                    self.form.id='';
+                    self.form.ename='';
+                    self.form.enumber='';
                     self.$refs.tree.setCheckedKeys([]);
                 },
-                //权限修改提交方法
+                //角色修改提交方法
                 getCheckedKeys:function () {
                     var self=this;
                     var keys1=self.$refs.tree.getCheckedKeys();
@@ -167,19 +155,20 @@
                     for (var i = 0; i < keys1.length; i++) {
                         setKeys.push(keys1[i]);
                     }
+                    // alert(setKeys);
                     // for (var i = 0; i < keys2.length; i++) {
                     //     setKeys.push(keys2[i]);
                     // }
                     $.ajax({
-                       url:'/demo4/power/setPowerOrRole',
+                       url:'/demo4/roleTree/addMenu',
                        type:'post',
                        dataType:'json',
-                       data:{"mid[]":setKeys},
+                       data:{"rid[]":setKeys},
                        success:function (msg) {
                            if (msg==true){
                                self.$message({
                                    type: 'success',
-                                   message: '权限设置成功!'
+                                   message: '角色设置成功!'
                                });
                                //刷新页面
                                self.$refs.tree.setCheckedKeys([]);

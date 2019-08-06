@@ -52,6 +52,8 @@ public class House {
     private String cphone;//房东电话
     private String rejectReason;//驳回理由
 
+    private List<String> installation;//配套设施
+
     public List<String> getInstallation() {
         return installation;
     }
@@ -59,8 +61,6 @@ public class House {
     public void setInstallation(List<String> installation) {
         this.installation = installation;
     }
-
-    private List<String> installation;//配套设施
 
     public String getNewstime() {
         return newstime;
