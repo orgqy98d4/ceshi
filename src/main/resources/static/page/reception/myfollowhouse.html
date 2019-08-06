@@ -72,7 +72,7 @@
                 <a-list-item-meta>
                     <a slot="title" @click="houseDetail(item.id)" :hid="item.id">{{item.htitle}}</a>
                     <span slot="description">{{item.hadr}}&nbsp;&nbsp;&nbsp;/</span>
-                    <span slot="description">{{item.hspace}}㎡&nbsp;&nbsp;&nbsp;/</span>
+                    <span slot="description">{{item.harea}}㎡&nbsp;&nbsp;&nbsp;/</span>
                     <span slot="description">{{item.orientation}}&nbsp;&nbsp;&nbsp;/</span>
                     <span slot="description">{{item.hdesc}}</span>
                     <span id="price" slot="description">{{item.hrent}}<span slot="description">元/月</span></span>
@@ -82,10 +82,7 @@
                             <a-button type="primary" @click="unFollowing(item.id)" style="padding: 0;margin: 0;padding-left: 5px" icon="heart" type="mini">取消关注</a-button>
                         </span>
                     </p>
-                    <ul id="ulinfo" slot="description" style="padding-left: 0px;">
-                        <li slot="description" v-for="(k,index) in item.desctag">{{k}}</li>
-                    </ul>
-                    <img width="170px" height="120px" slot="avatar" :src="item.himg"/>
+                    <img width="170px" height="120px" slot="avatar" :src="'/demo4/house/show?fileName='+item.headPic"/>
                 </a-list-item-meta>
             </a-list-item>
         </a-list>
@@ -108,7 +105,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/house/myFollowHouse",
+                    url: "/demo4/house/myFollowHouse",
                     success: function (data) {
                         //console.log(data)
                         _this.listData = data.object;
@@ -130,7 +127,7 @@
                         $.ajax({
                             type: "post",
                             dataType: "json",
-                            url: "/house/unFollow",
+                            url: "/demo4/house/unFollow",
                             data:{houseid:hid},
                             success: function (data) {
                                 if (data.code==200){
