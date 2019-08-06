@@ -3,6 +3,8 @@ package com.aaa.house.service;
 import com.aaa.house.dao.HouseMapper;
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseFurniture;
+import com.aaa.house.util.Page;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,7 @@ public class HouseServiceImpl implements HouseService {
         return houseMapper.saveFurniture(houseFurniture);
     }
 
+
     /**
      * 根据条件查询出所有符合条件的房屋总数
      * @param map
@@ -102,4 +105,20 @@ public class HouseServiceImpl implements HouseService {
 //    public int delete(Integer houseid) {
 //        return houseMapper.deleteByPrimaryKey(houseid);
 //    }
+
+    /**
+     * 前台获取全部已发布的房屋列表
+     */
+    @Override
+    public Page houseList(House house, int current, int pageSize) {
+        RowBounds rowBounds = new RowBounds((current - 1) * pageSize, pageSize);
+        List<House> list = houseMapper.houseList(house, rowBounds);
+        for (House h : list) {
+            Integer hid = h.getHouseid();
+            List<String> houseInstallation = houseMapper.houseInstallation(hid);
+            h.setInstallation(houseInstallation);
+        }
+        Integer count = houseMapper.count(house);
+        return new Page(list, count);
+    }
 }

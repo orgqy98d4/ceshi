@@ -278,7 +278,7 @@
                                 <div slot="nextArrow" slot-scope="props" class="custom-slick-arrow" style="right: 10px">
                                     <a-icon type="right-circle"/>
                                 </div>
-                                <div v-for="k in listDetail.himgs">
+                                <div v-for="k in listDetail.headPic">
                                     <h3><img :src="k" style="width: 100%;height: 500px"></h3>
                                 </div>
                             </a-carousel>
@@ -570,7 +570,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/house/isFollow",
+                    url: "/demo4/house/isFollow",
                     data: {"houseid": hid},
                     success: function (data) {
                         console.log(data);
@@ -624,7 +624,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/login/killCusSession",
+                    url: "/demo4/killCusSession",
                     success: function () {
                         window.location.reload();
                         //window.location.href="houselist.html";
@@ -639,7 +639,7 @@
         $.ajax({
             type: "post",
             dataType: "json",
-            url: "/login/judgeCusLogin",
+            url: "/demo4/judgeCusLogin",
             success: function (data) {
                 if (data.code == 200) {
                     //alert(data.code);
