@@ -101,7 +101,7 @@ public class ShiroConfiguration {
         //登录页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         //登录成功跳转页面
-        shiroFilterFactoryBean.setSuccessUrl("/backindex/index.html");
+        shiroFilterFactoryBean.setSuccessUrl("/backindex/home.html");
         //错误页面，认证不通过跳转页面(未授权)
         shiroFilterFactoryBean.setUnauthorizedUrl("/error.html");
         //将配置的map放进FilterChainDefinitionMap中
