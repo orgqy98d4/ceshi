@@ -136,6 +136,9 @@
       <if test="hlocation != null">
         #{hlocation,jdbcType=VARCHAR},
       </if>
+      <if test="houseid != null">
+        #{houseid,jdbcType=INTEGER},
+      </if>
       <if test="csid != null">
         #{csid,jdbcType=INTEGER},
       </if>
