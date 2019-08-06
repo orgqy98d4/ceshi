@@ -43,6 +43,16 @@ public class PowerController {
     }
 
     /**
+     * 根据员工id获取权限树
+     * @return
+     */
+    @RequestMapping("/getPowersById")
+    public Object getPowersById(@RequestParam Integer id){
+        System.out.println(powerService.getPowersById(id));
+        return powerService.getPowersById(id);
+    }
+
+    /**
      * 根据角色编号获取对应的所有权限编号
      * @param rid
      * @return

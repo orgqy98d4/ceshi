@@ -18,6 +18,20 @@ import java.util.List;
  * 权限树
  */
 public interface PowerMapper {
+
+
+    /**
+     * 根据员工id获取对应的权限
+     * @param id
+     * @return
+     */
+    @Select("select m.mid mid,m.mname label,m.url url,m.pid pid\n" +
+            "from menu m,role_menu rm,employee e\n" +
+            "where m.mid=rm.mid and rm.rid=e.roleid and e.id=#{id}\n" +
+            "order by m.mid,m.mid asc")
+    List<TreeNode> getPowersById(Integer id);
+
+
     /**
      * 获取所有权限
      * @return
