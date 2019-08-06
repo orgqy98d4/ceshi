@@ -10,7 +10,6 @@
     <script src="../../resources/antd/antd.min.js"></script>
     <script src="../../resources/antd/ant-design-vue.js"></script>
     <link href="../../resources/antd/antd.min.css" rel="stylesheet">
-    <link href="../../resources/css/home.css" rel="stylesheet"/>
     <script src="../../resources/js/cusutil.js"></script>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=M2kGUcWj1dSWhQvuNlrqWYPouAGVbBGT"></script>
@@ -163,7 +162,7 @@
                                     <a-list-item-meta>
                                         <a slot="title" @click="houseDetail(item.id)" :hid="item.id">{{item.htitle}}</a>
                                         <span slot="description">{{item.hadr}}&nbsp;&nbsp;&nbsp;/</span>
-                                        <span slot="description">{{item.hspace}}㎡&nbsp;&nbsp;&nbsp;/</span>
+                                        <span slot="description">{{item.harea}}㎡&nbsp;&nbsp;&nbsp;/</span>
                                         <span slot="description">{{item.orientation}}&nbsp;&nbsp;&nbsp;/</span>
                                         <span slot="description">{{item.hdesc}}</span>
                                         <span id="price" slot="description">{{item.hrent}}<span slot="description">元/月</span></span>
@@ -171,7 +170,7 @@
                                         <ul id="ulinfo" slot="description" style="padding-left: 10px;">
                                             <li slot="description" v-for="(k,index) in item.desctag">{{k}}</li>
                                         </ul>
-                                        <img slot="avatar" :src="item.himg"/>
+                                        <img slot="avatar" :src="'/demo4/house/show?fileName='+item.headPic"/>
                                     </a-list-item-meta>
                                 </a-list-item>
                             </a-list>
@@ -207,7 +206,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/house/houseList/"+current+"/"+this.pageSize,
+                    url: "/demo4/house/houseList/"+current+"/"+this.pageSize,
                     data:{hadr:_this.hadr},
                     success: function (data) {
                         //console.log(data)
@@ -245,7 +244,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/login/killCusSession",
+                    url: "/demo4/killCusSession",
                     success: function () {
                         window.location.reload();
                         //window.location.href="houselist.html";
@@ -260,7 +259,7 @@
         $.ajax({
             type: "post",
             dataType: "json",
-            url: "/login/judgeCusLogin",
+            url: "/demo4/judgeCusLogin",
             success: function (data) {
                 if (data.code == 200) {
                     //alert(data.code);

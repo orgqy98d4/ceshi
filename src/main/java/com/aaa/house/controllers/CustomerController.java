@@ -75,10 +75,10 @@ public class CustomerController {
      * @param customer
      * @return
      */
-    /*@RequestMapping("/update")
+    @RequestMapping("/update")
     public Object update(@RequestBody Customer customer){
         return customerService.update(customer);
-    }*/
+    }
 
     /**
      * 删除

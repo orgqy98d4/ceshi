@@ -170,26 +170,26 @@
         <el-dialog :title="title" :visible.sync="dialogFormVisible">
             <el-form :model="form">
                 <!--隐藏主键-->
-                <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
-                <el-form-item label="客户编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.cnumber" readonly="readonly" type="hidden" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客户姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cname" readonly="readonly" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客户性别" :label-width="formLabelWidth">
-                    <el-input v-model="form.csex" readonly="readonly" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客户电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.cphone" readonly="readonly" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客户身份证号" :label-width="formLabelWidth">
-                    <el-input v-model="form.ccard" readonly="readonly" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="客户用户名" :label-width="formLabelWidth">
-                    <el-input v-model="form.cusername" type="hidden" autocomplete="off"></el-input>
-                </el-form-item>
-                    <el-input v-model="form.cpassword" type="hidden" autocomplete="off"></el-input>
+                <!--<el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>-->
+                <!--<el-form-item label="客户编号" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.cnumber" readonly="readonly" type="hidden" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="客户姓名" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.cname" readonly="readonly" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="客户性别" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.csex" readonly="readonly" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="客户电话" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.cphone" readonly="readonly" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="客户身份证号" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.ccard" readonly="readonly" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="客户用户名" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.cusername" type="hidden" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                    <!--<el-input v-model="form.cpassword" type="hidden" autocomplete="off"></el-input>-->
                 <el-form-item label="客户状态" :label-width="formLabelWidth">
                     <el-select v-model="form.state" placeholder="请选择">
                         <el-option
@@ -200,11 +200,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                    <el-input v-model="form.cimg" type="hidden" autocomplete="off"></el-input>
-                <el-form-item label="原头像" v-if="form.headPic" :label-width="formLabelWidth">
-                    <img v-if="form.headPic" :src="'/demo4/customer/show?fileName='+form.headPic" height="60px;"
-                         width="60px;">
-                </el-form-item>
+                    <!--<el-input v-model="form.cimg" type="hidden" autocomplete="off"></el-input>-->
+                <!--<el-form-item label="原头像" v-if="form.headPic" :label-width="formLabelWidth">-->
+                    <!--<img v-if="form.headPic" :src="'/demo4/customer/show?fileName='+form.headPic" height="60px;"-->
+                         <!--width="60px;">-->
+                <!--</el-form-item>-->
                 <!--<el-form-item label="人员头像" :label-width="formLabelWidth">
                     <el-upload
                             name="headPic"
@@ -217,16 +217,16 @@
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>-->
-                <el-form-item label="客户类型" :label-width="formLabelWidth">
-                    <el-select v-model="form.ctname" readonly="readonly" placeholder="请选择">
-                        <el-option
-                                v-for="item in options1"
-                                :key="item.ctype"
-                                :label="item.ctname"
-                                :value="item.ctype">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                <!--<el-form-item label="客户类型" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="form.ctname" readonly="readonly" placeholder="请选择">-->
+                        <!--<el-option-->
+                                <!--v-for="item in options1"-->
+                                <!--:key="item.ctype"-->
+                                <!--:label="item.ctname"-->
+                                <!--:value="item.ctype">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
 
             </el-form>
             <div slot="footer" class="dialog-footer">
