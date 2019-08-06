@@ -4,6 +4,18 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>贝贝</title>
+		<link rel="icon" href="../../resources/images/favicon.ico"/>
+		<!--先引入vue.js库-->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<!--axios-->
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="../../js/jquery-2.1.3.js"></script>
+		<!--穿梭框的layui样式库-->
+		<!--<link rel="stylesheet" href="../layui/css/layui.css" >-->
 		<link rel="icon" href="../../resources/images/favicon.ico" />
 		<script src="../../resources/js/jquery.js"></script>
 		<script src="../../resources/vue/vue.js"></script>
@@ -174,13 +186,13 @@
 								</h3>
 							</div>
 						</a-layout-content>
-						<a-layout>
+						<!--<a-layout>
 							<a-layout-content style="background-color: #fff;padding-right: 100px;">
 								<div class="form">
 									<el-form ref="form" :rules="rules" :model="form" label-width="80px" style="">
-										<el-form-item prop="address">
+										<el-form-item prop="htitle">
 											<span style="color: #101d37;font: '微软雅黑';font-weight: bold;">市区&nbsp;&nbsp;</span>
-											<el-select v-model="form.address" placeholder="请选择地区" id="address">
+											<el-select v-model="form.htitle" placeholder="请选择地区" id="address">
 												<el-option label="中原区" value="中原区"></el-option>
 												<el-option label="二七区" value="二七区"></el-option>
 												<el-option label="管城区" value="管城区"></el-option>
@@ -196,9 +208,9 @@
 											</el-select>
 										</el-form-item>
 
-										<el-form-item prop="street">
+										<el-form-item prop="hfloor">
 											<span style="color: #101d37;font: '微软雅黑';font-weight: bold;">街道&nbsp;&nbsp;</span>
-											<el-input id="street" v-model="form.street" style="width:220px" placeholder="请填写街道"></el-input>
+											<el-input id="hfloor" v-model="form.hfloor" style="width:220px" placeholder="请填写街道"></el-input>
 										</el-form-item>
 
 										<el-form-item prop="uptown">
@@ -228,7 +240,129 @@
 									</el-form>
 								</div>
 							</a-layout-content>
-						</a-layout>
+						</a-layout>-->
+						<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+							<el-row :gutter="20">
+								<el-col :span="6">
+									<el-form-item label="房屋编号" type="hidden" prop="houseid">
+										<el-input  v-model="ruleForm.houseid" readonly="readonly"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="房屋描述" prop="htitle">
+										<el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="房屋楼层" prop="hfloor">
+										<el-input v-model="ruleForm.hfloor"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="设定租金" prop="hrent">
+										<el-input v-model="ruleForm.hrent"></el-input>
+									</el-form-item>
+								</el-col>
+								<!--</el-form>-->
+							</el-row>
+							<!--第二行-->
+							<el-row :gutter="20">
+								<el-col :span="6">
+									<el-form-item label="详细地址" prop="hadr">
+										<el-input v-model="ruleForm.hadr" placeholder="如:某区-某街道-某小区"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="占地面积" prop="harea">
+										<el-input v-model="ruleForm.harea"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="房屋朝向" prop="orientation">
+										<el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="出租方式" prop="leaseWay">
+										<!--<el-input v-model="ruleForm.leaseWay" placeholder="如:合租/单租"></el-input>-->
+										<el-select v-model="ruleForm.leaseWay">
+											<el-option value="合租">合租</el-option>
+											<el-option value="单租">单租</el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+
+							</el-row>
+							<!--房东编号，应该是在跳转页面后直接显示出来的-->
+							<!--房东姓名，应该是在跳转页面后直接显示出来的-->
+							<!--第三行-->
+							<el-row :gutter="20">
+								<el-col :span="6">
+									<el-form-item label="发布日期" :label-width="formLabelWidth">
+										<el-date-picker
+												v-model="ruleForm.releasedate"
+												align="right"
+												type="date"
+												placeholder="选择日期"
+												:picker-options="pickerOptions" >
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="房东姓名" prop="cname">
+										<el-input v-model="ruleForm.cname"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="房东电话" prop="cphone">
+										<el-input v-model="ruleForm.cphone"></el-input>
+									</el-form-item>
+								</el-col>
+								<!--</el-form>-->
+							</el-row>
+
+							<!--第四行-->
+							<el-row :gutter="20">
+								<el-col >
+									<el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">
+										<span id="tbd" style="width: 1000px;"></span>
+									</el-form-item>
+								</el-col>
+							</el-row>
+
+							<!--第五行-->
+							<!--使居中：type="flex" justify="center"-->
+							<el-row :gutter="20" >
+								<el-col :span="6">
+									<!--上传房屋图片-->
+									<el-form-item label="房屋图片" :label-width="formLabelWidth" margin-left="30px">
+										<el-upload
+												name="headPic"
+												class="avatar-uploader"
+												action="/demo4/house/uploadHeadPic"
+												:show-file-list="false"
+												:on-success="handleAvatarSuccess"
+												:before-upload="beforeAvatarUpload">
+											<img v-if="imageUrl" :src="imageUrl" class="avatar">
+											<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+										</el-upload>
+									</el-form-item>
+								</el-col>
+							</el-row>
+
+							<!--第六行-->
+							<el-row :gutter="20" type="flex" justify="center">
+								<el-col :span="8" >
+									<el-form-item>
+										<el-button type="primary" @click="saveData">
+											<el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">提交</el-button>
+										</el-button>
+										<el-button type="primary" @click="loadData">重置</el-button>
+									</el-form-item>
+								</el-col>
+							</el-row>
+
+						</el-form>
 						<a-layout-footer :style="{ textAlign: 'center' }">Copyright &copy; 2019.Volute.版权所有 | 本站内容版权属于原创，未经许可不得转载 </a-layout-footer>
 					</a-layout>
 				</a-layout-content>
@@ -236,91 +370,212 @@
 		</div>
 	</body>
 	<script>
-		new Vue({
-			el: "#house",
+		// 获取家具列表的异步请求
+		$(function () {
+			$("#tbd").empty();
+			$.ajax({
+				url:"/demo4/part/furnitures",
+				type:"POST",
+				dataType:"json",
+				success:function (data) {
+					var tr="<table style=\"width: 1000px;\"><tr>";
+					for (var i = 0; i < data.length; i++) {
+						var item=data[i];
+						// alert(item.furnitureid);
+						tr+="<td><input type='checkbox' name='checkbox' value='"+item.furnitureid+"'/>"+item.furniturename+"</td>";
+					}
+					tr+="</tr></table>";
+					$("#tbd").append(tr);
+				}
+			})
+		});
 
+		// vue的数据处理
+		var vue=new Vue({
+			el: "#app",
 			data: {
-				form: {},
-				rules: {
-						address: [
-					 		{
-					 			required: true, //是否必填
-					 		},
-					 	],
-					 	street: [
-					 		{
-						 		required: true, //是否必填
-						 		message: '街道不能为空', //规则
-						 		trigger: 'blur' //何事件触发
-					 		},
-					 	],
-					 	uptown: [
-					 		{
-						 		required: true, //是否必填
-						 		message: '小区不能为空', //规则
-						 		trigger: 'blur' //何事件触发
-					 		},
-					 	],
-					 	remoney: [
-					 		{
-					 			required: true, //是否必填
-						 		message: '租金不能为空', //规则
-						 		trigger: 'blur' //何事件触发
-					 		},
-					 		{
-					 			type: 'number',
-					 			message: '租金必须是数字'
-					 		},
-					 	],
-					 	lname: [
-					 		{
-					 			required: true, //是否必填
-						 		message: '称呼不能为空', //规则
-						 		trigger: 'blur' //何事件触发
-					 		},
-					 	],
-					 	lphone: [
-					 		{
-					 			required: true, //是否必填
-						 		message: '手机号码不能为空', //规则
-						 		trigger: 'blur' //何事件触发
-					 		},
-					 		{
-					 			type: 'number',
-					 			message: '手机号码必须是数字'
-					 		},
-					 	],
+				ruleForm: {
+					houseid:'',
+					htitle: '',
+					hadr: '',
+					state:'2',
+					leaseWay:'',
+					agentid:'',
+					hrent: '',
+					hfloor: '',
+					harea: '',
+					orientation: '',
+					releasedate:'',
+					// furnitures:[],
+					headPic:'',
+					headPicName:'',
+					cname:'',
+					cphone:''
 				},
+				states:[],
+				// agents:[],
+				agent:{},
+				furnitureForm:{
+					houseid:'',
+					furnitureid:''
+				},
+				imageUrl:'',
+				rules: {
+					htitle: [
+						{required: true, message: '请输入房屋描述', trigger: 'blur'},
+					],
+					hadr: [
+						{required: true, message: '某区-某道路-某小区', trigger: 'blur'}
+					],
+					hrent: [
+						{required: true, message: '请设定房屋租金', trigger: 'blur'}
+					],
+					harea: [
+						{required: true, message: '请描述房屋面积', trigger: 'blur'}
+					],
+					cname: [
+						{required: true, message: '请输入房东姓名', trigger: 'blur'}
+					],
+					cphone: [
+						{required: true, message: '请输入房东电话', trigger: 'blur'}
+					]
+				},
+				pickerOptions:{
+					disabledDate:function(time) {
+						return time.getTime() > Date.now();
+					},
+					shortcuts: [{
+						text: '今天',
+						onClick:function(picker) {
+							picker.$emit('pick', new Date());
+						}
+					}]
+				},
+
 			},
-			mounted: function() {
-				
+			created: function () {
+				var self = this;
+				this.loadData();
+				axios.post('/demo4/getName')
+						.then(function (response) {
+							self.ruleForm.agentid=response.data.emp.enumber;
+						});
+				// var Num="";
+				// for (var i = 0; i < 8; i++) {
+				//     Num+=Math.floor(Math.random()*10);
+				// }
+				// self.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
+				//     hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
+				//     releasedate:'', hdesc:'',leaseWay:'',cname:'', cphone:''
+				// };
+				// 向房子家具中间表中存入的数据
+				// self.furnitureForm={houseid:Num,furnitureid:''};
+
+				//只查出“待审核”这一条状态
+				axios.post('/demo4/part/state2')
+						.then(function (response) {
+							self.states=response.data;
+						});
 			},
 			methods: {
-				ladr: function() {
-					this.form.ladr = this.form.address + "-" + this.form.street + "-" + this.form.uptown;
+				loadData:function(){
+					var self=this;
+					var Num="";
+					for (var i = 0; i < 8; i++) {
+						Num+=Math.floor(Math.random()*10);
+					}
+					this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
+						hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
+						releasedate:'', hdesc:'',leaseWay:'',cname:'', cphone:'',agentid:''
+					};
+					// 向房子家具中间表中存入的数据
+					this.furnitureForm={houseid:Num,furnitureid:''};
+
+					//刷新页面时，将所有选中的复选框设为未选中状态
+					var checkbox=$('input[name=\'checkbox\']:checked');
+					for (var i = 0; i < checkbox.length; i++) {
+						checkbox[i].checked=false;
+					}
 				},
-				onSubmit: function() {
-					var _this = this;
+				saveData:function () {
+					var self=this;
+					axios.post("/demo4/house/save",this.ruleForm)
+							.then(function (response) {
+
+								if (response.data==1){
+									self.$message({
+										message: '恭喜你，操作成功',
+										type: 'success'
+									});
+									self.loadData();
+									axios.post('/demo4/getName')
+											.then(function (response) {
+												self.ruleForm.agentid=response.data.emp.enumber;
+											});
+								}else{
+									self.$message.error('错了哦，操作失败');
+								}
+							});
+					axios.post("/demo4/part/addHost",this.ruleForm)
+							.then(function (response) {
+								if (response.data==1){
+									self.loadData();
+								}else{
+									self.$message.error('错了哦，操作失败');
+								}
+							});
+					this.imageUrl='';
+				},
+				saveFurniture:function(){
+					// var Num="";
+					// for (var i = 0; i < 8; i++) {
+					//     Num+=Math.floor(Math.random()*10);
+					// }
+					// // 向房子家具中间表中存入的数据
+					// this.furnitureForm={houseid:Num,furnitureid:''}
+
+					var self=this;
+					// 写一个数组存入所有的家具编号
+					var ids=[];
+					$('input[name=\'checkbox\']:checked').each(function () {
+						ids.push($(this).val());
+					});
 					$.ajax({
-						type: "post",
-						url: "/house/leadhouseInsert",
-						data: this.form,
-						dataType: "json",
-						success: function(data) {
-							if(data.code == 200) {
-								_this.$message({
-									message: data.msg,
-									type: 'success'
-								});
-								_this.form={};
-							} else {
-								this.$message.error(data.msg);
+						url:"/demo4/house/saveFurniture",
+						type:"POST",
+						data:{furnitures:ids.toString(),houseid:this.furnitureForm.houseid},
+						dataType:"json",
+						success:function (msg) {
+							if(msg==true){
+								// $('input[name=\'checkbox\']:checked').each(function () {
+								//     $('input[name=\'checkbox\']:checked=fal')
+								// });
+								self.loadData();
+							}else{
+								self.$message.error('错了哦，操作失败');
 							}
 						}
 					});
+				},
+				handleAvatarSuccess:function(res, file) {
+					this.imageUrl = URL.createObjectURL(file.raw);
+					this.ruleForm.headPicName=file.response.originalFilename;
+					this.ruleForm.headPic=file.response.newFileName;
+				},
+				beforeAvatarUpload:function(file) {
+					const isJPG = file.type === 'image/jpeg';
+					const isLt2M = file.size / 1024 / 1024 < 2;
+					if (!isJPG) {
+						this.$message.error('上传头像图片只能是 JPG 格式!');
+					}
+					if (!isLt2M) {
+						this.$message.error('上传头像图片大小不能超过 2MB!');
+					}
+					return isJPG && isLt2M;
 				}
 			}
-		});
-	</script>
+		})
 
+
+	</script>
 </html>
