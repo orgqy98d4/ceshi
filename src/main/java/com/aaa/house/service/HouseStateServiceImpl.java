@@ -2,6 +2,7 @@ package com.aaa.house.service;
 
 import com.aaa.house.dao.HouseStateMapper;
 import com.aaa.house.entity.House;
+import com.aaa.house.entity.HouseContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,14 +94,50 @@ public class HouseStateServiceImpl implements HouseStateService {
     public int setHostId(Integer id, Integer houseid) {
         return houseStateMapper.setHostId(id,houseid);
     }
+
     /**
      * 根据编号，书写驳回理由
-     * @param rejectReason
+     * @param house
+     * @return
+     */
+    @Override
+    public int setRejectReason(House house) {
+        return houseStateMapper.setRejectReason(house);
+    }
+
+    /**
+     * 查询出所有已审核的房源
+     * @return
+     */
+    @Override
+    public List<Map> queryChecked() {
+        return houseStateMapper.queryChecked();
+    }
+
+    /**
+     * 修改待审核的房源状态为已发布
      * @param houseid
      * @return
      */
     @Override
-    public int setRejectReason(String rejectReason,Integer houseid) {
-        return houseStateMapper.setRejectReason(rejectReason,houseid);
+    public int updateChecked(int houseid) {
+        return houseStateMapper.updateChecked(houseid);
+    }
+    /**
+     * 查询出所有已发布的房源
+     * @return
+     */
+    @Override
+    public List<Map> queryReleased() {
+        return houseStateMapper.queryReleased();
+    }
+    /**
+     * 添加合同信息
+     * @param houseContract
+     * @return
+     */
+    @Override
+    public int addContract(HouseContract houseContract) {
+        return houseStateMapper.addContract(houseContract);
     }
 }

@@ -1,6 +1,7 @@
 package com.aaa.house.service;
 
 import com.aaa.house.entity.House;
+import com.aaa.house.entity.HouseContract;
 
 import java.util.List;
 import java.util.Map;
@@ -64,9 +65,32 @@ public interface HouseStateService {
 
     /**
      * 根据编号，书写驳回理由
-     * @param rejectReason
-     * @param houseid
+     * @param house
      * @return
      */
-    int setRejectReason(String rejectReason,Integer houseid);
+    int setRejectReason(House house);
+
+    /**
+     * 查询出所有已审核的房源
+     * @return
+     */
+    List<Map> queryChecked();
+
+    /**
+     * 修改待审核的房源状态为已发布
+     * @return
+     */
+    int updateChecked(int houseid);
+
+    /**
+     * 查询出所有已发布的房源
+     * @return
+     */
+    List<Map> queryReleased();
+    /**
+     * 添加合同信息
+     * @param houseContract
+     * @return
+     */
+    int addContract(HouseContract houseContract);
 }
