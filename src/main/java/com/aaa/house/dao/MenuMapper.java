@@ -121,7 +121,7 @@ public interface MenuMapper {
      * @param menu
      * @return
      */
-    @Update("update menu set mname=#{mname},pid=#{pid},mdesc=#{mdesc} where mid=#{mid}")
+    @Update("update menu set mname=#{mname},pid=#{pid},url=#{url},mdesc=#{mdesc} where mid=#{mid}")
     int updateSonMenu(Menu menu);
 
     /**
