@@ -267,20 +267,9 @@
                         </div>
                     </div>
                     <div>
-                        <!--轮播图-->
+                        <!--房源图-->
                         <div style="background-color: #fff;float: left;margin-left: 20px;width: 60%;">
-                            <a-carousel arrows>
-                                <div slot="prevArrow" slot-scope="props" class="custom-slick-arrow"
-                                     style="left: 10px;zIndex: 1">
-                                    <a-icon type="left-circle"/>
-                                </div>
-                                <div slot="nextArrow" slot-scope="props" class="custom-slick-arrow" style="right: 10px">
-                                    <a-icon type="right-circle"/>
-                                </div>
-                                <div v-for="k in listDetail.headPic">
-                                    <h3><img :src="k" style="width: 100%;height: 500px"></h3>
-                                </div>
-                            </a-carousel>
+                             <img :src="'/demo4/house/show?fileName='+listDetail.headPic"/>
                         </div>
                         <!--右侧-->
                         <div style="background-color: #fff;border: 1px solid lightgray;float: left;width: 30%;margin-left: 30px;height: 550px;padding: 15px 30px">
@@ -315,7 +304,7 @@
                             <a-divider></a-divider>
                             <div style="margin-left: 30px;">
                                 <div>
-                                    <div class="d1"><img id="dlimg" :src="'/demo4/emp/show?fileName='+empinfo.headPic"></div>
+                                    <div class="d1"><img id="dlimg" :src="'/demo4/emp/show?fileName='+listDetail.headPic"></div>
                                     <div class="d1" :model="empinfo">
                                         <p style="margin-bottom: 10px">
                                             <span style="color: black;font-size: 22px;font-weight: bold;">{{empinfo.ename}}</span>
@@ -510,7 +499,7 @@
                     $.ajax({
                         type: "post",
                         dataType: "json",
-                        url: "/house/followHouse",
+                        url: "/demo4/house/followHouse",
                         data: {"houseid": id},
                         success: function (data) {
                             //console.log(data)
@@ -545,25 +534,6 @@
                         }
                     }
                 });
-            },
-            BdMap: function (jd, wd, area) {
-                var _this = this;
-                // 百度地图API功能
-                var map = new BMap.Map("bdmap");    // 创建Map实例
-                map.centerAndZoom(new BMap.Point(jd, wd), 14);  // 初始化地图,设置中心点坐标和地图级别
-                //添加地图类型控件
-                map.addControl(new BMap.MapTypeControl({
-                    mapTypes: [
-                        BMAP_NORMAL_MAP,
-                        BMAP_HYBRID_MAP
-                    ]
-                }));
-                var marker = new BMap.Marker(new BMap.Point(jd, wd));  // 创建标注
-                map.addOverlay(marker);
-                var label = new BMap.Label(area, {offset: new BMap.Size(20, -10)});
-                marker.setLabel(label);
-                map.setCurrentCity("郑州");          // 设置地图显示的城市 此项是必须设置的
-                map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
             },
             yonghu: function ({key}) {
                 var _this = this;
