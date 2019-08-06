@@ -43,6 +43,15 @@
             font-size: 14px;
             width: 200px;
         }
+        .el-input__inner{
+            width:0px;
+            height: 0px;
+            margin:0px;
+            padding:0px;
+        }
+        .el-textarea{
+            width:600px;
+        }
     </style>
 </head>
 <body>
@@ -60,12 +69,12 @@
                 </el-table-column>
                 <el-table-column
                         prop="htitle"
-                        label="房间标题"
+                        label="所在小区"
                         width="180">
                 </el-table-column>
                 <el-table-column
                         prop="hadr"
-                        label="房间地址"
+                        label="房屋地址"
                         width="180" >
                 </el-table-column>
                 <el-table-column
@@ -104,34 +113,43 @@
                     <template slot-scope="scope">
                         <el-button
                             type="primary"
-                            @click="beChecked(scope.$index, scope.row)">点击审核</el-button>
-                        <el-button
-                                type="danger"
-                                @click="toReject">驳回</el-button>
+                            @click="beChecked(scope.$index, scope.row)">通过</el-button>
+                    <el-button
+                            type="danger"
+                            @click="toReject(scope.$index, scope.row)">驳回</el-button>
+                        <!--<el-button-->
+                                <!--size="mini"-->
+                                <!--type="primary"-->
+                                <!--@click="handleEdit(scope.$index, scope.row)" icon="el-icon-edit"></el-button>-->
                     </template>
                 </el-table-column>
 
             </el-table>
         </template>
     </el-row>
-    <!--添加驳回理由-->
+    <!--添加驳回理由（弹框）-->
     <el-row>
         <el-dialog :title="title" :visible.sync="dialogFormVisible">
             <el-form :model="form">
 
-                <el-form-item label="房屋编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.houseid" autocomplete="off" readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="驳回理由" :label-width="formLabelWidth">
+                <!--<el-form-item label="房屋编号" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.houseid" style="width:200px" autocomplete="off" readonly="readonly"></el-input>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="驳回理由" :label-width="formLabelWidth">-->
+                    <!--<el-input v-model="form.rejectReason" style="width:200px" autocomplete="off"></el-input>-->
+                <!--</el-form-item>-->
+                <!--驳回理由-->
+                <el-form-item label="" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
-                            :rows="2"
-                            placeholder="请输入至少10字"
+                            :rows="4"
+                            placeholder="请至少输入10个字"
                             v-model="form.rejectReason">
                     </el-input>
                 </el-form-item>
-
-
+                <!--<el-form-item label="" :label-width="formLabelWidth">-->
+                    <el-input v-model="form.houseid" autocomplete="off" type="hidden" readonly="readonly"></el-input>
+                <!--</el-form-item>-->
             </el-form>
 
             <div slot="footer" class="dialog-footer">
@@ -237,19 +255,29 @@
                         }
                     })
             },
-            toReject:function () {
-                var self=this;
-                this.title='添加驳回理由';
+            // toReject:function () {
+            //     var self=this;
+            //     this.title='添加驳回理由';
+            //     this.url="/demo4/part/setRejectReason";
+            //     //随机数
+            //     // var Num=self.uncheckedHouses.houseid;
+            //     this.form={ houseid:'',rejectReason:''
+            //         // htitle:'', hadr:'', hrent:'', headPic:'',headPicName:'',
+            //         // hfloor:'', harea:'', orientation:'',
+            //         // releasedate:'', hdesc:'',cname:'',id:'',
+            //     };
+            //     this.imageUrl='';
+            //     this.dialogFormVisible=true;
+            // },
+            toReject:function(index, row) {
+                this.title='驳回理由';
                 this.url="/demo4/part/setRejectReason";
-                //随机数
-                var Num=self.uncheckedHouses.houseid;
-                this.form={ houseid:Num,rejectReason:''
-                    // htitle:'', hadr:'', hrent:'', headPic:'',headPicName:'',
-                    // hfloor:'', harea:'', orientation:'',
-                    // releasedate:'', hdesc:'',cname:'',id:'',
-                };
-                this.imageUrl='';
+                //赋值，将查出来的数据显示在弹框里
+                this.form=row;
+                //让弹出框显示出来
                 this.dialogFormVisible=true;
+                //在编辑修改时，将缓存的其他原头像置空
+                this.imageUrl='';
             },
             //驳回房源，弹出一个框，输入驳回原因，向数据库rejectReason中存放
             beRejected:function () {
@@ -258,17 +286,18 @@
                     .then(function (response) {
                         if (response.data==1){
                             self.$message({
-                                message: '恭喜你，操作成功',
+                                message: '已驳回',
                                 type: 'success'
                             });
                             self.dialogFormVisible=false;
                             self.loadData();
                         }else{
                             //添加或者修改错误
-                            self.$message.error('错了哦，操作失败');
+                            self.$message.error('驳回失败，请重试');
                         }
                     })
             },
+
             // beChecked:function(){
             //     var self=this;
             //     alert(this.uncheckedHouses.id)

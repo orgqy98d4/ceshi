@@ -15,11 +15,20 @@ import java.util.Map;
  * @Version 1.0
  */
 public interface PowerService  {
+
+    /**
+     * 根据员工id获取对应的权限
+     * @param id
+     * @return
+     */
+    List<TreeNode> getPowersById(Integer id);
+
     /**
      * 获取所有权限
      * @return
      */
     List<TreeNode> getPowers();
+
 
     /**
      * 根据角色编号获取对应的所有权限编号

@@ -126,7 +126,7 @@
 
   <!--  子权限列表，start计算出开始-->
   <select id="getSonMenu" resultType="map" parameterType="map">
-    select m1.mid  mid,m1.pid pid,m2.mname bmname,m1.mname mname,m1.mdesc mdesc
+    select m1.mid  mid,m1.pid pid,m2.mname bmname,m1.mname mname,m1.url url,m1.mdesc mdesc
     from menu m1,menu m2
     <where>
       m1.pid=m2.mid and m1.pid!=0
