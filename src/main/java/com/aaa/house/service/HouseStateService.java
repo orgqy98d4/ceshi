@@ -29,7 +29,9 @@ public interface HouseStateService {
      * 查询出所有待审核的房源
      * @return
      */
-    List<Map> queryUnchecked();
+    List<Map> queryUnchecked(Map map);
+    //查询出所有待审核的房源数量
+    int uncheckedCount(Map map);
 
     /**
      * 修改待审核的房源状态为已审核

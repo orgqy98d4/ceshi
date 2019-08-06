@@ -45,9 +45,15 @@ public class HouseStateServiceImpl implements HouseStateService {
      * @return
      */
     @Override
-    public List<Map> queryUnchecked() {
-        return houseStateMapper.queryUnchecked();
+    public List<Map> queryUnchecked(Map map) {
+        return houseStateMapper.queryUnchecked(map);
     }
+    //查询出所有待审核的房源数量
+    @Override
+    public int uncheckedCount(Map map) {
+        return houseStateMapper.uncheckedCount(map);
+    }
+
     /**
      * 修改待审核的房源状态为已审核
      * @return

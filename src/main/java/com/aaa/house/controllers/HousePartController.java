@@ -31,7 +31,7 @@ public class HousePartController {
      */
     @RequestMapping("/states")
     public Object queryStates(){
-        System.out.println("状态集合："+houseStateService.queryStates());
+//        System.out.println("状态集合："+houseStateService.queryStates());
         return houseStateService.queryStates();
     }
     /**
@@ -40,7 +40,7 @@ public class HousePartController {
      */
     @RequestMapping("/state2")
     public Object queryState2(){
-        System.out.println("待审核："+houseStateService.queryState2());
+//        System.out.println("待审核："+houseStateService.queryState2());
         return houseStateService.queryState2();
     }
 
@@ -77,8 +77,11 @@ public class HousePartController {
      * @return
      */
     @RequestMapping("/queryUnchecked")
-    public Object queryUnchecked(){
-        return houseStateService.queryUnchecked();
+    public Object queryUnchecked(@RequestBody Map map){
+        Map map1=new HashMap();
+        map1.put("uncheckedList",houseStateService.queryUnchecked(map));
+        map1.put("total",houseStateService.uncheckedCount(map));
+        return map1;
     }
 
     /**
@@ -90,17 +93,7 @@ public class HousePartController {
         int houseid = (int) map.get("houseid");
         return houseStateService.updateUnchecked(houseid);
     }
-    /**
-     * 查询出所有已出租的房源
-     * @return
-     */
-    @RequestMapping("/queryRented")
-    public Object queryRented(Map map){
-        Map map1=new HashMap();
-        map1.put("rentedList",houseStateService.queryRented(map));
-        map1.put("total",houseStateService.rentedCount(map));
-        return map1;
-    }
+
 
     /**
      * 向房东表中添加一条信息
@@ -168,6 +161,17 @@ public class HousePartController {
         Map map1=new HashMap();
         map1.put("releasedList",houseStateService.queryReleased(map));
         map1.put("total",houseStateService.releasedCount(map));
+        return map1;
+    }
+    /**
+     * 查询出所有已出租的房源
+     * @return
+     */
+    @RequestMapping("/queryRented")
+    public Object queryRented(@RequestBody Map map){
+        Map map1=new HashMap();
+        map1.put("rentedList",houseStateService.queryRented(map));
+        map1.put("total",houseStateService.rentedCount(map));
         return map1;
     }
     /**

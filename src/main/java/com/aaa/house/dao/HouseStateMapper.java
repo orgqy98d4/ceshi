@@ -36,8 +36,10 @@ public interface HouseStateMapper {
      * 查询出所有待审核的房源
      * @return
      */
-    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=2")
-    List<Map> queryUnchecked();
+//    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=2")
+    List<Map> queryUnchecked(Map map);
+    //查询出所有待审核的房源数量
+    int uncheckedCount(Map map);
 
     /**
      * 修改待审核的房源状态为已审核
@@ -46,14 +48,7 @@ public interface HouseStateMapper {
     @Update("update house set state=4 where state=2 and houseid=#{houseid}")
     int updateUnchecked(int houseid);
 
-    /**
-     * 查询出所有已出租的房源
-     * @return
-     */
-//    @Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=5")
-    List<Map> queryRented(Map map);
-    //查询所有已出租的数量
-    int rentedCount(Map map);
+
     /**
      * 向房东表中添加一条信息
      * @param house
@@ -106,6 +101,11 @@ public interface HouseStateMapper {
     //查询所有已发布的数量
     int releasedCount(Map map);
 
+     //查询出所有已出租的房源
+     //@Select("select h.*, hs.name  from house h join house_state hs on h.state=hs.id where h.state=5")
+    List<Map> queryRented(Map map);
+    //查询所有已出租的数量
+    int rentedCount(Map map);
 
     /**
      * 添加合同信息

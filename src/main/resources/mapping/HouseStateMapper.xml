@@ -30,6 +30,26 @@
     insert into customer(cname,cphone) values (#{cname,jdbcType=VARCHAR}, #{cphone,jdbcType=VARCHAR})
   </insert>
 
+  <!--待审核开始-->
+  <!--根据条件查询所有已审核待发布的-->
+  <select id="queryUnchecked" resultType="map" parameterType="map">
+    select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+    <where>
+      h.state=2
+      <!--根据房屋小区、地址查询-->
+      <if test="hrent!=null and hrent!=''">
+        and (h.htitle like "%"#{hrent}"%"
+        or h.hadr like "%"#{hrent}"%")
+      </if>
+    </where>
+    limit ${start},${pageSize}
+  </select>
+  <!--计算所有待审核的-->
+  <select id="uncheckedCount" resultType="int">
+      select count(*) from house h join house_state hs on h.state=hs.id where h.state=2
+    </select>
+  <!--待审核结束-->
+
   <!--已审核待发布开始-->
     <!--根据条件查询所有已审核待发布的-->
     <select id="queryChecked" resultType="map" parameterType="map">
@@ -74,14 +94,7 @@
   <!--根据条件查询所有已出租的-->
   <select id="queryRented" resultType="map" parameterType="map">
     select h.*, hs.name from house h join house_state hs on h.state=hs.id
-    <where>
-      h.state=5
-      <!--根据房屋小区、地址查询-->
-      <if test="hrent!=null and hrent!=''">
-        and (h.htitle like "%"#{hrent}"%"
-        or h.hadr like "%"#{hrent}"%")
-      </if>
-    </where>
+    where h.state=5
     limit ${start},${pageSize}
   </select>
   <!--计算所有已出租的-->

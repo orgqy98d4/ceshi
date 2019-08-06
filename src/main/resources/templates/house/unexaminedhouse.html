@@ -160,24 +160,23 @@
             </div>
         </el-dialog>
     </el-row>
-    <!--分页-->
-    <!--<el-row>-->
-        <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="currentPage"-->
-                <!--:page-sizes="[3,5,10]"-->
-                <!--:page-size="pageSize"-->
-                <!--layout="total, sizes, prev, pager, next, jumper"-->
-                <!--:total="total">-->
-        <!--</el-pagination>-->
-    <!--</el-row>-->
+    分页
+    <el-row>
+        <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[3,5,10]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
+        </el-pagination>
+    </el-row>
 </div>
 <script>
     new Vue({
         el:"#app",
         data:{
-            // houseData:[],
             currentPage:1,
             pageSize:3,
             total:0,
@@ -217,16 +216,15 @@
             loadData: function () {
                 var self = this;
                 //开始的位置：(pageNo-1)*pageSize
-
-            // ,{
-            //         start:start,
-            //             pageSize:this.pageSize,
-            //     }
+                var start = (this.currentPage - 1) * this.pageSize;
                 //查询出所有待审核的房源
-                axios.post('/demo4/part/queryUnchecked')
+                axios.post('/demo4/part/queryUnchecked',{
+                        start:start,
+                        pageSize:this.pageSize,
+                    })
                 .then(function (response) {
-                    self.uncheckedHouses = response.data;
-                    // self.total = response.data.total;
+                    self.uncheckedHouses = response.data.uncheckedList;
+                    self.total = response.data.total;
                 })
 
                 // axios.post('/demo4/part/queryByState',{
@@ -334,7 +332,7 @@
             handleCurrentChange: function (val) {
                 this.currentPage = val;
                 this.loadData();
-            },
+            }
             //点击修改为“已审核”,并将对应数据库中的房屋状态id修改
 
             // handleAvatarSuccess:function(res, file) {
