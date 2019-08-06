@@ -1,0 +1,203 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<title>签订合同</title>-->
+    <!--<link rel="icon" href="../../resources/images/favicon.ico"/>-->
+    <!--&lt;!&ndash;先引入vue.js库&ndash;&gt;-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+    <!--&lt;!&ndash;axios&ndash;&gt;-->
+    <!--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+    <!--&lt;!&ndash; 引入样式 &ndash;&gt;-->
+    <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <!--&lt;!&ndash; 引入组件库 &ndash;&gt;-->
+    <!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+    <!--<script src="../js/jquery-2.1.3.js"></script>-->
+    <!--<style>-->
+        <!--.avatar-uploader .el-upload {-->
+            <!--border: 1px dashed #d9d9d9;-->
+            <!--border-radius: 6px;-->
+            <!--cursor: pointer;-->
+            <!--position: relative;-->
+            <!--overflow: hidden;-->
+        <!--}-->
+        <!--.avatar-uploader .el-upload:hover {-->
+            <!--border-color: #409EFF;-->
+        <!--}-->
+        <!--.avatar-uploader-icon {-->
+            <!--font-size: 28px;-->
+            <!--color: #8c939d;-->
+            <!--width: 178px;-->
+            <!--height: 178px;-->
+            <!--line-height: 178px;-->
+            <!--text-align: center;-->
+        <!--}-->
+        <!--.avatar {-->
+            <!--width: 178px;-->
+            <!--height: 178px;-->
+            <!--display: block;-->
+        <!--}-->
+        <!--.el-form-item__content {-->
+            <!--line-height: 40px;-->
+            <!--position: relative;-->
+            <!--font-size: 14px;-->
+            <!--width: 200px;-->
+        <!--}-->
+    <!--</style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="app" class="div1">-->
+    <!--<el-container>-->
+        <!--<el-header>-->
+
+            <!--<h1>房屋租赁合同</h1>-->
+        <!--</el-header>-->
+        <!--<el-main>-->
+            <!--<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">-->
+                <!--&lt;!&ndash;<el-form-item label="房屋编号" type="hidden" prop="houseid">&ndash;&gt;-->
+                <!--<el-input  v-model="ruleForm.houseid" type="hidden"  readonly="readonly"></el-input>-->
+                <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+                <!--<el-row :gutter="20">-->
+                    <!--&lt;!&ndash;<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">&ndash;&gt;-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="房屋描述" prop="htitle">-->
+                            <!--<el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="房屋楼层" prop="hfloor">-->
+                            <!--<el-input v-model="ruleForm.hfloor"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="设定租金" prop="hrent">-->
+                            <!--<el-input v-model="ruleForm.hrent"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--&lt;!&ndash;</el-form>&ndash;&gt;-->
+                <!--</el-row>-->
+                <!--&lt;!&ndash;第二行&ndash;&gt;-->
+                <!--<el-row :gutter="20">-->
+
+
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="详细地址" prop="hadr">-->
+                            <!--<el-input v-model="ruleForm.hadr" placeholder="如:某区-某街道-某小区"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="占地面积" prop="harea">-->
+                            <!--<el-input v-model="ruleForm.harea"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="房屋朝向" prop="orientation">-->
+                            <!--<el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+
+                <!--</el-row>-->
+
+                <!--&lt;!&ndash;第三行&ndash;&gt;-->
+                <!--<el-row :gutter="20">-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="经纪人" prop="agentid">-->
+                            <!--<el-select v-model="ruleForm.agentid" >-->
+                                <!--<el-option-->
+                                        <!--v-for="item in agents"-->
+                                        <!--:key="item.id"-->
+                                        <!--:label="item.ename"-->
+                                        <!--:value="item.id">-->
+                                <!--</el-option>-->
+                            <!--</el-select>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+
+
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="出租方式" prop="leaseWay">-->
+                            <!--<el-input v-model="ruleForm.leaseWay" placeholder="如:合租/单租"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--&lt;!&ndash;<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">&ndash;&gt;-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="发布日期" :label-width="formLabelWidth">-->
+                            <!--<el-date-picker-->
+                                    <!--v-model="ruleForm.releasedate"-->
+                                    <!--align="right"-->
+                                    <!--type="date"-->
+                                    <!--placeholder="选择日期"-->
+                                    <!--:picker-options="pickerOptions" >-->
+                            <!--</el-date-picker>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--&lt;!&ndash;</el-form>&ndash;&gt;-->
+                <!--</el-row>-->
+
+                <!--&lt;!&ndash;第四行&ndash;&gt;-->
+                <!--<el-row :gutter="20">-->
+                    <!--&lt;!&ndash;配置家具:inline="true"class="demo-form-inline"&ndash;&gt;-->
+                    <!--&lt;!&ndash;<el-form :inline="true" :model="furnitureForm"  margin-left="30px"class="demo-form-inline">&ndash;&gt;-->
+                    <!--<el-col >-->
+                        <!--<el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">-->
+                            <!--<span id="tbd" style="width: 1000px;"></span>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--&lt;!&ndash;</el-form>&ndash;&gt;-->
+                <!--</el-row>-->
+
+                <!--&lt;!&ndash;第五行&ndash;&gt;-->
+                <!--&lt;!&ndash;使居中：type="flex" justify="center"&ndash;&gt;-->
+                <!--<el-row :gutter="20" >-->
+                    <!--<el-col :span="6">-->
+                        <!--&lt;!&ndash;上传房屋图片&ndash;&gt;-->
+                        <!--<el-form-item label="房屋图片" :label-width="formLabelWidth" margin-left="30px">-->
+                            <!--<el-upload-->
+                                    <!--name="headPic"-->
+                                    <!--class="avatar-uploader"-->
+                                    <!--action="/demo4/house/uploadHeadPic"-->
+                                    <!--:show-file-list="false"-->
+                                    <!--:on-success="handleAvatarSuccess"-->
+                                    <!--:before-upload="beforeAvatarUpload">-->
+                                <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+                                <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+                            <!--</el-upload>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+
+
+                    <!--<el-col :span="6">-->
+                        <!--<el-form-item label="房东姓名" prop="cname">-->
+                            <!--<el-input v-model="ruleForm.cname"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="6">-->
+                        <!--<el-form-item label="房东电话" prop="cphone">-->
+                            <!--<el-input v-model="ruleForm.cphone"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+
+                <!--</el-row>-->
+
+                <!--&lt;!&ndash;第六行&ndash;&gt;-->
+                <!--<el-row :gutter="20" type="flex" justify="center">-->
+                    <!--<el-col :span="8" >-->
+                        <!--&lt;!&ndash;<el-form :inline="true" :model="furnitureForm" class="demo-form-inline" margin-left="30px">&ndash;&gt;-->
+                        <!--<el-form-item>-->
+                            <!--<el-button type="primary" @click="saveData">-->
+                                <!--<el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">提交</el-button>-->
+                            <!--</el-button>-->
+                            <!--<el-button type="primary" @click="loadData">重置</el-button>-->
+                        <!--</el-form-item>-->
+                        <!--&lt;!&ndash;</el-form>&ndash;&gt;-->
+                    <!--</el-col>-->
+                <!--</el-row>-->
+
+            <!--</el-form>-->
+        <!--</el-main>-->
+    <!--</el-container>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

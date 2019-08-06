@@ -33,11 +33,10 @@
       (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
       hhs join customer cu on hhs.landlord=cu.id
         <where>
-            <!--根据房屋租金查询-->
+            <!--根据房屋小区、地址查询-->
             <if test="hrent!=null and hrent!=''">
                 and (hhs.htitle like "%"#{hrent}"%"
-                or hhs.hadr like "%"#{hrent}"%"
-                or hhs.hdesc like "%"#{hrent}"%")
+                or hhs.hadr like "%"#{hrent}"%")
             </if>
             <!--<if test="hrent!=null and hrent!=''">-->
                 <!--and hrent=#{hrent}-->
