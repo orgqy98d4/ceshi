@@ -76,7 +76,7 @@
     <where>
       <if test="rname!=null and rname!=''">
         and (rname like concat('%',#{rname},'%')
-        or rid like concat('%',#{rname},'%'))
+        or rid=#{rname})
       </if>
     </where> limit #{start},#{pageSize}
   </select>
