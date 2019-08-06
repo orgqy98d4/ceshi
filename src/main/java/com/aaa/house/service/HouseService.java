@@ -1,5 +1,6 @@
 package com.aaa.house.service;
 
+import com.aaa.house.entity.FollowHouse;
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseFurniture;
 import com.aaa.house.util.Page;
@@ -35,4 +36,29 @@ public interface HouseService {
      * 前台获取全部已发布的房屋列表
      */
     Page houseList(House house, int current, int pageSize);
+
+    /**
+     * 前台根据ID获取房屋详细信息
+     */
+    Map<String, Object> houseDetail(Integer id);
+
+    /**
+     * 关注房源
+     */
+    int followhouse(Integer houseid);
+
+    /**
+     * 判断是否已经关注
+     */
+    FollowHouse isFollow(Integer houseid);
+
+    /**
+     * 用户关注的房源
+     */
+    Page myFollowHouse();
+
+    /**
+     * 取消关注
+     */
+    int delFollow(Integer houseid);
 }
