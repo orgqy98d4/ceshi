@@ -164,6 +164,11 @@
                                     width="180">
                             </el-table-column>
                             <el-table-column
+                                    prop="url"
+                                    label="地址"
+                                    width="180">
+                            </el-table-column>
+                            <el-table-column
                                     prop="mdesc"
                                     label="权限概述">
                             </el-table-column>
@@ -215,6 +220,9 @@
                                             :value="item.mid">
                                     </el-option>
                                 </el-select>
+                            </el-form-item>
+                            <el-form-item label="地址" :label-width="formLabelWidth">
+                                <el-input v-model="sonForm.url" autocomplete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="权限概述" :label-width="formLabelWidth">
                                 <el-input v-model="sonForm.mdesc" autocomplete="off"></el-input>
@@ -278,6 +286,7 @@
                 sonForm: {//子表单属性
                     mname: '',
                     pid: '',
+                    url:'',
                     mdesc: ''
                 },
                 options:[]//子菜单 父权限下拉框
@@ -381,6 +390,7 @@
                     this.sonForm={
                         mname: '',
                         pid:'',
+                        url:'',
                         mdesc: ''
                     };
                 },
