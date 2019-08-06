@@ -45,7 +45,7 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree"  lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="/demo4/back/customerList.html" target="change">用户管理</a>
+                    <a class="" href="/demo4/customer/list.html" target="change">用户管理</a>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">员工管理</a>
@@ -59,7 +59,7 @@
                     <dl class="layui-nav-child" >
                         <!--id="app" @click="toSave"-->
                         <dd><a href="/demo4/house/addhouse.html" target="change" >添加房源</a></dd>
-                        <dd><a href="javascript:;" target="change">房源审核</a></dd>
+                        <dd><a href="/demo4/house/house.html" target="change">房源审核</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -74,53 +74,53 @@
     </div>
 </div>
 <!--<script>-->
-    <!--new Vue({-->
-        <!--el:"#app",-->
-        <!--data: {-->
-            <!--ruleForm:{-->
-                <!--id:'',-->
-                <!--houseid:'',-->
-                <!--htitle:'',-->
-                <!--hadr:'',-->
-                <!--hrent:'',-->
-                <!--headPic:'',-->
-                <!--hfloor:'',-->
-                <!--harea:'',-->
-                <!--orientation:'',-->
-                <!--releasedate:'',-->
-                <!--hdesc:'',-->
-                <!--state:'',-->
-                <!--name:'',-->
-                <!--headPicName:'',-->
-                <!--furnitures:[]-->
-            <!--},-->
-            <!--url:''-->
-        <!--},-->
-        <!--created: function () {-->
-            <!--this.loadData();-->
-            <!--var self = this;-->
-            <!--axios.post('/demo4/part/furnitures')-->
-                <!--.then(function (response) {-->
-                    <!--self.furnitures = response.data;-->
-                <!--})-->
-        <!--},-->
+<!--    new Vue({-->
+<!--        el:"#app",-->
+<!--        data: {-->
+<!--            ruleForm:{-->
+<!--                id:'',-->
+<!--                houseid:'',-->
+<!--                htitle:'',-->
+<!--                hadr:'',-->
+<!--                hrent:'',-->
+<!--                headPic:'',-->
+<!--                hfloor:'',-->
+<!--                harea:'',-->
+<!--                orientation:'',-->
+<!--                releasedate:'',-->
+<!--                hdesc:'',-->
+<!--                state:'',-->
+<!--                name:'',-->
+<!--                headPicName:'',-->
+<!--                furnitures:[]-->
+<!--            },-->
+<!--            url:''-->
+<!--        },-->
+<!--        created: function () {-->
+<!--            this.loadData();-->
+<!--            var self = this;-->
+<!--            axios.post('/demo4/part/furnitures')-->
+<!--                .then(function (response) {-->
+<!--                    self.furnitures = response.data;-->
+<!--                })-->
+<!--        },-->
 
 
-        <!--method:{-->
-            <!--toSave:function () {-->
-                <!--this.url="/demo4/house/addhouse.html";-->
-                <!--//随机数-->
-                <!--var Num="";-->
-                <!--for (var i = 0; i < 8; i++) {-->
-                    <!--Num+=Math.floor(Math.random()*10);-->
-                <!--}-->
-                <!--this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',-->
-                    <!--hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',-->
-                    <!--releasedate:'', hdesc:''-->
-                <!--};-->
-            <!--},-->
-        <!--}-->
-    <!--})-->
+<!--        method:{-->
+<!--            toSave:function () {-->
+<!--                this.url="/demo4/house/addhouse.html";-->
+<!--                //随机数-->
+<!--                var Num="";-->
+<!--                for (var i = 0; i < 8; i++) {-->
+<!--                    Num+=Math.floor(Math.random()*10);-->
+<!--                }-->
+<!--                this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',-->
+<!--                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',-->
+<!--                    releasedate:'', hdesc:''-->
+<!--                };-->
+<!--            },-->
+<!--        }-->
+<!--    })-->
 <!--</script>-->
 </body>
 </html>
