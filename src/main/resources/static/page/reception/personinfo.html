@@ -7,6 +7,8 @@
     <script src="../../resources/vue/vue.js"></script>
     <script src="../../resources/js/ele.js"></script>
     <link href="../../resources/css/ele.css" rel="stylesheet">
+    <!--axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <style>
     .cusInfo{
@@ -18,6 +20,29 @@
         margin-top: 30px;
         border-bottom: 1px solid lightgray;
     }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+    }
+    .avatar {
+        width: 60px;
+        height: 60px;
+        display: block;
+    }
 </style>
 <body>
 <div id="house">
@@ -28,41 +53,61 @@
     <div>
         <el-form :model="person" label-width="100px" :inline="true" :rules="rules">
             <input type="hidden" v-model="person.id"/>
-            <el-form-item label="用户名" prop="cusername">
-                <el-input v-model="person.cusername" clearable></el-input>
+            <el-form-item label="编号" :label-width="formLabelWidth">
+                <el-input v-model="person.cnumber" readonly="readonly" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="性别">
-                <el-select v-model="person.csex" style="width: 150px;" placeholder="请选择您的性别">
-                    <el-option label="男" value="1"></el-option>
-                    <el-option label="女" value="0"></el-option>
-                </el-select>
+            <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-input v-model="person.cname"  autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="手机号">
-                <el-input v-model="person.cphone" clearable style="width: 200px;"></el-input>
+            <el-form-item label="性别" :label-width="formLabelWidth">
+                <template>
+                    <el-radio v-model="person.csex" label="男">男</el-radio>
+                    <el-radio v-model="person.csex" label="女">女</el-radio>
+                </template>
             </el-form-item>
-            <el-form-item label="身份证号">
-                <el-input v-model="person.ccard" clearable style="width: 200px;"></el-input>
+            <el-form-item label="电话" :label-width="formLabelWidth">
+                <el-input v-model="person.cphone"  autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="真实姓名">
-                <el-input v-model="person.cname" clearable style="width: 140px;"></el-input>
+            <el-form-item label="身份证号" :label-width="formLabelWidth">
+                <el-input v-model="person.ccard" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="头像">
+            <el-form-item label="用户名" :label-width="formLabelWidth">
+                <el-input v-model="person.cusername" autocomplete="off"></el-input>
+            </el-form-item>
+            <!--<el-form-item label="密码" :label-width="formLabelWidth">
+                <el-input v-model="person.cpassword" autocomplete="off"></el-input>
+            </el-form-item>-->
+            <el-form-item label="头像" v-if="person.headPic" :label-width="formLabelWidth">
+                <img v-if="person.headPic" :src="'/demo4/customer/show?fileName='+person.headPic" height="60px;"
+                     width="60px;">
+            </el-form-item>
+            <el-form-item label="" :label-width="formLabelWidth">
                 <el-upload
-                        name="picture"
-                        class="upload-demo"
-                        action="/uploadCus"
-                        :before-remove="beforeRemove"
-                        multiple
+                        name="headPic"
+                        class="avatar-uploader"
+                        action="/demo4/customer/uploadHeadPic"
                         :show-file-list="false"
+                        :auto-upload="true"
                         :on-success="handleAvatarSuccess"
-                        :limit="3"
-                        :on-exceed="handleExceed">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar" height="60px;"
+                         width="60px;">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+            </el-form-item>
+            <el-form-item label="客户类型" :label-width="formLabelWidth">
+                <el-select v-model="person.ctype"  placeholder="请选择">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.ctype"
+                            :label="item.ctname"
+                            :value="item.ctype">
+                    </el-option>
+                </el-select>
             </el-form-item>
         </el-form>
         <el-button type="primary" @click="save()" style="margin-left: 300px">确 定</el-button>
+        <el-button type="primary" @click="flush">刷新</el-button>
     </div>
 </div>
 </body>
@@ -70,7 +115,22 @@
     new Vue({
         el: "#house",
         data: {
-            person:{},
+            options:[],
+            person:{id:'',
+                cnumber:'',
+                cname:'',
+                csex:'男',
+                cphone:'',
+                ccard:'',
+                cusername:'',
+                cpassword:'',
+                state:'',
+                cimg:'',
+                headPic:'',
+                headPicName:'',
+                ctype:'',
+                headPicT:''},
+            formLabelWidth: '120px',
             rules:{
                 cusername:[
                     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -80,10 +140,17 @@
                     { required: true, message: '请输入用户名', trigger: 'blur' },
                     { length:18, message: '长度为18位', trigger: 'blur' }
                 ]
-            }
+            },
+            imageUrl:''
         },
         mounted: function () {
             this.load();
+            var _this = this;
+            //获取所有客户类型
+            axios.post('/demo4/custype/queryType')
+                .then(function (response) {
+                    _this.options=response.data;
+                });
         },
         methods: {
             load: function () {
@@ -91,41 +158,46 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/customer/getCusFromSession",
+                    url: "/demo4/customer/getCusFromSession",
                     success: function (data) {
                         //console.log(data);
                         _this.person=data.object;
+                        _this.person.ctype=parseInt(data.object.ctype);
                     }
                 });
             },
             beforeRemove:function () {
                 this.$confirm("确定移除?");
             },
-            handleExceed:function (files, fileList) {
-                this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            handleAvatarSuccess:function(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+                this.person.headPicName = file.response.originalFilename;
+                this.person.headPicT =file.response.newFileName;
+                //this.load();
             },
-            handleAvatarSuccess:function(res) {
-                var _this=this;
-                //alert(res.success)
-                if (res.success){
-                    _this.$message({
-                        message: '上传成功！正在审核~',
-                        type: 'success'
-                    });
-                }else{
-                    _this.$message({
-                        message: '上传失败！',
-                        type: 'warning'
-                    });
+            beforeAvatarUpload:function(file) {
+                var isJPG = file.type === 'image/jpeg';
+                var isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
                 }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            },
+            flush:function(){
+                this.load();
             },
             save:function () {
                 var _this = this;
                 //console.log(_this.person)
+                this.person.headPic=this.person.headPicT;
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/customer/saveCus",
+                    url: "/demo4/customer/insert",
                     data:_this.person,
                     success: function (data) {
                         if (data.code==200){

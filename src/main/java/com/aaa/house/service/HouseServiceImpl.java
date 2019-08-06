@@ -2,6 +2,7 @@ package com.aaa.house.service;
 
 import com.aaa.house.dao.HouseMapper;
 import com.aaa.house.entity.House;
+import com.aaa.house.entity.HouseFurniture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 @Service
 public class HouseServiceImpl implements HouseService {
     @Autowired
-    private HouseMapper  HouseMapper;
+    private HouseMapper  houseMapper;
 
     /**
      * 查询出所有房屋
@@ -20,12 +21,12 @@ public class HouseServiceImpl implements HouseService {
      */
     @Override
     public List<Map> queryHouses(Map map) {
-        return HouseMapper.queryHouses(map);
+        return houseMapper.queryHouses(map);
     }
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
-        return HouseMapper.deleteByPrimaryKey(id);
+        return houseMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public int insertSelective(House record) {
-        return HouseMapper.insertSelective(record);
+        return houseMapper.insertSelective(record);
     }
 
     @Override
@@ -45,12 +46,22 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public int updateByPrimaryKeySelective(House record) {
-        return HouseMapper.updateByPrimaryKeySelective(record);
+        return houseMapper.updateByPrimaryKeySelective(record);
     }
 
     @Override
     public int updateByPrimaryKey(House record) {
         return 0;
+    }
+
+    /**
+     * 保存家具信息
+     * @param houseFurniture
+     * @return
+     */
+    @Override
+    public int saveFurniture(HouseFurniture houseFurniture) {
+        return houseMapper.saveFurniture(houseFurniture);
     }
 
     /**
@@ -60,7 +71,7 @@ public class HouseServiceImpl implements HouseService {
      */
     @Override
     public int queryHouseCount(Map map) {
-        return HouseMapper.queryHouseCount(map);
+        return houseMapper.queryHouseCount(map);
     }
 
 
@@ -71,7 +82,7 @@ public class HouseServiceImpl implements HouseService {
      */
 //    @Override
 //    public int save(House house) {
-//        return HouseMapper.insertSelective(house);
+//        return houseMapper.insertSelective(house);
 //    }
     /**
      *更新房屋信息
@@ -80,7 +91,7 @@ public class HouseServiceImpl implements HouseService {
      */
 //    @Override
 //    public int modify(House house) {
-//        return HouseMapper.updateByPrimaryKeySelective(house);
+//        return houseMapper.updateByPrimaryKeySelective(house);
 //    }
 //    /**
 //     *根据房屋编号进行删除
@@ -89,6 +100,6 @@ public class HouseServiceImpl implements HouseService {
 //     */
 //    @Override
 //    public int delete(Integer houseid) {
-//        return HouseMapper.deleteByPrimaryKey(houseid);
+//        return houseMapper.deleteByPrimaryKey(houseid);
 //    }
 }

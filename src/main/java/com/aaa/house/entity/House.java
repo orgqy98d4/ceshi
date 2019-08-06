@@ -44,6 +44,42 @@ public class House {
 
     private Integer stateid; //房屋状态编号
     private String name;//房屋状态
+    private String leaseWay;//出租方式，如：合租、单租
+    private String cname;//房东姓名
+    private String cphone;//房东电话
+    private String rejectReason;//驳回理由
+
+    public String getRejectReason() {
+        return rejectReason;
+    }
+
+    public void setRejectReason(String rejectReason) {
+        this.rejectReason = rejectReason;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+
+    public String getCphone() {
+        return cphone;
+    }
+
+    public void setCphone(String cphone) {
+        this.cphone = cphone;
+    }
+
+    public String getLeaseWay() {
+        return leaseWay;
+    }
+
+    public void setLeaseWay(String leaseWay) {
+        this.leaseWay = leaseWay;
+    }
 
     public Integer getStateid() {
         return stateid;
@@ -97,8 +133,9 @@ public class House {
         return hadr;
     }
 
+
     public void setHadr(String hadr) {
-        this.hadr = hadr == null ? null : hadr.trim();
+        this.hadr = hadr    == null ? null : hadr.trim();
     }
 
     public Integer getHrent() {

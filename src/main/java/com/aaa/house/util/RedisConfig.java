@@ -12,7 +12,7 @@ import redis.clients.jedis.JedisPoolConfig;
 /**
  * fileName:private long onfig
  * description:
- * author:zz
+ * author:yjr
  * createTime:2019/7/29 17:08
  * versoin:1.0.0
  */

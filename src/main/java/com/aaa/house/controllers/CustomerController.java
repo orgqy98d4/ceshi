@@ -4,6 +4,8 @@ import com.aaa.house.entity.Customer;
 import com.aaa.house.service.CustomerService;
 import com.aaa.house.util.FtpConfig;
 import com.aaa.house.util.FtpUtil;
+import com.aaa.house.util.ISysConstants;
+import com.aaa.house.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ import java.util.Map;
 public class CustomerController {
 
     @Autowired
-    private CustomerService customerServic;
+    private CustomerService customerService;
 
     @Autowired
     private FtpUtil ftpUtil;
@@ -39,13 +41,33 @@ public class CustomerController {
     private ResourceLoader resourceLoader;
 
     /**
-     * 添加
+     * 添加修改
      * @param customer
      * @return
      */
     @RequestMapping("/insert")
-    public Object insert(@RequestBody Customer customer){
-        return customerServic.insert(customer);
+    public Result insert(Customer customer){
+        Result result = new Result();
+        if (customer.getId() == null || customer.getId() == 0) {
+            int addCus = customerService.insert(customer);
+            if (addCus > 0) {
+                result.setCode(ISysConstants.SUCCESSCODE);
+                result.setMsg("添加成功");
+            } else {
+                result.setCode(ISysConstants.ERRORCODE);
+                result.setMsg("添加失败");
+            }
+        } else {
+            int updateCus = customerService.update(customer);
+            if (updateCus > 0) {
+                result.setCode(ISysConstants.SUCCESSCODE);
+                result.setMsg("修改成功");
+            } else {
+                result.setCode(ISysConstants.ERRORCODE);
+                result.setMsg("修改失败");
+            }
+        }
+        return result;
     }
 
     /**
@@ -53,10 +75,10 @@ public class CustomerController {
      * @param customer
      * @return
      */
-    @RequestMapping("/update")
+    /*@RequestMapping("/update")
     public Object update(@RequestBody Customer customer){
-        return customerServic.update(customer);
-    }
+        return customerService.update(customer);
+    }*/
 
     /**
      * 删除
@@ -65,7 +87,7 @@ public class CustomerController {
      */
     @RequestMapping("/delete")
     public Object delete(Integer id){
-        return customerServic.delete(id);
+        return customerService.delete(id);
     }
 
     /**
@@ -76,9 +98,17 @@ public class CustomerController {
     @RequestMapping("/page")
     public Object queryAll(@RequestBody Map map){
         Map mapResult =new HashMap();
-        mapResult.put("customerList",customerServic.queryAll(map));
-        mapResult.put("total",customerServic.queryPageCount(map));
+        mapResult.put("customerList",customerService.queryAll(map));
+        mapResult.put("total",customerService.queryPageCount(map));
         return mapResult;
+    }
+
+    /**
+     * 查询单个
+     * */
+    @RequestMapping("/select")
+    public Object select(Integer id){
+        return customerService.select(id);
     }
 
     /**
@@ -103,6 +133,19 @@ public class CustomerController {
     @RequestMapping("/show")
     public ResponseEntity show(String fileName){
         return ResponseEntity.ok(resourceLoader.getResource("ftp://"+ftpConfig.getFtpUserName()+":"+ftpConfig.getFtpPassWord()+"@"+ftpConfig.getRemoteIp()+ftpConfig.getRemotePath()+"/"+fileName));
+    }
+
+    /**
+     * 从Session中取出用户信息
+     */
+    @RequestMapping("/getCusFromSession")
+    public Result getCusFromSession(){
+        Customer customer = customerService.getCusFromSession();
+        if (customer !=null){
+            return new Result(ISysConstants.SUCCESSCODE,"存在",customer);
+        } else {
+            return new Result(ISysConstants.ERRORCODE,"请重新登录",null);
+        }
     }
 
 }

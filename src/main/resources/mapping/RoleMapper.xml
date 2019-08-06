@@ -68,4 +68,29 @@
       rdesc = #{rdesc,jdbcType=VARCHAR}
     where rid = #{rid,jdbcType=INTEGER}
   </update>
+
+  <!--  角色列表，start计算出开始-->
+  <select id="queryAll" resultType="map" parameterType="map">
+    select *
+    from role
+    <where>
+      <if test="rname!=null and rname!=''">
+        and (rname like concat('%',#{rname},'%')
+        or rid like concat('%',#{rname},'%'))
+      </if>
+    </where> limit #{start},#{pageSize}
+  </select>
+  <!--  查询出角色的总数量-->
+  <select id="queryPageCont" resultType="int">
+    SELECT count(*)
+    FROM role
+    <where>
+      <if test="rname!=null and rname!=''">
+        and rname like concat('%',#{rname},'%')
+      </if>
+      <if test="rid!=null and rid!=''">
+        and rid = #{rid}
+      </if>
+    </where>
+  </select>
 </mapper>
