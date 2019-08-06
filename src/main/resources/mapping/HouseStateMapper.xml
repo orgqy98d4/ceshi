@@ -22,11 +22,126 @@
   </select>
 
   <select id="queryAgents" resultType="map">
-    select id,ename from employee
+    select id,ename from employee where roleid=3
   </select>
 
   <!--向房东表中添加房东，并需要获取到该房东的编号插入到房屋表的landlord中-->
   <insert id="addHost" parameterType="com.aaa.house.entity.House">
     insert into customer(cname,cphone) values (#{cname,jdbcType=VARCHAR}, #{cphone,jdbcType=VARCHAR})
+  </insert>
+
+  <!--根据条件查询所有已发布的-->
+  <select id="queryReleased" resultType="map" parameterType="map">
+    select h.*, hs.name from house h join house_state hs on h.state=hs.id
+    <where>
+      h.state=6
+      <!--根据房屋小区、地址查询-->
+      <if test="hrent!=null and hrent!=''">
+        and (h.htitle like "%"#{hrent}"%"
+        or h.hadr like "%"#{hrent}"%")
+      </if>
+    </where>
+  </select>
+
+  <!--向合同表录入数据-->
+  <insert id="addContract" parameterType="com.aaa.house.entity.HouseContract">
+    insert into contract
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="contractid != null">
+        contractid,
+      </if>
+      <if test="hname != null">
+        hname,
+      </if>
+      <if test="hphone != null">
+        hphone,
+      </if>
+      <if test="haddress != null">
+        haddress,
+      </if>
+      <if test="hid != null">
+        hid,
+      </if>
+      <if test="agentid != null">
+        agentid,
+      </if>
+      <if test="ename != null">
+        ename,
+      </if>
+      <if test="ephone != null">
+        ephone,
+      </if>
+      <if test="eaddress != null">
+        eaddress,
+      </if>
+      <if test="eid != null">
+        eid,
+      </if>
+      <if test="hmeter != null">
+        hmeter,
+      </if>
+      <if test="hlocation != null">
+        hlocation,
+      </if>
+      <if test="houseid != null">
+        houseid,
+      </if>
+      <if test="csid != null">
+        csid,
+      </if>
+      <if test="signdate != null">
+        signdate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="contractid != null">
+        #{contractid,jdbcType=INTEGER},
+      </if>
+      <if test="hname != null">
+        #{hname,jdbcType=VARCHAR},
+      </if>
+      <if test="hphone != null">
+        #{hphone,jdbcType=VARCHAR},
+      </if>
+      <if test="haddress != null">
+        #{haddress,jdbcType=VARCHAR},
+      </if>
+      <if test="hid != null">
+        #{hid,jdbcType=INTEGER},
+      </if>
+      <if test="agentid != null">
+        #{agentid,jdbcType=INTEGER},
+      </if>
+      <if test="ename != null">
+        #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="ephone != null">
+        #{ephone,jdbcType=VARCHAR},
+      </if>
+      <if test="eaddress != null">
+        #{eaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="eid != null">
+        #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="hmeter != null">
+        #{hmeter,jdbcType=INTEGER},
+      </if>
+      <if test="hlocation != null">
+        #{hlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="csid != null">
+        #{csid,jdbcType=INTEGER},
+      </if>
+      <if test="signdate != null">
+        #{signdate,jdbcType=DATE},
+      </if>
+    </trim>
   </insert>
 </mapper>

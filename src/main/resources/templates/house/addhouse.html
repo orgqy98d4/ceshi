@@ -123,23 +123,29 @@
     </el-header>
     <el-main>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-
-    <!--<el-form-item label="房屋编号" type="hidden" prop="houseid">-->
-        <el-input  v-model="ruleForm.houseid" type="hidden"  readonly="readonly"></el-input>
-    <!--</el-form-item>-->
+    <!--<el-col :span="8">-->
+        <!--<el-form-item label="房屋编号" type="hidden" prop="houseid">-->
+            <!--<el-input  v-model="ruleForm.houseid" type="hidden"  readonly="readonly"></el-input>-->
+        <!--</el-form-item>-->
+    <!--</el-col>-->
 <el-row :gutter="20">
     <!--<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">-->
-        <el-col :span="8">
+    <el-col :span="6">
+        <el-form-item label="房屋编号" type="hidden" prop="houseid">
+            <el-input  v-model="ruleForm.houseid" readonly="readonly"></el-input>
+        </el-form-item>
+    </el-col>
+        <el-col :span="6">
             <el-form-item label="房屋描述" prop="htitle">
                 <el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>
             </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
             <el-form-item label="房屋楼层" prop="hfloor">
                 <el-input v-model="ruleForm.hfloor"></el-input>
             </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
             <el-form-item label="设定租金" prop="hrent">
                 <el-input v-model="ruleForm.hrent"></el-input>
             </el-form-item>
@@ -148,38 +154,31 @@
 </el-row>
     <!--第二行-->
 <el-row :gutter="20">
-    <!--<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">-->
-        <!--<el-col :span="8">-->
-        <!--<el-form-item label="详细地址" prop="hadr">-->
-            <!--&lt;!&ndash;详细地址：应该做一个级联&ndash;&gt;-->
-            <!--<el-input  v-model="ruleForm.hadr" placeholder="如:区名，某小区"></el-input>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-
-    <el-col :span="8">
+    <el-col :span="6">
         <el-form-item label="详细地址" prop="hadr">
             <el-input v-model="ruleForm.hadr" placeholder="如:某区-某街道-某小区"></el-input>
         </el-form-item>
     </el-col>
-        <!--尝试级联-->
-        <!--<el-form-item label="详细地址" prop="hadr">-->
-            <!--<el-cascader-->
-                    <!--v-model="ruleForm.hadr"-->
-                    <!--:options="options"-->
-                    <!--@change="handleChange"></el-cascader>-->
-        <!--</el-form-item>-->
-        <el-col :span="8">
+    <el-col :span="6">
         <el-form-item label="占地面积" prop="harea">
             <el-input v-model="ruleForm.harea"></el-input>
         </el-form-item>
-        </el-col>
-
-        <el-col :span="8">
+    </el-col>
+    <el-col :span="6">
         <el-form-item label="房屋朝向" prop="orientation">
             <el-input v-model="ruleForm.orientation" placeholder="如:坐北朝南"></el-input>
         </el-form-item>
-        </el-col>
-    <!--</el-form>-->
+    </el-col>
+    <el-col :span="6">
+        <el-form-item label="出租方式" prop="leaseWay">
+            <!--<el-input v-model="ruleForm.leaseWay" placeholder="如:合租/单租"></el-input>-->
+            <el-select v-model="ruleForm.leaseWay">
+                <el-option value="合租">合租</el-option>
+                <el-option value="单租">单租</el-option>
+            </el-select>
+        </el-form-item>
+    </el-col>
+
    </el-row>
 
 
@@ -187,50 +186,66 @@
     <!--房东姓名，应该是在跳转页面后直接显示出来的-->
 <!--第三行-->
 <el-row :gutter="20">
-    <el-col :span="8">
-        <el-form-item label="经纪人" prop="agentid">
-            <el-select v-model="ruleForm.agentid" >
-                <el-option
-                        v-for="item in agents"
-                        :key="item.id"
-                        :label="item.ename"
-                        :value="item.id">
-                </el-option>
-            </el-select>
-        </el-form-item>
+    <!--<el-col :span="8">-->
+        <!--<el-form-item label="经纪人" prop="agentid">-->
+            <!--<el-select v-model="ruleForm.agentid" >-->
+                <!--<el-option-->
+                        <!--v-for="item in agents"-->
+                        <!--:key="item.id"-->
+                        <!--:label="item.ename"-->
+                        <!--:value="item.id">-->
+                <!--</el-option>-->
+            <!--</el-select>-->
+        <!--</el-form-item>-->
+    <!--</el-col>-->
+    <el-col :span="6">
+    <el-form-item label="经纪人" prop="agentid">
+        <el-input v-model="ruleForm.agentid" readonly="true"></el-input>
+    </el-form-item>
     </el-col>
 
+            <!--<el-select v-model="ruleForm.leaseWay" >-->
+                <!--<el-option-->
+                    <!--v-for="item in states"-->
+                    <!--:key="item.id"-->
+                    <!--:label="item.name"-->
+                    <!--:value="item.id">-->
+                <!--</el-option>-->
+            <!--</el-select>-->
+            <!---->
 
-    <el-col :span="8">
-        <el-form-item label="出租方式" prop="leaseWay">
-            <el-input v-model="ruleForm.leaseWay" placeholder="如:合租/单租"></el-input>
-        </el-form-item>
-    </el-col>
     <!--<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">-->
-        <el-col :span="8">
-            <el-form-item label="发布日期" :label-width="formLabelWidth">
-                <el-date-picker
-                        v-model="ruleForm.releasedate"
-                        align="right"
-                        type="date"
-                        placeholder="选择日期"
-                        :picker-options="pickerOptions" >
-                </el-date-picker>
-            </el-form-item>
-        </el-col>
+    <el-col :span="6">
+        <el-form-item label="发布日期" :label-width="formLabelWidth">
+            <el-date-picker
+                    v-model="ruleForm.releasedate"
+                    align="right"
+                    type="date"
+                    placeholder="选择日期"
+                    :picker-options="pickerOptions" >
+            </el-date-picker>
+        </el-form-item>
+    </el-col>
+    <el-col :span="6">
+        <el-form-item label="房东姓名" prop="cname">
+            <el-input v-model="ruleForm.cname"></el-input>
+        </el-form-item>
+    </el-col>
+    <el-col :span="6">
+        <el-form-item label="房东电话" prop="cphone">
+            <el-input v-model="ruleForm.cphone"></el-input>
+        </el-form-item>
+    </el-col>
     <!--</el-form>-->
 </el-row>
 
 <!--第四行-->
 <el-row :gutter="20">
-    <!--配置家具:inline="true"class="demo-form-inline"-->
-    <!--<el-form :inline="true" :model="furnitureForm"  margin-left="30px"class="demo-form-inline">-->
     <el-col >
         <el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">
             <span id="tbd" style="width: 1000px;"></span>
         </el-form-item>
     </el-col>
-    <!--</el-form>-->
 </el-row>
 
 <!--第五行-->
@@ -251,70 +266,17 @@
             </el-upload>
         </el-form-item>
     </el-col>
-    <!--<el-col :span="6">-->
-        <!--<el-form-item label="房屋状态" prop="state">-->
-            <!--<el-select v-model="ruleForm.state" >-->
-                <!--<el-option-->
-                        <!--v-for="item in states"-->
-                        <!--:key="item.id"-->
-                        <!--:label="item.name"-->
-                        <!--:value="item.id">-->
-                <!--</el-option>-->
-            <!--</el-select>-->
-        <!--</el-form-item>-->
-    <!--</el-col>-->
-
-
-
-    <el-col :span="6">
-        <el-form-item label="房东姓名" prop="cname">
-            <el-input v-model="ruleForm.cname"></el-input>
-        </el-form-item>
-    </el-col>
-    <el-col :span="6">
-        <el-form-item label="房东电话" prop="cphone">
-            <el-input v-model="ruleForm.cphone"></el-input>
-        </el-form-item>
-    </el-col>
-    <!---->
-
-        <!--<el-form-item label="" prop="state">-->
-            <!--<el-input v-model="ruleForm.state"></el-input>-->
-        <!--</el-form-item>-->
-
-
 </el-row>
-    <!--配置家具第2版-->
-    <!--<el-form :inline="true" :model="furnitureForm" class="demo-form-inline" margin-left="30px">-->
-        <!--<el-form-item label="配置家具" :label-width="formLabelWidth" margin-left="30px">-->
-            <!--&lt;!&ndash;<span id="tbd" style="width: 1000px;"></span>&ndash;&gt;-->
-            <!--<template>-->
-                <!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
-                <!--<div style="margin: 15px 0;"></div>-->
-                <!--<el-checkbox-group v-model="checkedFurnitures" @change="handleCheckedFurnituresChange">-->
-                    <!--<el-checkbox v-for="furniture in furnitures" :label="furniture" :key="furniture">{{city}}</el-checkbox>-->
-                <!--</el-checkbox-group>-->
-            <!--</template>-->
-
-        <!--</el-form-item>-->
-    <!--</el-form>-->
-
-    <!--上传房屋图片-->
-    <!--<el-form-item label="原房屋图片" v-if="ruleForm.headPicName" :label-width="formLabelWidth">-->
-        <!--<img v-if="ruleForm.headPicName" :src="'/demo4/house/show?fileName='+ruleForm.headPicName" height="160px;" width="160px;">-->
-    <!--</el-form-item>-->
 
 <!--第六行-->
 <el-row :gutter="20" type="flex" justify="center">
     <el-col :span="8" >
-<!--<el-form :inline="true" :model="furnitureForm" class="demo-form-inline" margin-left="30px">-->
     <el-form-item>
-    <el-button type="primary" @click="saveData">
-        <el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">提交</el-button>
-    </el-button>
-    <el-button type="primary" @click="loadData">重置</el-button>
-</el-form-item>
-<!--</el-form>-->
+        <el-button type="primary" @click="saveData">
+            <el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">提交</el-button>
+        </el-button>
+        <el-button type="primary" @click="loadData">重置</el-button>
+    </el-form-item>
     </el-col>
 </el-row>
 
@@ -342,36 +304,12 @@
                 $("#tbd").append(tr);
             }
         })
-    })
+    });
 
     // vue的数据处理
    var vue=new Vue({
        el: "#app",
        data: {
-           // value:[],
-           options:[
-               {value:'中原区', label: '中原区',
-               children: [
-                   {value: '五一公园', label: '五一公园',
-                   children: [
-                       {value: '西贵小区1', label: '西贵小区1'}, {value: '西贵小区2', label: '西贵小区2'}]},
-                   {value: '五一公园2', label: '五一公园2',
-                   children: [
-                       {value: '西贵小区3', label: '西贵小区3'}, {value: '西贵小区4', label: '西贵小区4'}]}
-                   ]
-               },
-               {value:'二七区', label: '二七区',
-                   children: [
-                       {value: '河医立交桥1', label: '河医立交桥1',
-                           children: [
-                               {value: '绿洲书苑1', label: '绿洲书苑1'}, {value: '绿洲书苑2', label: '绿洲书苑2'},
-                              ]},
-                       {value: '河医立交桥2', label: '河医立交桥2',
-                           children: [
-                               {value: '绿洲书苑3', label: '绿洲书苑3'}, {value: '绿洲书苑4', label: '绿洲书苑4'}
-                              ]}
-                   ]
-           }],
            ruleForm: {
                houseid:'',
                htitle: '',
@@ -379,31 +317,6 @@
                state:'2',
                leaseWay:'',
                agentid:'',
-               // hadr:[],
-               // value:[],
-               // options:[
-               //     {value:'中原区', label: '中原区',
-               //         children: [
-               //             {value: '五一公园', label: '五一公园',
-               //                 children: [
-               //                     {value: '西贵小区1', label: '西贵小区1'}, {value: '西贵小区2', label: '西贵小区2'}]},
-               //             {value: '五一公园2', label: '五一公园2',
-               //                 children: [
-               //                     {value: '西贵小区3', label: '西贵小区3'}, {value: '西贵小区4', label: '西贵小区4'}]}
-               //         ]
-               //     },
-               //     {value:'二七区', label: '二七区',
-               //         children: [
-               //             {value: '河医立交桥1', label: '河医立交桥1',
-               //                 children: [
-               //                     {value: '绿洲书苑1', label: '绿洲书苑1'}, {value: '绿洲书苑2', label: '绿洲书苑2'},
-               //                 ]},
-               //             {value: '河医立交桥2', label: '河医立交桥2',
-               //                 children: [
-               //                     {value: '绿洲书苑3', label: '绿洲书苑3'}, {value: '绿洲书苑4', label: '绿洲书苑4'}
-               //                 ]}
-               //         ]
-               //     }],
                hrent: '',
                hfloor: '',
                harea: '',
@@ -416,7 +329,8 @@
                cphone:''
            },
            states:[],
-           agents:[],
+           // agents:[],
+           agent:{},
            furnitureForm:{
                houseid:'',
                furnitureid:''
@@ -434,6 +348,12 @@
                ],
                harea: [
                    {required: true, message: '请描述房屋面积', trigger: 'blur'}
+               ],
+               cname: [
+                   {required: true, message: '请输入房东姓名', trigger: 'blur'}
+               ],
+               cphone: [
+                   {required: true, message: '请输入房东电话', trigger: 'blur'}
                ]
            },
            pickerOptions:{
@@ -450,40 +370,39 @@
 
        },
        created: function () {
-           this.loadData();
            var self = this;
-           var Num="";
-           for (var i = 0; i < 8; i++) {
-               Num+=Math.floor(Math.random()*10);
-           }
-           self.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
-               hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-               releasedate:'', hdesc:'',leaseWay:'',agentid:'',cname:'', cphone:''
-           };
+           this.loadData();
+           axios.post('/demo4/getName')
+               .then(function (response) {
+                   self.ruleForm.agentid=response.data.emp.enumber;
+               });
+           // var Num="";
+           // for (var i = 0; i < 8; i++) {
+           //     Num+=Math.floor(Math.random()*10);
+           // }
+           // self.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
+           //     hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
+           //     releasedate:'', hdesc:'',leaseWay:'',cname:'', cphone:''
+           // };
            // 向房子家具中间表中存入的数据
-           self.furnitureForm={houseid:Num,furnitureid:''};
+           // self.furnitureForm={houseid:Num,furnitureid:''};
 
            //只查出“待审核”这一条状态
            axios.post('/demo4/part/state2')
                .then(function (response) {
                    self.states=response.data;
-               })
-
-           // 查询出所有的经纪人，放在下拉框
-           axios.post('/demo4/part/agents')
-               .then(function (response) {
-                   self.agents=response.data;
-               })
+               });
        },
        methods: {
            loadData:function(){
+               var self=this;
                var Num="";
                for (var i = 0; i < 8; i++) {
                    Num+=Math.floor(Math.random()*10);
                }
                this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-                   releasedate:'', hdesc:'',leaseWay:'',agentid:'',cname:'', cphone:''
+                   releasedate:'', hdesc:'',leaseWay:'',cname:'', cphone:'',agentid:''
                };
                // 向房子家具中间表中存入的数据
                this.furnitureForm={houseid:Num,furnitureid:''};
@@ -493,7 +412,6 @@
                for (var i = 0; i < checkbox.length; i++) {
                    checkbox[i].checked=false;
                }
-
            },
            saveData:function () {
                var self=this;
@@ -506,10 +424,14 @@
                                type: 'success'
                            });
                            self.loadData();
+                           axios.post('/demo4/getName')
+                               .then(function (response) {
+                                   self.ruleForm.agentid=response.data.emp.enumber;
+                               });
                        }else{
                            self.$message.error('错了哦，操作失败');
                        }
-                   })
+                   });
                axios.post("/demo4/part/addHost",this.ruleForm)
                    .then(function (response) {
                        if (response.data==1){
@@ -517,7 +439,7 @@
                        }else{
                            self.$message.error('错了哦，操作失败');
                        }
-                   })
+                   });
                this.imageUrl='';
            },
            saveFurniture:function(){
@@ -537,7 +459,6 @@
                $.ajax({
                    url:"/demo4/house/saveFurniture",
                    type:"POST",
-                   // contentType: 'application/json; charset=UTF-8',
                    data:{furnitures:ids.toString(),houseid:this.furnitureForm.houseid},
                    dataType:"json",
                    success:function (msg) {
@@ -551,21 +472,6 @@
                        }
                    }
                });
-               // 向数据库添加家具信息，主要添加一个房屋编号和家具编号
-               // axios.post("/demo4/house/saveFurniture",this.furnitureForm.houseid,{
-               //     // furnitures:ids.toString()
-               // })
-               //     .then(function (response) {
-               //
-               //         if (response.data==true){
-               //             self.loadData();
-               //         }else{
-               //             self.$message.error('错了哦，操作失败');
-               //         }
-               //     })
-           },
-           resetForm: function (formName) {
-               this.$refs[formName].resetFields();
            },
            handleAvatarSuccess:function(res, file) {
                this.imageUrl = URL.createObjectURL(file.raw);
@@ -575,7 +481,6 @@
            beforeAvatarUpload:function(file) {
                const isJPG = file.type === 'image/jpeg';
                const isLt2M = file.size / 1024 / 1024 < 2;
-
                if (!isJPG) {
                    this.$message.error('上传头像图片只能是 JPG 格式!');
                }
