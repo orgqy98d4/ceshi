@@ -100,6 +100,16 @@ public class ShiroConfiguration {
         map.put("/resources/**","anon");
         map.put("/page/**","anon");
         map.put("/page/reception/**","anon");
+
+        //静态页面可以直接访问后台方法
+        map.put("/page/reception/housingresource.html","anon");
+        map.put("/house/save","anon");
+        map.put("/part/furnitures","anon");
+        map.put("/getName","anon");
+        map.put("image/jpeg","anon");
+        map.put("/login/judgeCusLogin","anon");
+
+
         //首页直接访问
         map.put("/page/index.html","anon");
         //对所有请求进行认证
