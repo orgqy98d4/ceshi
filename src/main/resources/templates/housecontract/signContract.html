@@ -208,7 +208,7 @@
                                 align="right"
                                 type="date"
                                 placeholder="选择日期"
-                                :picker-options="pickerOptions" >
+                                :picker-options="pickerOptions" @blur="showHrent">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -225,14 +225,20 @@
                     </el-form-item>
                 </el-col>
 
+                <!--<el-col :span="6">-->
+                    <!--<el-form-item label="每月租金" prop="hrent">-->
+                        <!--<el-input v-model="ruleForm.hrent"></el-input>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
+
                 <el-col :span="6">
-                    <el-form-item label="应付租金" prop="money">
+                    <el-form-item label="应付租金(元)" prop="money">
                         <el-input v-model="ruleForm.money"></el-input>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="6">
-                    <el-form-item label="需付押金" prop="foregift">
+                    <el-form-item label="需付押金(元)" prop="foregift">
                         <el-input v-model="ruleForm.foregift" >1000</el-input>
                     </el-form-item>
                 </el-col>
@@ -242,8 +248,8 @@
             <el-row :gutter="20" type="flex" justify="center">
                 <el-col :span="8" >
                     <el-form-item>
-                        <el-button type="primary" @click="saveContract">签订合同</el-button>
-                        <el-button type="primary" @click="loadData">重置</el-button>
+                        <el-button type="primary" @click="addContract">签订合同</el-button>
+                        <!--<el-button type="primary" @click="loadData">重置</el-button>-->
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -256,13 +262,13 @@
     var vue=new Vue({
         el: "#app",
         data: {
-            hostInfo:[],
-            renterInfo:[],
+            // hostInfo:[],
+            // renterInfo:[],
             ruleForm: {
                 contractid:'',
                 houseid:'',
                 agentid:'',
-
+                hrent:'',//每月租金
                 hname:'',
                 hphone:'',
                 haddress:'',
@@ -280,7 +286,7 @@
 
                 paytype:'2',
                 money: '',
-                foregift: ''
+                foregift: '1000'
 
             },
             formLabelWidth: '120px',
@@ -316,32 +322,29 @@
         },
         created: function () {
             var self = this;
-            this.loadData();
+            // this.loadData();
             axios.post('/demo4/getName')
                 .then(function (response) {
+                    //经纪人编号赋值
                     self.ruleForm.agentid=response.data.emp.enumber;
                 });
             var Num="";
             for (var i = 0; i < 8; i++) {
                 Num+=Math.floor(Math.random()*10);
             }
-            self.ruleForm={
-                contractid:Num, houseid:'', agentid:'',
-                hname:'', hphone:'', haddress:'', hid:'',
-                ename:'', ephone:'', eaddress:'', eid:'',
-                hmeter:'', hlocation:'', signdate:'', endate:'',
-                paytype:'2', money: '', foregift: ''
-            };
+            //合同编号赋值
+            self.ruleForm.contractid=Num;
+
         },
         methods: {
             loadData:function(){
-                // var self=this;
-                // var Num="";
-                // for (var i = 0; i < 8; i++) {
-                //     Num+=Math.floor(Math.random()*10);
-                // }
+                var self=this;
+                var Num="";
+                for (var i = 0; i < 8; i++) {
+                    Num+=Math.floor(Math.random()*10);
+                }
                 this.ruleForm={
-                    contractid:'', houseid:'', agentid:'',
+                    contractid:Num, houseid:'', agentid:'',
                     hname:'', hphone:'', haddress:'', hid:'',
                     ename:'', ephone:'', eaddress:'', eid:'',
                     hmeter:'', hlocation:'', signdate:'', endate:'',
@@ -357,50 +360,39 @@
                    data:{houseid:this.ruleForm.houseid},
                    dataType:'json',
                    success:function (msg) {
-                       self.hostInfo = msg;
-                       alert(self.hostInfo.cname);
+                       self.ruleForm.hname=msg.cname;
+                       self.ruleForm.hphone=msg.cphone;
+                       self.ruleForm.hid=msg.ccard;
+                       self.ruleForm.hmeter=msg.harea;
+                       self.ruleForm.hlocation=msg.hadr;
+                       self.ruleForm.haddress=msg.haddress;
+                       self.ruleForm.hrent=msg.hrent;//每月租金赋值
 
-                       self.ruleForm={
-                           // houseid:'', agentid:'',
-                           hname:self.hostInfo.cname, hphone:self.hostInfo.cphone, haddress:'', hid:self.hostInfo.ccard,
-                           hmeter:self.hostInfo.harea, hlocation:self.hostInfo.hadr, signdate:'', endate:'',
-                           paytype:'2', money: '', foregift: ''
-                       }
                    }
                 });
-                // axios.post('/demo4/part/queryHost',{houseid:this.ruleForm.houseid})
-                //     .then(function (response) {
-                //         self.hostInfo = response.data;
-                //     });
+
 
             },
-            showRenter:function(){
+            showRenter:function(){//获取租客信息
                 var self=this;
                 $.ajax({
                     url:'/demo4/part/queryRenter',
                     type:'post',
-                    data:{cname:this.ruleForm.ename},
+                    data:{ename:this.ruleForm.ename},
                     dataType:'json',
                     success:function (msg) {
-                        self.renterInfo =  msg;
+                        self.ruleForm.ename=msg.cname;
+                        self.ruleForm.ephone=msg.cphone;
+                        self.ruleForm.eid=msg.ccard;
+                        self.ruleForm.eaddress=msg.eaddress;
                     }
                 });
-                // axios.post('/demo4/part/queryRenter',{
-                //     cname:this.ruleForm.ename
-                // })
-                //     .then(function (response) {
-                //         self.renterInfo = response.data;
-                //     });
-                self.ruleForm={
-                    ename:self.renterInfo.cname, ephone:self.renterInfo.cphone, eaddress:'', eid:self.renterInfo.ccard
-                    // money: '', foregift: ''
-                }
-            },
-            addContract:function () {
-                var self=this;
-                axios.post("/demo4/house/save",this.ruleForm)
-                    .then(function (response) {
 
+            },
+            addContract:function () {//提交合同
+                var self=this;
+                axios.post("/demo4/part/addContract",this.ruleForm)
+                    .then(function (response) {
                         if (response.data==1){
                             self.$message({
                                 message: '恭喜你，操作成功',
@@ -415,48 +407,12 @@
                             self.$message.error('错了哦，操作失败');
                         }
                     });
-                axios.post("/demo4/part/addHost",this.ruleForm)
-                    .then(function (response) {
-                        if (response.data==1){
-                            self.loadData();
-                        }else{
-                            self.$message.error('错了哦，操作失败');
-                        }
-                    });
-                this.imageUrl='';
             },
-            saveContract:function(){
-                // var Num="";
-                // for (var i = 0; i < 8; i++) {
-                //     Num+=Math.floor(Math.random()*10);
-                // }
-                // // 向房子家具中间表中存入的数据
-                // this.furnitureForm={houseid:Num,furnitureid:''}
-
+            showHrent:function () {//计算租金
                 var self=this;
-                // 写一个数组存入所有的家具编号
-                var ids=[];
-                $('input[name=\'checkbox\']:checked').each(function () {
-                    ids.push($(this).val());
-                });
-                $.ajax({
-                    url:"/demo4/house/saveFurniture",
-                    type:"POST",
-                    data:{furnitures:ids.toString(),houseid:this.furnitureForm.houseid},
-                    dataType:"json",
-                    success:function (msg) {
-                        if(msg==true){
-                            // $('input[name=\'checkbox\']:checked').each(function () {
-                            //     $('input[name=\'checkbox\']:checked=fal')
-                            // });
-                            self.loadData();
-                        }else{
-                            self.$message.error('错了哦，操作失败');
-                        }
-                    }
-                });
+                var time= Math.floor((self.ruleForm.endate.getTime()-self.ruleForm.signdate.getTime())/(24*60*60*1000*30));
+                self.ruleForm.money=time*self.ruleForm.hrent;
             }
-
 
         }
     })
