@@ -78,7 +78,7 @@
     (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
     hhs join customer cu on hhs.landlord=cu.id
     <where>
-      hhs.state=6
+      and hhs.state=6
       <!--根据房屋小区、地址查询-->
       <if test="hrent!=null and hrent!=''">
         and (hhs.htitle like "%"#{hrent}"%"
@@ -99,13 +99,23 @@
   <!--已出租开始-->
   <!--根据条件查询所有已出租的-->
   <select id="queryRented" resultType="map" parameterType="map">
-    select h.*, hs.name from house h join house_state hs on h.state=hs.id
-    where h.state=5
+    select hhs.*,cu.cname,cu.cphone,cu.ccard from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
+    <where>
+      and hhs.state=5
+      <!--根据房屋小区、地址查询-->
+      <if test="hrent!=null and hrent!=''">
+        and hhs.houseid like "%"#{hrent}"%"
+      </if>
+    </where>
     limit ${start},${pageSize}
   </select>
   <!--计算所有已出租的-->
   <select id="rentedCount" resultType="int">
-      select count(*) from house h join house_state hs on h.state=hs.id where h.state=5
+    select count(*) from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id where hhs.state=5
   </select>
   <!--已出租结束-->
 
