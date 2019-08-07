@@ -171,6 +171,15 @@
       <if test="signdate != null">
         signdate,
       </if>
+      <if test="endate != null">
+        endate,
+      </if>
+      <if test="paytype != null">
+        paytype,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -221,19 +230,28 @@
       <if test="signdate != null">
         #{signdate,jdbcType=DATE},
       </if>
+      <if test="endate != null">
+        #{endate,jdbcType=DATE},
+      </if>
+      <if test="paytype != null">
+        #{paytype,jdbcType=INTEGER},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
 <!--根据房屋编号，查询出房东编号,查询出房屋面积，房屋所在地-->
     <select id="queryLandlord" parameterType="java.lang.Integer" resultType="map">
-        select landlord,hadr,harea from house where houseid=#{houseid};
+        select landlord,hadr,harea,hrent from house where houseid=#{houseid};
     </select>
     <!--再根据房东id，查询出房东信息-->
     <select id="queryHost" parameterType="java.lang.Integer" resultType="map">
-      select cname,cphone,ccard from customer where id=#{landlord};
+      select cname,cphone,ccard,caddress haddress from customer where id=#{landlord};
     </select>
     <!--根据租客姓名查询出租客的信息-->
     <select id="queryRenter" parameterType="java.lang.String" resultType="map">
-        select cname,cphone,ccard from customer where cname=#{ename}
+        select cname,cphone,ccard,caddress eaddress from customer where cname=#{ename}
     </select>
 
 </mapper>

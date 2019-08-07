@@ -154,19 +154,19 @@
                 <el-input v-model="form.id" type="hidden" autocomplete="off"></el-input>
 
                 <el-form-item label="员工编号" :label-width="formLabelWidth">
-                    <el-input v-model="form.enumber" autocomplete="off" readonly="readonly" id="aaa"></el-input>
+                    <el-input v-model="form.enumber" autocomplete="off" :disabled="update" id="aaa"></el-input>
                 </el-form-item>
                 <el-form-item label="员工姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.ename" autocomplete="off"></el-input>
+                    <el-input v-model="form.ename" autocomplete="off" :disabled="update"></el-input>
                 </el-form-item>
                 <el-form-item label="性别" :label-width="formLabelWidth">
                     <template>
-                        <el-radio v-model="form.esex" label="男">男</el-radio>
-                        <el-radio v-model="form.esex" label="女">女</el-radio>
+                        <el-radio v-model="form.esex" label="男" :disabled="update">男</el-radio>
+                        <el-radio v-model="form.esex" label="女" :disabled="update">女</el-radio>
                     </template>
                 </el-form-item>
                 <el-form-item label="员工职位" :label-width="formLabelWidth">
-                    <el-select v-model="form.roleid" placeholder="请选择">
+                    <el-select v-model="form.roleid" placeholder="请选择" :disabled="update">
                         <el-option
                                 v-for="item in optionsrole"
                                 :key="item.roleid"
@@ -176,11 +176,12 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="员工手机号" :label-width="formLabelWidth">
-                    <el-input v-model="form.ephone" autocomplete="off"></el-input>
+                    <el-input v-model="form.ephone" autocomplete="off" :disabled="update"></el-input>
                 </el-form-item>
                 <el-form-item label="入职日期" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="form.hiredate"
+                            :disabled="update"
                             align="right"
                             type="date"
                             placeholder="选择日期"
@@ -188,13 +189,13 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="员工邮箱" :label-width="formLabelWidth">
-                    <el-input v-model="form.email" autocomplete="off"></el-input>
+                    <el-input v-model="form.email" autocomplete="off" :disabled="update"></el-input>
                 </el-form-item>
                 <el-form-item label="员工qq号码" :label-width="formLabelWidth">
-                    <el-input v-model="form.eqq" autocomplete="off"></el-input>
+                    <el-input v-model="form.eqq" autocomplete="off" :disabled="update"></el-input>
                 </el-form-item>
                 <el-form-item label="员工家庭住址" :label-width="formLabelWidth">
-                    <el-input v-model="form.eaddress" autocomplete="off"></el-input>
+                    <el-input v-model="form.eaddress" autocomplete="off" :disabled="update"></el-input>
                 </el-form-item>
                 <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="form.stateid" placeholder="请选择">
@@ -206,7 +207,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item v-if="form.headPic" label="原头像" :label-width="formLabelWidth">
+                <el-form-item v-if="form.headPic" label="头像" :label-width="formLabelWidth">
                     <img v-if="form.headPic" :src="'/demo4/emp/show?fileName='+form.headPic" height="160px;" width="160px;">
                 </el-form-item>
                 <el-form-item label="员工上传头像" :label-width="formLabelWidth">
@@ -241,6 +242,7 @@
                 enameOrDname: '',
                 id: ''
             },
+            update:true,//是否可修改
             options: [],
             optionsrole:[],
             title: '',
@@ -367,6 +369,7 @@
                 this.title='员工添加';
                 this.url="/demo4/emp/save";
                 this.imageUrl='';
+                this.update=false;
                 //把缓存的数据清空
                 this. form= {
                         id:'',
@@ -390,6 +393,7 @@
                 //console.log(index,row)
                 this.title='员工修改';
                 this.url='/demo4/emp/update';
+                this.update=true;
                 //赋值
                 this.form=row;
                 //让弹出框显示

@@ -6,6 +6,7 @@ import com.aaa.house.entity.HouseContract;
 import com.aaa.house.service.HouseFurnitureService;
 import com.aaa.house.service.HouseService;
 import com.aaa.house.service.HouseStateService;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,8 +187,8 @@ public class HousePartController {
     @RequestMapping("/addContract")
     public Object addContract(@RequestBody HouseContract houseContract){
         Integer houseid = houseContract.getHouseid();
-        houseStateService.beRented(houseid);
-        return houseStateService.addContract(houseContract);
+        houseStateService.addContract(houseContract);//向数据库保存数据
+        return  houseStateService.beRented(houseid);//修改房子的出租状态
     }
     /**
      * 签订合同后将对应的房屋状态改为已出租
@@ -204,17 +208,21 @@ public class HousePartController {
         //再根据房东id向客户表中查询出房东信息，并返回
         Map map = houseStateService.queryLandlord(houseid);//map中存放的有landlord,hadr,harea
         Integer landlord= (Integer) map.get("landlord"); //先取出房东编号
+        Object o = map.get("hrent");
         Map hostInfo = houseStateService.queryHost(landlord);//hostInfo中存放的有cname,cphone,ccard
         //这里取出再存进去是因为向页面传送的是一个map,这样数据集中起来，页面上容易取到
         hostInfo.put("hadr",map.get("hadr"));
         hostInfo.put("harea",map.get("harea"));
+        hostInfo.put("hrent",o);
         return hostInfo;
     }
 
     //根据租客姓名查询出租客的信息
     @RequestMapping("/queryRenter")
-    public Object queryRenter(@RequestBody String ename){
+    public Object queryRenter(@RequestParam String ename){
+        System.out.println(ename+".........");
         Map renterInfo=houseStateService.queryRenter(ename);
         return renterInfo;
     }
+
 }
