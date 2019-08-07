@@ -47,6 +47,7 @@
 </head>
 <body>
 <div id="app">
+    <h1>待发布房源</h1>
     <el-row>
         <template>
             <el-table
@@ -106,12 +107,27 @@
             </el-table>
         </template>
     </el-row>
+    <!--分页-->
+    <el-row>
+        <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[3,5,10]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
+        </el-pagination>
+    </el-row>
 </div>
 <script>
     new Vue({
         el:"#app",
         data:{
             checkedHouses:[],
+            currentPage:1,
+            pageSize:3,
+            total:0,
             id:'',
             title:'',
             formLabelWidth: '120px',
@@ -123,15 +139,39 @@
             this.loadData();
         },
         methods: {
-            //封装方法
+            //获取所有已审核待发布的房源
             loadData: function () {
                 var self = this;
-                //查询出所有已审核过的房源
-                axios.post('/demo4/part/queryChecked')
+                var start = (this.currentPage - 1) * this.pageSize;
+                axios.post('/demo4/part/queryChecked',{
+                    start:start,
+                    pageSize:this.pageSize
+                })
                     .then(function (response) {
-                        self.checkedHouses = response.data;
+                        self.checkedHouses = response.data.checkedList;
+                        // alert(response.data.houseList);
+                        self.total = response.data.total;
                     })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function () {
+                    });
             },
+            //封装方法
+            // loadData: function () {
+            //     var self = this;
+            //     var start = (this.currentPage - 1) * this.pageSize;
+            //     //查询出所有已审核过的房源
+            //     axios.post('/demo4/part/queryChecked',{
+            //         start:start,
+            //         pageSize:this.pageSize
+            //     })
+            //         .then(function (response) {
+            //             self.checkedHouses = response.data.checkedList;
+            //             self.total = response.data.total;
+            //         })
+            // },
             //点击发布，成功后该条数据从本页面“消失”
             //修改
             beReleased:function(index, row) {
@@ -144,6 +184,16 @@
                             self.$message.error('发布失败,请重试');
                         }
                     })
+            },
+            //每页条数
+            handleSizeChange: function (val) {
+                this.pageSize = val;
+                this.loadData();
+            },
+            //当前页
+            handleCurrentChange: function (val) {
+                this.currentPage = val;
+                this.loadData();
             }
 
         }

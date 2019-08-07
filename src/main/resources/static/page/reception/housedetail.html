@@ -269,7 +269,7 @@
                     <div>
                         <!--房源图-->
                         <div style="background-color: #fff;float: left;margin-left: 20px;width: 60%;">
-                             <img :src="'/demo4/house/show?fileName='+listDetail.headPic"/>
+                             <img  :src="'/demo4/house/show?fileName='+listDetail.headPic" style="width: 100%;height: 500px"/>
                         </div>
                         <!--右侧-->
                         <div style="background-color: #fff;border: 1px solid lightgray;float: left;width: 30%;margin-left: 30px;height: 550px;padding: 15px 30px">
@@ -304,21 +304,27 @@
                             <a-divider></a-divider>
                             <div style="margin-left: 30px;">
                                 <div>
-                                    <div class="d1"><img id="dlimg" :src="'/demo4/emp/show?fileName='+listDetail.headPic"></div>
+                                    <div class="d1"><img id="dlimg" :src="'/demo4/emp/show?fileName='+empinfo.headPic"></div>
                                     <div class="d1" :model="empinfo">
                                         <p style="margin-bottom: 10px">
-                                            <span style="color: black;font-size: 22px;font-weight: bold;">{{empinfo.ename}}</span>
+                                            <span style="color: black;font-size: 20px;font-weight: bold;">{{empinfo.ename}}</span>
                                             <a-popover>
-                                                <span id="cardimg"><img style="width: 20px;height: 20px"
-                                                                        src="../../resources/images/icon/id_card.png"></span>
+                                                <template slot="content">
+                                                    <img width="220px" height="350px"
+                                                         src="../../resources/images/zhizhao.jpg">
+                                                </template>
+                                                <span id="cardimg"><img style="width: 20px;height: 20px" src="../../resources/images/icon/id_card.png"></span>
                                             </a-popover>
+                                            <span style="color: orangered;font-size: 20px;font-weight: bold;">{{empinfo
+                                                .ephone}}</span>
                                         </p>
-                                        <p><span>贝贝租房</span><span>经纪人</span></p>
+                                        <p><span>贝贝租房</span><span>经纪人</span><span>联系方式</span></p>
                                     </div>
                                 </div>
                                 <div>
                                     <span>
                                         <a-button size="large" :id="empinfo.id" icon="message" style="font-size:20px;">
+
                                             <a :href="['tencent://message/?uin='+empinfo.eqq+'&Site=Sambow&Menu=yes']" style="color:#000">在线咨询</a>
                                         </a-button>
                                     </span>
@@ -477,7 +483,6 @@
                         var area = data.object.hadr;
                         var index = area.lastIndexOf("\-");
                         area = area.substr(index + 1);
-                        _this.BdMap(jd, wd, area);
                         _this.empinfo = data.empinfo;
                         _this.isFollow(data.object.id);
                     }

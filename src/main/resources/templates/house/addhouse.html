@@ -119,7 +119,7 @@
         <!--<img src="../images/houses/zufang1.jpg" height="50" width="50"/>-->
         <!--<el-input icon="el-icon-office-building"></el-input>-->
         <!--<img src="../images/houses2/6.jpg" height="488" width="500"/>-->
-        <h1>房源添加</h1>
+        <h1 style="font-family: 'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif">房源添加</h1>
     </el-header>
     <el-main>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -131,7 +131,7 @@
 <el-row :gutter="20">
     <!--<el-form :inline="true" :model="ruleForm" class="demo-form-inline" margin-left="30px">-->
     <el-col :span="6">
-        <el-form-item label="房屋编号" type="hidden" prop="houseid">
+        <el-form-item label="房屋编号" prop="houseid">
             <el-input  v-model="ruleForm.houseid" readonly="readonly"></el-input>
         </el-form-item>
     </el-col>
