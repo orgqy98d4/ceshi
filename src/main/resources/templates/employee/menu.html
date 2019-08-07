@@ -107,17 +107,17 @@
         </el-row>
         <el-row>
             <!--添加修改弹出框-->
-            <el-dialog :title="title" :visible.sync="dialogFormVisible">
-                <el-form :model="form">
-                    <!--隐藏主键-->
-                    <el-input v-model="form.mid" type="hidden" autocomplete="off"></el-input>
-                    <el-form-item label="权限名称" :label-width="formLabelWidth">
-                        <el-input v-model="form.mname" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="权限概述" :label-width="formLabelWidth">
-                        <el-input v-model="form.mdesc" autocomplete="off"></el-input>
-                    </el-form-item>
-                </el-form>
+                <el-dialog :title="title" :visible.sync="dialogFormVisible">
+                    <el-form :model="form">
+                        <!--隐藏主键-->
+                        <el-input v-model="form.mid" type="hidden" autocomplete="off"></el-input>
+                        <el-form-item label="权限名称" :label-width="formLabelWidth">
+                            <el-input v-model="form.mname" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="权限概述" :label-width="formLabelWidth">
+                            <el-input v-model="form.mdesc" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="danger" @click="dialogFormVisible = false">取 消</el-button>
                     <el-button type="primary" @click="saveData">确 定</el-button>

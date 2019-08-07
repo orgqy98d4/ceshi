@@ -173,4 +173,20 @@ public class HouseStateServiceImpl implements HouseStateService {
     public int beRented(int houseid) {
         return houseStateMapper.beRented(houseid);
     }
+
+    //根据房屋编号，向房屋表中查询出房东id
+    @Override
+    public Map queryLandlord(Integer houseid) {
+        return houseStateMapper.queryLandlord(houseid);
+    }
+    //再根据房东编号，向用户表中查询出房东信息
+    @Override
+    public Map queryHost(Integer landlord) {
+        return houseStateMapper.queryHost(landlord);
+    }
+    //根据租客姓名查询出租客的信息
+    @Override
+    public Map queryRenter(String ename) {
+        return houseStateMapper.queryRenter(ename);
+    }
 }

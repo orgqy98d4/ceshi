@@ -152,16 +152,16 @@
                     <el-input v-model="form.contractid" autocomplete="off" readonly="true"></el-input>
                 </el-form-item>
                 <el-form-item label="甲方姓名" :label-width="formLabelWidth">
-                    <el-input v-model="form.hname" autocomplete="off"></el-input>
+                    <el-input v-model="form.hname" autocomplete="off" readonly="true"></el-input>
                 </el-form-item>
                 <el-form-item label="甲方电话" :label-width="formLabelWidth">
-                    <el-input v-model="form.hphone" autocomplete="off"></el-input>
+                    <el-input v-model="form.hphone" autocomplete="off" readonly="true"></el-input>
                 </el-form-item>
                 <el-form-item label="甲方地址" :label-width="formLabelWidth">
                     <el-input v-model="form.haddress" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="甲方身份证号" :label-width="formLabelWidth">
-                    <el-input v-model="form.hid" autocomplete="off"></el-input>
+                    <el-input v-model="form.hid" autocomplete="off"readonly="true"></el-input>
                 </el-form-item>
                 <el-form-item label="经纪人编号" :label-width="formLabelWidth">
                     <el-input v-model="form.agentid" autocomplete="off" readonly="true"></el-input>
@@ -294,7 +294,7 @@
                 for (var i = 0; i < 8; i++) {
                     Num+=Math.floor(Math.random()*10);
                 }
-                this.form={id:'', contractid: Num, hname: '', hphone: '', haddress: '', hid: '',
+                this.form={id:'', contractid: Num, hname: row.cname, hphone:row.cphone, haddress: '', hid:row.ccard,
                     agentid: '', ename: '', ephone: '', eaddress: '', eid: '', hmeter: row.harea,
                     hlocation:row.hadr, houseid:row.houseid, csid:'', signdate:''
                 };

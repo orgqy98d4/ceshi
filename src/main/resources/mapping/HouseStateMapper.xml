@@ -73,20 +73,26 @@
   <!--已发布开始-->
   <!--根据条件查询所有已发布的-->
   <select id="queryReleased" resultType="map" parameterType="map">
-    select h.*, hs.name from house h join house_state hs on h.state=hs.id
+    <!--select h.*, hs.name from house h join house_state hs on h.state=hs.id-->
+    select hhs.*,cu.cname,cu.cphone,cu.ccard from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
     <where>
-      h.state=6
+      hhs.state=6
       <!--根据房屋小区、地址查询-->
       <if test="hrent!=null and hrent!=''">
-        and (h.htitle like "%"#{hrent}"%"
-        or h.hadr like "%"#{hrent}"%")
+        and (hhs.htitle like "%"#{hrent}"%"
+        or hhs.hadr like "%"#{hrent}"%")
       </if>
     </where>
     limit ${start},${pageSize}
   </select>
   <!--计算所有已发布的-->
   <select id="releasedCount" resultType="int">
-      select count(*) from house h join house_state hs on h.state=hs.id where h.state=6
+      <!--select count(*) from house h join house_state hs on h.state=hs.id where h.state=6-->
+    select count(*) from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id where hhs.state=6
   </select>
   <!--已发布结束-->
 
@@ -207,5 +213,17 @@
       </if>
     </trim>
   </insert>
+<!--根据房屋编号，查询出房东编号,查询出房屋面积，房屋所在地-->
+    <select id="queryLandlord" parameterType="java.lang.Integer" resultType="map">
+        select landlord,hadr,harea from house where houseid=#{houseid};
+    </select>
+    <!--再根据房东id，查询出房东信息-->
+    <select id="queryHost" parameterType="java.lang.Integer" resultType="map">
+      select cname,cphone,ccard from customer where id=#{landlord};
+    </select>
+    <!--根据租客姓名查询出租客的信息-->
+    <select id="queryRenter" parameterType="java.lang.String" resultType="map">
+        select cname,cphone,ccard from customer where cname=#{ename}
+    </select>
 
 </mapper>

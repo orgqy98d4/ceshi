@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,4 +196,25 @@ public class HousePartController {
 //        return houseStateService.beRented(houseid);
 //    }
 
+    //根据数据的房屋编号，将相应的房东信息查询出来
+    @RequestMapping("/queryHost")
+    public Object queryHost(@RequestParam Integer houseid){
+        System.out.println(houseid+"............");
+        //先根据房屋编号得到房屋部分信息
+        //再根据房东id向客户表中查询出房东信息，并返回
+        Map map = houseStateService.queryLandlord(houseid);//map中存放的有landlord,hadr,harea
+        Integer landlord= (Integer) map.get("landlord"); //先取出房东编号
+        Map hostInfo = houseStateService.queryHost(landlord);//hostInfo中存放的有cname,cphone,ccard
+        //这里取出再存进去是因为向页面传送的是一个map,这样数据集中起来，页面上容易取到
+        hostInfo.put("hadr",map.get("hadr"));
+        hostInfo.put("harea",map.get("harea"));
+        return hostInfo;
+    }
+
+    //根据租客姓名查询出租客的信息
+    @RequestMapping("/queryRenter")
+    public Object queryRenter(@RequestBody String ename){
+        Map renterInfo=houseStateService.queryRenter(ename);
+        return renterInfo;
+    }
 }

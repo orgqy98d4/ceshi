@@ -117,5 +117,11 @@ public interface HouseStateMapper {
      * 签订合同后将对应的房屋状态改为已出租
      */
     @Update("update house set state=5 where state=6 and houseid=#{houseid}")
-    int beRented(int houseid);
+    int beRented(Integer houseid);
+    //根据房屋编号，向房屋表中查询出房东id
+    Map queryLandlord(Integer houseid);
+    //再根据房东编号，向用户表中查询出房东信息
+    Map queryHost(Integer landlord);
+    //根据租客姓名查询出租客的信息
+    Map queryRenter(String ename);
 }
