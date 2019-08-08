@@ -244,4 +244,27 @@
         select cname,cphone,ccard,caddress eaddress from customer where cname=#{ename}
     </select>
 
+
+  <!--合同列表-->
+  <!--  分页查询，start计算出开始-->
+  <select id="getAll" resultType="map" parameterType="map">
+    select contract.*,paytype.htname from contract,paytype
+    <where>
+      contract.paytype=paytype.id
+      and (contract.paytype=1 or contract.paytype=2)
+      <if test="contractid!=null and contractid!=''">
+        and contract.contractid like concat("%",#{contractid},"%")
+      </if>
+    </where> limit #{start},#{pageSize}
+  </select>
+  <!--  查询出合同总数量-->
+  <select id="queryContractCont" resultType="int">
+    SELECT count(*)
+    FROM contract
+    <where>
+      <if test="contractid!=null and contractid!=''">
+        and contractid=#{contractid}
+      </if>
+    </where>
+  </select>
 </mapper>

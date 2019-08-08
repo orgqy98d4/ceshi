@@ -189,4 +189,37 @@ public class HouseStateServiceImpl implements HouseStateService {
     public Map queryRenter(String ename) {
         return houseStateMapper.queryRenter(ename);
     }
+
+    /**
+     * 获取合同列表
+     * @param map
+     * @return
+     */
+    @Override
+    public List<Map> getAll(Map map) {
+        return houseStateMapper.getAll(map);
+    }
+
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    @Override
+    public int queryContractCont(Map map) {
+
+        return houseStateMapper.queryContractCont(map);
+    }
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    @Override
+    public int conDelete(Integer id) {
+        return houseStateMapper.conDelete(id);
+    }
 }
+

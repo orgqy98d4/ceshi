@@ -2,6 +2,7 @@ package com.aaa.house.service;
 
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseContract;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -111,4 +112,25 @@ public interface HouseStateService {
     Map queryHost(Integer landlord);
     //根据租客姓名查询出租客的信息
     Map queryRenter(String ename);
+
+    /**
+     * 获取合同列表
+     * @param map
+     * @return
+     */
+    List<Map> getAll(Map map);
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    int queryContractCont(Map map);
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    int conDelete(Integer id);
 }

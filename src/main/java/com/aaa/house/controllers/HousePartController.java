@@ -225,4 +225,27 @@ public class HousePartController {
         return renterInfo;
     }
 
+    /**
+     * 合同列表
+     * @param map
+     * @return
+     */
+    @RequestMapping("/page")
+    public Object getAll(@RequestBody Map map){
+        Map mapResult=new HashMap();
+        mapResult.put("conList",houseStateService.getAll(map));
+        mapResult.put("total",houseStateService.queryContractCont(map));
+        return mapResult;
+    }
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    @RequestMapping("/conDelete")
+    public Object conDelete(@RequestParam Integer id){
+        return houseStateService.conDelete(id);
+    }
+
 }
