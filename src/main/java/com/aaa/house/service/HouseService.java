@@ -61,9 +61,4 @@ public interface HouseService {
      * 取消关注
      */
     int delFollow(Integer houseid);
-
-    /**
-     * 用户发布的房源
-     */
-    Page myPostedHouse();
 }

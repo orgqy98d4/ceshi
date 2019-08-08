@@ -126,4 +126,28 @@ public interface HouseStateMapper {
     Map queryRenter(String ename);
     //根据房屋编号查询出房屋状态
     Integer queryState(Integer houseid);
+
+    /**
+     * 获取合同列表
+     * @param map
+     * @return
+     */
+    List<Map> getAll(Map map);
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    int queryContractCont(Map map);
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    @Update("update contract set paytype=5 where id=#{id}")
+    int conDelete(Integer id);
+
+
 }

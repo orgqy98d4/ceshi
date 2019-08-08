@@ -26,6 +26,7 @@ public class HouseContract {
     private Integer paytype;//付款方式（贷款、自付）
     private String money;//应付金额
     private String foregift;//应付租金（默认1000）
+    private String lendmoney;//借款金额
 
     public Date getEndate() {
         return endate;
@@ -185,5 +186,13 @@ public class HouseContract {
 
     public void setCsid(Integer csid) {
         this.csid = csid;
+    }
+
+    public String getLendmoney() {
+        return lendmoney;
+    }
+
+    public void setLendmoney(String lendmoney) {
+        this.lendmoney = lendmoney;
     }
 }
