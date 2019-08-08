@@ -336,8 +336,7 @@
 
                     axios.post('/demo4/house/houselist',{
                         start:start,
-                        pageSize:this.pageSize,
-                        hrent:self.formInline.hrent
+                        pageSize:this.pageSize,hrent:self.formInline.hrent
                     })
                         .then(function (response) {
                             self.houseData = response.data.houseList;
@@ -391,7 +390,7 @@
             //         })
             //             .then(function (response) {
             //                 self.houseData = response.data.houseList;
-            //                 // alert(response.data.houseList);
+            //
             //                 self.total = response.data.total;
             //             })
             //     },

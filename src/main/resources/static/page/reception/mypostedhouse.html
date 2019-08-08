@@ -72,7 +72,7 @@
                 <a-list-item-meta>
                     <a slot="title" @click="houseDetail(item.id)" :hid="item.id">{{item.htitle}}</a>
                     <span slot="description">{{item.hadr}}&nbsp;&nbsp;&nbsp;/</span>
-                    <span slot="description">{{item.hspace}}㎡&nbsp;&nbsp;&nbsp;/</span>
+                    <span slot="description">{{item.harea}}㎡&nbsp;&nbsp;&nbsp;/</span>
                     <span slot="description">{{item.orientation}}&nbsp;&nbsp;&nbsp;/</span>
                     <span slot="description">{{item.hdesc}}</span>
                     <span id="price" slot="description">{{item.hrent}}<span slot="description">元/月</span></span>
@@ -82,7 +82,7 @@
                     <ul id="ulinfo" slot="description" style="padding-left: 0px;">
                         <li slot="description" v-for="(k,index) in item.desctag">{{k}}</li>
                     </ul>
-                    <img width="170px" height="120px" slot="avatar" :src="item.himg"/>
+                    <img width="170px" height="120px" slot="avatar" :src="'/demo4/house/show?fileName='+item.headPic"/>
                 </a-list-item-meta>
             </a-list-item>
         </a-list>
@@ -105,7 +105,7 @@
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: "/house/myPostedHouse",
+                    url: "/demo4/house/myPostedHouse",
                     success: function (data) {
                         console.log(data)
                         _this.listData = data.object;
