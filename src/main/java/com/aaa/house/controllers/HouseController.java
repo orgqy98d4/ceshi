@@ -209,4 +209,12 @@ public class HouseController {
         }
     }
 
+    /**
+     * 用户发布的房源
+     */
+    @RequestMapping("myPostedHouse")
+    public Page myPostedHouse() {
+        return houseService.myPostedHouse();
+    }
+
 }
