@@ -59,7 +59,7 @@ public interface HouseMapper {
     /**
      * 前台根据ID获取房屋详细信息
      */
-    @Select("select h.id,h.houseid,h.hadr,h.agentid,h.htitle,h.hrent,h.state,h.hfloor,h.harea,h.orientation,DATE_FORMAT(h.releasedate,'%Y-%m-%d') releasedate,DATEDIFF(NOW(),h.releasedate) newstime,h.hdesc,h.headPic from house h where h.id=#{id}")
+    @Select("select h.id,h.houseid,h.hadr,h.agentid,h.htitle,h.hrent,h.state,h.hfloor,h.harea,h.orientation,DATE_FORMAT(h.releasedate,'%Y-%m-%d') releasedate,DATEDIFF(NOW(),h.releasedate) newstime,h.hdesc from house h where h.id=#{id}")
     House houseDetail(Integer id);
 
 
@@ -98,17 +98,5 @@ public interface HouseMapper {
      */
     @Delete("delete from followhouse where cid=#{cid} and houseid=#{houseid}")
     int delFollow(Integer cid, Integer houseid);
-
-    /**
-     * 后台发布的房源
-     */
-    @Select("select h.id,h.houseid,h.htitle,h.hfloor,h.headPic,h.hadr,h.hrent,h.harea,h.orientation,DATE_FORMAT(h.releasedate,'%Y-%m-%d') releasedate,DATEDIFF(NOW(),h.releasedate) newstime,h.hdesc from house h,house_state hs where h.state=hs.id and h.state=6 and h.landlord=#{landlord}")
-    List<House> myPostedHouse(Integer landlord);
-
-    /**
-     * 后台发布的房源总数
-     */
-    @Select("select count(1) from house where state=6 and landlord=#{landlord}")
-    int myPostedHouseCount(Integer landlord);
 
 }

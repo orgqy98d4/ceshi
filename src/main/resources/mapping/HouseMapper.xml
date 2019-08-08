@@ -38,26 +38,6 @@
                 and (hhs.htitle like "%"#{hrent}"%"
                 or hhs.hadr like "%"#{hrent}"%")
             </if>
-            <!--<if test="hrent!=null and hrent!=''">-->
-                <!--and hrent=#{hrent}-->
-            <!--</if>-->
-            <!--&lt;!&ndash;根据房屋地址查询&ndash;&gt;-->
-            <!--<if test="hadr!=null and hadr!=''">-->
-                <!--and hadr=#{hadr}-->
-            <!--</if>-->
-            <!--&lt;!&ndash;根据房屋格局查询&ndash;&gt;-->
-            <!--<if test="hdesc!=null and hdesc!=''">-->
-                <!--and hdesc=#{hdesc}-->
-            <!--</if>-->
-            <!--<if test="releasedate!=null and releasedate!=''">-->
-                <!--and releasedate=#{releasedate}-->
-            <!--</if>-->
-          <!--<if test="state!=null and state!=''">-->
-             <!--and hhs.state=#{state}-->
-          <!--</if>-->
-          <!--<if test="hdesc!=null and hdesc!=''">-->
-           <!--and state=0-->
-          <!--</if>-->
         </where>
         limit ${start},${pageSize}
     </select>
@@ -65,13 +45,13 @@
     <select id="queryHouseCount" resultType="int">
       select count(*) from (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
       hhs join customer cu on hhs.landlord=cu.id
-      <where>
-        <!--根据房屋小区、地址查询-->
-        <if test="hrent!=null and hrent!=''">
-          and (hhs.htitle like "%"#{hrent}"%"
-          or hhs.hadr like "%"#{hrent}"%")
-        </if>
-      </where>
+        <where>
+            <!--根据房屋小区、地址查询-->
+            <if test="hrent!=null and hrent!=''">
+                and (hhs.htitle like "%"#{hrent}"%"
+                or hhs.hadr like "%"#{hrent}"%")
+            </if>
+        </where>
     </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 

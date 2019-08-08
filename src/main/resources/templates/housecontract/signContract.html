@@ -249,7 +249,7 @@
                 <el-col :span="8" >
                     <el-form-item>
                         <el-button type="primary" @click="addContract">签订合同</el-button>
-                        <el-button type="primary" @click="loadData">重置</el-button>
+                        <!--<el-button type="primary" @click="loadData">重置</el-button>-->
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -309,7 +309,7 @@
             },
             pickerOptions:{
                 disabledDate:function(time) {
-                    return time.getTime() > Date.now();
+                    return time.getTime() < Date.now();
                 },
                 shortcuts: [{
                     text: '今天',
@@ -360,17 +360,14 @@
                    data:{houseid:this.ruleForm.houseid},
                    dataType:'json',
                    success:function (msg) {
-                       if (msg==1){
-                           self.$message.error('该房源不是待出租状态，请核对^_^');
-                       } else {
-                           self.ruleForm.hname=msg.cname;
-                           self.ruleForm.hphone=msg.cphone;
-                           self.ruleForm.hid=msg.ccard;
-                           self.ruleForm.hmeter=msg.harea;
-                           self.ruleForm.hlocation=msg.hadr;
-                           self.ruleForm.haddress=msg.haddress;
-                           self.ruleForm.hrent=msg.hrent;//每月租金赋值
-                       }
+                       self.ruleForm.hname=msg.cname;
+                       self.ruleForm.hphone=msg.cphone;
+                       self.ruleForm.hid=msg.ccard;
+                       self.ruleForm.hmeter=msg.harea;
+                       self.ruleForm.hlocation=msg.hadr;
+                       self.ruleForm.haddress=msg.haddress;
+                       self.ruleForm.hrent=msg.hrent;//每月租金赋值
+
                    }
                 });
 

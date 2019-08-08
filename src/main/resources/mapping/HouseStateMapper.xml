@@ -31,28 +31,32 @@
   </insert>
 
   <!--待审核开始-->
-  <!--根据条件查询所有已审核待发布的-->
+  <!--根据条件查询所有待审核的-->
   <select id="queryUnchecked" resultType="map" parameterType="map">
-    select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+    select hhs.*,cu.cname,cu.cphone,cu.ccard from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
     <where>
-      h.state=2
+      hhs.state=2
       <!--根据房屋小区、地址查询-->
       <if test="hrent!=null and hrent!=''">
-        and (h.htitle like "%"#{hrent}"%"
-        or h.hadr like "%"#{hrent}"%")
+        and (hhs.htitle like "%"#{hrent}"%"
+        or hhs.hadr like "%"#{hrent}"%")
       </if>
     </where>
     limit ${start},${pageSize}
   </select>
   <!--计算所有待审核的-->
   <select id="uncheckedCount" resultType="int">
-    select count(*) from house h join house_state hs on h.state=hs.id
+    select count(*) from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
     <where>
-      h.state=2
+      and hhs.state=2
       <!--根据房屋小区、地址查询-->
       <if test="hrent!=null and hrent!=''">
-        and (h.htitle like "%"#{hrent}"%"
-        or h.hadr like "%"#{hrent}"%")
+        and (hhs.htitle like "%"#{hrent}"%"
+        or hhs.hadr like "%"#{hrent}"%")
       </if>
     </where>
     </select>
@@ -61,26 +65,30 @@
   <!--已审核待发布开始-->
     <!--根据条件查询所有已审核待发布的-->
     <select id="queryChecked" resultType="map" parameterType="map">
-      select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+      select hhs.*,cu.cname,cu.cphone,cu.ccard from
+      (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+      hhs join customer cu on hhs.landlord=cu.id
       <where>
-      h.state=4
-      <!--根据房屋小区、地址查询-->
+        hhs.state=4
+        <!--根据房屋小区、地址查询-->
         <if test="hrent!=null and hrent!=''">
-          and (h.htitle like "%"#{hrent}"%"
-          or h.hadr like "%"#{hrent}"%")
+          and (hhs.htitle like "%"#{hrent}"%"
+          or hhs.hadr like "%"#{hrent}"%")
         </if>
       </where>
       limit ${start},${pageSize}
     </select>
     <!--计算所有已审核待发布的-->
     <select id="checkedCount" resultType="int">
-      select count(*) from house h join house_state hs on h.state=hs.id
+      select count(*) from
+      (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+      hhs join customer cu on hhs.landlord=cu.id
       <where>
-        h.state=4
+        and hhs.state=4
         <!--根据房屋小区、地址查询-->
         <if test="hrent!=null and hrent!=''">
-          and (h.htitle like "%"#{hrent}"%"
-          or h.hadr like "%"#{hrent}"%")
+          and (hhs.htitle like "%"#{hrent}"%"
+          or hhs.hadr like "%"#{hrent}"%")
         </if>
       </where>
     </select>
@@ -94,7 +102,7 @@
     (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
     hhs join customer cu on hhs.landlord=cu.id
     <where>
-      and hhs.state=6
+      hhs.state=6
       <!--根据房屋小区、地址查询-->
       <if test="hrent!=null and hrent!=''">
         and (hhs.htitle like "%"#{hrent}"%"
@@ -287,5 +295,28 @@
   <!--根据房屋编号，查询房屋状态，如果是已出租状态，就让其向页面传送一个错误-->
   <select id="queryState" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select state from house where houseid=#{houseid};
+  </select>
+
+  <!--合同列表-->
+  <!--  分页查询，start计算出开始-->
+  <select id="getAll" resultType="map" parameterType="map">
+    select contract.*,paytype.htname from contract,paytype
+    <where>
+      contract.paytype=paytype.id
+      and (contract.paytype=1 or contract.paytype=2)
+      <if test="contractid!=null and contractid!=''">
+        and contract.contractid like concat("%",#{contractid},"%")
+      </if>
+    </where> order by contract.endate asc limit #{start},#{pageSize}
+  </select>
+  <!--  查询出合同总数量-->
+  <select id="queryContractCont" resultType="int">
+    SELECT count(*)
+    FROM contract
+    <where>
+      <if test="contractid!=null and contractid!=''">
+        and contractid=#{contractid}
+      </if>
+    </where>
   </select>
 </mapper>

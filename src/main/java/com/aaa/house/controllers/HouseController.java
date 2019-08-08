@@ -10,6 +10,7 @@ import com.aaa.house.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,10 +50,17 @@ public class HouseController {
      * @return
      */
     @RequestMapping("/save")
+    @Transactional
     public Object save(@RequestBody House house){
-        Map map=new HashMap();
-        map.put("house",house);
-        return houseService.insertSelective(house);
+        //判断：如果页面上必填字段客户没有填写，就不能向数据库中存放
+        if (house.getHtitle()==null&&house.getHrent()==null&&house.getHadr()==null&&house.getHarea()==null&&house.getCname()==null&&house.getCphone()==null){
+            //必填字段有空值时，返回值为-1表示不可达
+            return -1;
+        }else{
+            Map map=new HashMap();
+            map.put("house",house);
+            return houseService.insertSelective(house);
+        }
     }
     /**
      *更新房屋信息
@@ -207,14 +215,6 @@ public class HouseController {
         } else {
             return new Result(ISysConstants.ERRORCODE, "", null);
         }
-    }
-
-    /**
-     * 用户发布的房源
-     */
-    @RequestMapping("myPostedHouse")
-    public Page myPostedHouse() {
-        return houseService.myPostedHouse();
     }
 
 }
