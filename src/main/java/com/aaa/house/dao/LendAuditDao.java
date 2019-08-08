@@ -22,7 +22,7 @@ public interface LendAuditDao {
     /**
      * 查询出来所有的 合同表的内容
      */
-    @Select("SELECT * from contract")
-    List<HouseContract> queryCon();
+    @Select("SELECT * from contract where contractid=#{contractid}")
+    List<HouseContract> queryCon(Integer contractid);
 
 }

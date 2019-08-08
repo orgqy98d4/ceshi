@@ -59,7 +59,6 @@
             <el-form-item>
                 <el-button type="primary" @click="onSubmit" icon="el-icon-search">查询</el-button>
                 <el-button type="primary" @click="flush" >刷新</el-button>
-                <el-button type="primary" @click="toSave" class="el-icon-circle-plus-outline">添加</el-button>
             </el-form-item>
         </el-form>
     </el-row>
@@ -151,25 +150,25 @@
                 <el-form-item label="借贷编号" :label-width="formLabelWidth">
                     <el-input v-model="form.jdid" autocomplete="off" readonly="readonly"></el-input>
                 </el-form-item>
-                <el-form-item label="借贷人姓名" :label-width="formLabelWidth">
+                <!--<el-form-item label="借贷人姓名" :label-width="formLabelWidth">
                     <el-input v-model="form.jdname" autocomplete="off" readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="借贷金额" :label-width="formLabelWidth">
-                    <el-input v-model="form.jdmoney" autocomplete="off" readonly="readonly"></el-input>
+                    <el-input v-model="form.jdmoney" autocomplete="off" readonly="readonly" @change="aaa"></el-input>
                 </el-form-item>
                 <el-form-item label="利息" :label-width="formLabelWidth">
                     <el-input v-model="form.jdinterest" autocomplete="off" readonly="readonly"></el-input>
                 </el-form-item>
                 <el-form-item label="还款金额" :label-width="formLabelWidth">
                     <el-input v-model="form.sum" autocomplete="off" readonly="readonly"></el-input>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item label="借贷日期" :label-width="formLabelWidth">
                     <el-date-picker
                             v-model="form.cdDate"
                             align="right"
                             type="date"
                             placeholder="选择日期"
-                            :picker-options="pickerOptions" readonly="readonly">
+                            :picker-options="pickerOptions" readonly="readonly" @change="aaa">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="还款日期" :label-width="formLabelWidth">
@@ -178,7 +177,7 @@
                                 align="right"
                                 type="date"
                                 placeholder="选择日期"
-                                :picker-options="pickerOptions"></el-date-picker>
+                                :picker-options="pickerOptions" @change="aaa"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="是否还完" :label-width="formLabelWidth">
                     <el-select v-model="form.auditid" placeholder="请选择">
@@ -190,7 +189,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="合同编号" :label-width="formLabelWidth">
+               <!-- <el-form-item label="合同编号" :label-width="formLabelWidth">
                     <el-select v-model="form.conid" placeholder="请选择">
                         <el-option
                                 v-for="item in options"
@@ -199,13 +198,13 @@
                                 :value="item.id" readonly="readonly">
                         </el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item v-if="form.headPic" label="身份证照片" :label-width="formLabelWidth">
                     <img v-if="form.headPic" :src="'/demo4/lend/show?fileName='+form.headPic" height="160px;" width="160px;">
                 </el-form-item>
 
 <!--                这是上传头像-->
-                <el-form-item label="修改身份证照片" :label-width="formLabelWidth">
+                <!--<el-form-item label="修改身份证照片" :label-width="formLabelWidth">
                     <el-upload
                             name="headPic"
                             class="avatar-uploader"
@@ -216,7 +215,7 @@
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
-                </el-form-item>
+                </el-form-item>-->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button type="danger" @click="dialogFormVisible = false">取 消</el-button>
@@ -287,6 +286,12 @@
                 });
         },
         methods: {
+            aaa:function () {
+                var month=Math.floor((this.form.repaymentDate.getTime()-this.form.cdDate.getTime())/(24*60*60*30));
+                this.form.jdinterest=month/20;
+                this.form.sum=Number(this.form.jdmoney)+Number(this.form.jdinterest);
+
+            },
             loadData:function(){
                 var self = this;
                 //开始位置  (currentPage-1)*pageSize

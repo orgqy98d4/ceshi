@@ -65,20 +65,21 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="借贷人姓名" prop="jdname">
-                            <el-input v-model="form.jdname" placeholder="如:张三，李四"></el-input>
+                        <el-form-item label="合同编号" :label-width="formLabelWidth">
+                            <el-input v-model="form.contractid" placeholder=""  @change="showCon"></el-input>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="6">
-                        <el-form-item label="借贷金额" prop="jdmoney">
-                            <el-input @change="aaa" v-model="form.jdmoney" id="rege" placeholder="最高上限5000元人民币"></el-input>
+                        <el-form-item label="借贷人姓名" prop="jdname">
+                            <el-input v-model="form.jdname" placeholder="如:张三，李四" readonly="readonly"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="利息" prop="jdinterest">
-                            <el-input v-model="form.jdinterest" placeholder="" readonly="readonly"></el-input>
+                        <el-form-item label="借贷金额" prop="jdmoney">
+                            <el-input v-model="form.jdmoney" @change="aaa" id="rege"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -91,8 +92,8 @@
                                     align="right"
                                     type="date"
                                     placeholder="选择日期"
-                                    :picker-options="pickerOptions"
-                                    @change="aaa">
+                                    :picker-options="pickerOptions" @change="aaa">
+<!--                                readonly="readonly"-->
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -106,9 +107,13 @@
                                     :picker-options="pickerOptions" @change="aaa"></el-date-picker>
                         </el-form-item>
                     </el-col>
-
                 </el-row>
                 <el-row :gutter="20">
+                    <el-col :span="6">
+                        <el-form-item label="利息" prop="jdinterest">
+                            <el-input v-model="form.jdinterest" placeholder="" readonly="readonly"></el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="6">
                         <el-form-item label="还款总金额" prop="sum">
                             <el-input v-model="form.sum" placeholder="" readonly="readonly"></el-input>
@@ -128,19 +133,8 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="合同编号" :label-width="formLabelWidth">
-                            <el-select v-model="form.conid" placeholder="请选择">
-                                <el-option
-                                        v-for="item in options"
-                                        :key="item.conid"
-                                        :label="item.contractid"
-                                        :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
                 </el-row>
+
                 <!--<el-form-item v-if="form.headPic" label="身份证照片" :label-width="formLabelWidth">
                     <img v-if="form.headPic" :src="'/demo4/lend/show?fileName='+form.headPic" height="160px;" width="160px;">
                 </el-form-item>
@@ -219,24 +213,50 @@
         created:function(){
             this.loadData();
             var self = this;
-            //获取所有还钱的状态
-            axios.post('/demo4/lend/listCon')
+            //获取
+           /* axios.post('/demo4/lend/listCon')
                 .then(function (response) {
                     self.options=response.data;
-                });
-            //获取合同的编号
+                });*/
+            //获取所有还钱的状态
             axios.post('/demo4/lend/listAudit')
                 .then(function (response) {
                     self.optionsrole=response.data;
                 });
+
         },
         methods: {
-            aaa:function () {
-                var month=Math.floor((this.form.repaymentDate.getTime()-this.form.cdDate.getTime())/(24*60*60*30));
-                this.form.jdinterest=month/20;
-                this.form.sum=Number(this.form.jdmoney)+Number(this.form.jdinterest);
-
+            aaa:function(){
+                var self=this;
+                var month=Math.floor((self.form.repaymentDate.getTime()-self.form.cdDate.getTime())/(24*60*60*30));
+                self.form.jdinterest=month/20;
+                self.form.sum=Number(self.form.jdmoney)+Number(self.form.jdinterest);
             },
+            showCon:function(){
+                var self=this;
+                $.ajax({
+                    url:'/demo4/lend/listCon',
+                    type:'post',
+                    data:{contractid:this.form.contractid},
+                    dataType:'json',
+                    success:function (msg) {
+                        alert(msg[0].ename);
+                        self.form.jdname=msg[0].ename;//借贷人姓名
+                        self.form.jdmoney=msg[0].lendmoney;//借贷金额
+                        // self.form.cdDate=msg[0].signdate;//借贷日期
+                        // self.form.repaymentDate=msg[0].endate;//还款日期
+                        // var month=Math.floor((self.form.repaymentDate.getTime()-self.form.cdDate.getTime())/(24*60*60*30));
+                        // self.form.jdinterest=month/20;
+                        // self.form.sum=Number(self.form.jdmoney)+Number(self.form.jdinterest);
+                    }
+                });
+            },
+            /*onSubmit:function () {
+                var self=this;
+                var month=Math.floor((self.form.repaymentDate.getTime()-self.form.cdDate.getTime())/(24*60*60*30));
+                self.form.jdinterest=month/20;
+                self.form.sum=Number(self.form.jdmoney)+Number(self.form.jdinterest);
+            },*/
             //添加借贷的方法
             loadData: function () {
                 var self = this;

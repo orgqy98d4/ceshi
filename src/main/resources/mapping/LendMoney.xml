@@ -12,11 +12,12 @@
         <result column="sum" jdbcType="VARCHAR" property="sum" />
         <result column="headPic" jdbcType="VARCHAR" property="headPic" />
         <result column="headPicName" jdbcType="VARCHAR" property="headPicName" />
+        <result column="contractid" jdbcType="VARCHAR" property="contractid" />
         <result column="auditid" jdbcType="INTEGER" property="auditid"/>
         <result column="conid" jdbcType="INTEGER" property="conid"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,jdid,jdname,cdDate,repaymentDate,jdmoney,jdinterest,sum,headPic,headPicName,auditid,conid
+        id,jdid,jdname,cdDate,repaymentDate,jdmoney,jdinterest,sum,headPic,headPicName,auditid,conid,contractid
   </sql>
     <!--    添加借贷列表-->
     <insert id="insert" parameterType="com.aaa.house.entity.LendMoney">
@@ -42,6 +43,9 @@
             </if>
              <if test="jdinterest != null">
                  jdinterest,
+            </if>
+            <if test="contractid != null">
+                contractid,
             </if>
             <if test="sum != null">
                 sum,
@@ -80,6 +84,9 @@
             </if>
             <if test="jdinterest != null">
                 #{jdinterest,jdbcType=VARCHAR},
+            </if>
+            <if test="contractid != null">
+                #{contractid,jdbcType=VARCHAR},
             </if>
             <if test="sum != null">
                 #{sum,jdbcType=VARCHAR},
@@ -121,6 +128,9 @@
             <if test="jdinterest != null">
                 jdinterest = #{jdinterest,jdbcType=VARCHAR},
             </if>
+            <if test="contractid != null">
+                contractid = #{contractid,jdbcType=VARCHAR},
+            </if>
             <if test="sum != null">
                 sum = #{sum,jdbcType=VARCHAR},
             </if>
@@ -161,8 +171,8 @@
         LEFT JOIN contract l3 on l1.conid=l3.id
         <where>
             <if test="jdname!=null and jdname!=''">
-                and (jdname like concat('%',#{jdname},'%')
-                or conid like concat('%',#{jdname},'%'))
+                and (l1.jdname like concat('%',#{jdname},'%')
+                or l1.contractid like concat('%',#{jdname},'%'))
             </if>
             <if test="id!=null and id!=''">
                 and l1.auditid = #{id}
@@ -174,12 +184,12 @@
     <!--  查询出总数量-->
     <select id="queryPageCont" resultType="int">
         SELECT count(*)
-        FROM lend_money l1 join lend_audit l2 on l1.auditid=l2.id
+        FROM lend_money l1 LEFT join lend_audit l2 on l1.auditid=l2.id
         LEFT JOIN contract l3 on l1.conid=l3.id
         <where>
             <if test="jdname!=null and jdname!=''">
-                and (jdname like concat('%',#{jdname},'%')
-                or conid like concat('%',#{jdname},'%'))
+                and (l1.jdname like concat('%',#{jdname},'%')
+                or l1.contractid like concat('%',#{jdname},'%'))
             </if>
             <if test="id!=null and id!=''">
                 and l1.auditid = #{id}

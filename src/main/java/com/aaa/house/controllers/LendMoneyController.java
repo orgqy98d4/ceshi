@@ -63,8 +63,8 @@ public class LendMoneyController {
 
     //查询合同的编号
     @RequestMapping("/listCon")
-    public Object roleList(){
-        return lendAuditService.queryCon();
+    public Object roleList(@RequestParam Integer contractid){
+        return lendAuditService.queryCon(contractid);
     }
 
 

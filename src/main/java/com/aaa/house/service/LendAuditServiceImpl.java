@@ -35,7 +35,7 @@ public class LendAuditServiceImpl implements LendAuditService {
      * @return
      */
     @Override
-    public List<HouseContract> queryCon() {
-        return dao.queryCon();
+    public List<HouseContract> queryCon(Integer contractid) {
+        return dao.queryCon(contractid);
     }
 }

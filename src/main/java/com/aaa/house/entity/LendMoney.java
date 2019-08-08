@@ -20,6 +20,7 @@ public class LendMoney {
     private String sum;//总金额
     private String headPic;//身份证照片
     private String headPicName;//上传身份证
+    private String contractid;//合同编号
     private Integer auditid;//是否还完借贷
     private Integer conid;//根据合同填写借贷的内容
 
@@ -116,5 +117,13 @@ public class LendMoney {
 
     public void setJdinterest(String jdinterest) {
         this.jdinterest = jdinterest;
+    }
+
+    public String getContractid() {
+        return contractid;
+    }
+
+    public void setContractid(String contractid) {
+        this.contractid = contractid;
     }
 }

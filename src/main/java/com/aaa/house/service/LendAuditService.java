@@ -17,5 +17,5 @@ public interface LendAuditService {
      * 查询出来所有的 合同表的内容
      * @return
      */
-    List<HouseContract> queryCon();
+    List<HouseContract> queryCon(Integer contractid);
 }
