@@ -50,6 +50,7 @@ public class HouseController {
      */
     @RequestMapping("/save")
     public Object save(@RequestBody House house){
+        //判断：如果页面上部分字段
         Map map=new HashMap();
         map.put("house",house);
         return houseService.insertSelective(house);
