@@ -124,6 +124,8 @@ public interface HouseStateMapper {
     Map queryHost(Integer landlord);
     //根据租客姓名查询出租客的信息
     Map queryRenter(String ename);
+    //根据房屋编号查询出房屋状态
+    Integer queryState(Integer houseid);
 
     /**
      * 获取合同列表
