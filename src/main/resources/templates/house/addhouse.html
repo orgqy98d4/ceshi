@@ -422,9 +422,7 @@
                //解决方法：将插入房屋和同时修改landlord分别放在两个方法里
                axios.post("/demo4/house/save",this.ruleForm)
                    .then(function (response) {
-                       if (response.data ==-1){
-                           self.$message.error('操作失败，或请填写必填字段');
-                       }else{
+                       if (response.data >= 0){
                            self.$message({
                                message: '恭喜你，操作成功',
                                type: 'success'
@@ -434,6 +432,8 @@
                                .then(function (response) {
                                    self.ruleForm.agentid=response.data.emp.enumber;
                                });
+                       }else{
+                           self.$message.error('操作失败，或请填写必填字段');
                        }
                    });
                // axios.post("/demo4/part/addHost",this.ruleForm)
@@ -455,14 +455,14 @@
                // this.furnitureForm={houseid:Num,furnitureid:''}
 
                var self=this;
-               axios.post("/demo4/part/addHost",this.ruleForm)
-                   .then(function (response) {
-                       if (response.data==-1){
-                           self.loadData();
-                       }else{
-                           self.$message.error('错了哦，操作失败');
-                       }
-                   });
+               // axios.post("/demo4/part/addHost",this.ruleForm)
+               //     .then(function (response) {
+               //         if (response.data==1){
+               //             self.loadData();
+               //         }else{
+               //             self.$message.error('错了哦，操作失败');
+               //         }
+               //     });
                // 写一个数组存入所有的家具编号
                var ids=[];
                $('input[name=\'checkbox\']:checked').each(function () {

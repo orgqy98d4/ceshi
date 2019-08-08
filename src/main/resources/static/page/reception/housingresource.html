@@ -583,7 +583,7 @@
                             axios.post('/demo4/getName')
                                 .then(function (response) {
                                     self.ruleForm.agentid=response.data.emp.enumber;
-                                    location.href= "/demo4/page/index.html"
+                                    location.href= "/demo4/backindex/index.html"
                                 });
                         }else{
                             self.$message.error('错了哦，操作失败');
