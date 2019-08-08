@@ -58,6 +58,18 @@
 <div id="app">
     <h1>待审核房源</h1>
     <el-row>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <!--根据租金/地址/房屋格局进行查询-->
+            <el-form-item label="">
+                <el-input style="width: 200px" v-model="formInline.hrent" placeholder="根据道路/小区名查询"></el-input>
+            </el-form-item>
+            <el-form-item >
+                <!--style="margin-left: 20px"-->
+                <el-button type="primary" @click="loadData">查询</el-button>
+            </el-form-item>
+        </el-form>
+    </el-row>
+    <el-row>
         <template>
             <el-table
                     :data="uncheckedHouses"
@@ -183,6 +195,9 @@
             uncheckedHouses:[],
             id:'',
             title:'',
+            formInline:{
+                hrent:''
+            },
             form:{
                 // id:'',
                 houseid:'',
@@ -221,6 +236,7 @@
                 axios.post('/demo4/part/queryUnchecked',{
                         start:start,
                         pageSize:this.pageSize,
+                        hrent:self.formInline.hrent
                     })
                 .then(function (response) {
                     self.uncheckedHouses = response.data.uncheckedList;
@@ -299,7 +315,7 @@
 
             // beChecked:function(){
             //     var self=this;
-            //     alert(this.uncheckedHouses.id)
+            //
             //     $.ajax({
             //         url:'/demo4/part/updateUnchecked',
             //         type:'POST',

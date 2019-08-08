@@ -31,42 +31,66 @@
   </insert>
 
   <!--待审核开始-->
-  <!--根据条件查询所有已审核待发布的-->
+  <!--根据条件查询所有待审核的-->
   <select id="queryUnchecked" resultType="map" parameterType="map">
-    select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+    select hhs.*,cu.cname,cu.cphone,cu.ccard from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
     <where>
-      h.state=2
+      hhs.state=2
       <!--根据房屋小区、地址查询-->
       <if test="hrent!=null and hrent!=''">
-        and (h.htitle like "%"#{hrent}"%"
-        or h.hadr like "%"#{hrent}"%")
+        and (hhs.htitle like "%"#{hrent}"%"
+        or hhs.hadr like "%"#{hrent}"%")
       </if>
     </where>
     limit ${start},${pageSize}
   </select>
   <!--计算所有待审核的-->
   <select id="uncheckedCount" resultType="int">
-      select count(*) from house h join house_state hs on h.state=hs.id where h.state=2
+    select count(*) from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
+    <where>
+      and hhs.state=2
+      <!--根据房屋小区、地址查询-->
+      <if test="hrent!=null and hrent!=''">
+        and (hhs.htitle like "%"#{hrent}"%"
+        or hhs.hadr like "%"#{hrent}"%")
+      </if>
+    </where>
     </select>
   <!--待审核结束-->
 
   <!--已审核待发布开始-->
     <!--根据条件查询所有已审核待发布的-->
     <select id="queryChecked" resultType="map" parameterType="map">
-      select h.*, hs.name  from house h join house_state hs on h.state=hs.id
+      select hhs.*,cu.cname,cu.cphone,cu.ccard from
+      (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+      hhs join customer cu on hhs.landlord=cu.id
       <where>
-      h.state=4
-      <!--根据房屋小区、地址查询-->
+        hhs.state=4
+        <!--根据房屋小区、地址查询-->
         <if test="hrent!=null and hrent!=''">
-          and (h.htitle like "%"#{hrent}"%"
-          or h.hadr like "%"#{hrent}"%")
+          and (hhs.htitle like "%"#{hrent}"%"
+          or hhs.hadr like "%"#{hrent}"%")
         </if>
       </where>
       limit ${start},${pageSize}
     </select>
     <!--计算所有已审核待发布的-->
     <select id="checkedCount" resultType="int">
-      select count(*) from house h join house_state hs on h.state=hs.id where h.state=4
+      select count(*) from
+      (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+      hhs join customer cu on hhs.landlord=cu.id
+      <where>
+        and hhs.state=4
+        <!--根据房屋小区、地址查询-->
+        <if test="hrent!=null and hrent!=''">
+          and (hhs.htitle like "%"#{hrent}"%"
+          or hhs.hadr like "%"#{hrent}"%")
+        </if>
+      </where>
     </select>
   <!--已审核待发布结束-->
 
@@ -92,20 +116,45 @@
       <!--select count(*) from house h join house_state hs on h.state=hs.id where h.state=6-->
     select count(*) from
     (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
-    hhs join customer cu on hhs.landlord=cu.id where hhs.state=6
+    hhs join customer cu on hhs.landlord=cu.id
+    <where>
+      and hhs.state=6
+      <!--根据房屋小区、地址查询-->
+      <if test="hrent!=null and hrent!=''">
+        and (hhs.htitle like "%"#{hrent}"%"
+        or hhs.hadr like "%"#{hrent}"%")
+      </if>
+    </where>
   </select>
   <!--已发布结束-->
 
   <!--已出租开始-->
   <!--根据条件查询所有已出租的-->
   <select id="queryRented" resultType="map" parameterType="map">
-    select h.*, hs.name from house h join house_state hs on h.state=hs.id
-    where h.state=5
+    select hhs.*,cu.cname,cu.cphone,cu.ccard from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
+    <where>
+      and hhs.state=5
+      <!--根据房屋小区、地址查询like "%"#{hrent}"%"-->
+      <if test="hrent!=null and hrent!=''">
+        and hhs.houseid = #{hrent}
+      </if>
+    </where>
     limit ${start},${pageSize}
   </select>
   <!--计算所有已出租的-->
   <select id="rentedCount" resultType="int">
-      select count(*) from house h join house_state hs on h.state=hs.id where h.state=5
+    select count(*) from
+    (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
+    hhs join customer cu on hhs.landlord=cu.id
+    <where>
+      and hhs.state=5
+      <!--根据房屋小区、地址查询-->
+      <if test="hrent!=null and hrent!=''">
+        and hhs.houseid = #{hrent}
+      </if>
+    </where>
   </select>
   <!--已出租结束-->
 

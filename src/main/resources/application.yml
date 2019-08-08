@@ -23,7 +23,7 @@ spring:
 
 #配置mybatis
 mybatis:
-  mapper-locations: mapping/*.xml,mapping/lend/*.xml
+  mapper-locations: mapping/*.xml
   type-aliases-package: com.aaa.house.entity
 
 

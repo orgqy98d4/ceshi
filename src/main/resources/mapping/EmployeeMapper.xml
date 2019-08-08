@@ -228,7 +228,7 @@
     join role r on e.roleid=r.rid
     <where>
       <if test="ename!=null and ename!=''">
-        and (e.enumber like concat("%",#{ename},"%")
+        and (e.enumber=#{ename}
         or e.ename like concat('%',#{ename},'%'))
       </if>
       <if test="id!=null and id!=''">

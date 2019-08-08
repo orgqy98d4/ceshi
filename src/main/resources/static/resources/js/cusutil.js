@@ -113,17 +113,7 @@ Function.prototype.getMultiLine = function () {
     return lines;
 }
 var string = function () {
-/*
 
- __      __   _       _
- \ \    / /  | |     | |
-  \ \  / /__ | |_   _| |_ ___
-   \ \/ / _ \| | | | | __/ _ \
-    \  / (_) | | |_| | ||  __/
-     \/ \___/|_|\__,_|\__\___|
-
-蜗壳后台入口:http://localhost/page/backstage/blogin.html
-*/
 }
 
 
