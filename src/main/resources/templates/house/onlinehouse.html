@@ -67,7 +67,7 @@
             </el-form-item>
             <el-form-item >
                 <!--style="margin-left: 20px"-->
-                <el-button type="primary" @click="queryBySome">查询</el-button>
+                <el-button type="primary" @click="loadData">查询</el-button>
             </el-form-item>
         </el-form>
     </el-row>
@@ -119,13 +119,13 @@
                         label="房屋状态"
                         width="180">
                 </el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button
-                                type="primary"
-                                @click="toSign(scope.$index, scope.row)">签订合同</el-button>
-                    </template>
-                </el-table-column>
+                <!--<el-table-column label="操作">-->
+                    <!--<template slot-scope="scope">-->
+                        <!--<el-button-->
+                                <!--type="primary"-->
+                                <!--@click="toSign(scope.$index, scope.row)">签订合同</el-button>-->
+                    <!--</template>-->
+                <!--</el-table-column>-->
             </el-table>
         </template>
     </el-row>
@@ -255,7 +255,7 @@
             }
         },
         created: function () {
-            var self = this;
+            // var self = this;
             this.loadData();
 
             // var self = this;
@@ -272,7 +272,8 @@
                 //查询出所有已发布的房源
                 axios.post('/demo4/part/queryReleased',{
                     start:start,
-                    pageSize:this.pageSize
+                    pageSize:this.pageSize,
+                    hrent:self.formInline.hrent
                 })
                     .then(function (response) {
                         self.releasedHouses = response.data.releasedList;
@@ -341,23 +342,39 @@
             //             }
             //         })
             // },
-            queryBySome: function () {
-                // this.loadData();
-                var self = this;
-                //开始的位置：(pageNo-1)*pageSize
-                // var start = (this.currentPage - 1) * this.pageSize;
-
-                axios.post('/demo4/part/queryReleased',{
-                    // start:start,
-                    // pageSize:this.pageSize,
-                    hrent:self.formInline.hrent
-                })
-                    .then(function (response) {
-                        self.releasedHouses = response.data;
-                        // alert(response.data.houseList);
-                        // self.total = response.data.total;
-                    })
-            }
+            // queryBySome: function () {
+            //     // this.loadData();
+            //     var self = this;
+            //     //开始的位置：(pageNo-1)*pageSize
+            //     var start = (this.currentPage - 1) * this.pageSize;
+            //     axios.post('/demo4/part/queryReleased',{
+            //         start:start,
+            //         pageSize:this.pageSize,
+            //         hrent:self.formInline.hrent,
+            //     })
+            //         .then(function (response) {
+            //
+            //             self.releasedHouses = response.data.releasedList;
+            //             self.total = response.data.total;
+            //         })
+            // }
+            // queryBySome: function () {
+            //     // this.loadData();
+            //     var self = this;
+            //     //开始的位置：(pageNo-1)*pageSize
+            //     // var start = (this.currentPage - 1) * this.pageSize;
+            //
+            //     axios.post('/demo4/part/queryReleased',{
+            //         // start:start,
+            //         // pageSize:this.pageSize,
+            //         hrent:self.formInline.hrent
+            //     })
+            //         .then(function (response) {
+            //             self.releasedHouses = response.data;
+            //
+            //             // self.total = response.data.total;
+            //         })
+            // }
         }
     });
 </script>
