@@ -136,7 +136,7 @@
         </el-form-item>
     </el-col>
         <el-col :span="6">
-            <el-form-item label="所在小区/房屋格局" prop="htitle">
+            <el-form-item label="小区/格局" prop="htitle">
                 <el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>
             </el-form-item>
         </el-col>
@@ -358,7 +358,7 @@
            },
            pickerOptions:{
                disabledDate:function(time) {
-                   return time.getTime() > Date.now();
+                   return time.getTime() != Date.now();
                },
                shortcuts: [{
                    text: '今天',
@@ -417,8 +417,7 @@
                var self=this;
                axios.post("/demo4/house/save",this.ruleForm)
                    .then(function (response) {
-
-                       if (response.data==1){
+                       if (response.data ==1){
                            self.$message({
                                message: '恭喜你，操作成功',
                                type: 'success'
@@ -429,7 +428,7 @@
                                    self.ruleForm.agentid=response.data.emp.enumber;
                                });
                        }else{
-                           self.$message.error('错了哦，操作失败');
+                           self.$message.error('操作失败，或请填写必填字段');
                        }
                    });
                axios.post("/demo4/part/addHost",this.ruleForm)
