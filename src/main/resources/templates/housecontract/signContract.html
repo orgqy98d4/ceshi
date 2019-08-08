@@ -309,7 +309,7 @@
             },
             pickerOptions:{
                 disabledDate:function(time) {
-                    return time.getTime() > Date.now();
+                    return time.getTime() < Date.now();
                 },
                 shortcuts: [{
                     text: '今天',
