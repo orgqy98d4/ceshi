@@ -148,4 +148,6 @@ public interface HouseStateMapper {
      */
     @Update("update contract set paytype=5 where id=#{id}")
     int conDelete(Integer id);
+
+
 }

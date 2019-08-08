@@ -258,7 +258,7 @@
       <if test="contractid!=null and contractid!=''">
         and contract.contractid like concat("%",#{contractid},"%")
       </if>
-    </where> limit #{start},#{pageSize}
+    </where> order by contract.endate asc limit #{start},#{pageSize}
   </select>
   <!--  查询出合同总数量-->
   <select id="queryContractCont" resultType="int">
