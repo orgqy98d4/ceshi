@@ -189,4 +189,10 @@ public class HouseStateServiceImpl implements HouseStateService {
     public Map queryRenter(String ename) {
         return houseStateMapper.queryRenter(ename);
     }
+
+    //根据房屋编号查询出房屋状态
+    @Override
+    public Integer queryState(Integer houseid) {
+        return houseStateMapper.queryState(houseid);
+    }
 }

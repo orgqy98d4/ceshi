@@ -360,14 +360,17 @@
                    data:{houseid:this.ruleForm.houseid},
                    dataType:'json',
                    success:function (msg) {
-                       self.ruleForm.hname=msg.cname;
-                       self.ruleForm.hphone=msg.cphone;
-                       self.ruleForm.hid=msg.ccard;
-                       self.ruleForm.hmeter=msg.harea;
-                       self.ruleForm.hlocation=msg.hadr;
-                       self.ruleForm.haddress=msg.haddress;
-                       self.ruleForm.hrent=msg.hrent;//每月租金赋值
-
+                       if (msg==1){
+                           self.$message.error('该房源不是待出租状态，请核对^_^');
+                       } else {
+                           self.ruleForm.hname=msg.cname;
+                           self.ruleForm.hphone=msg.cphone;
+                           self.ruleForm.hid=msg.ccard;
+                           self.ruleForm.hmeter=msg.harea;
+                           self.ruleForm.hlocation=msg.hadr;
+                           self.ruleForm.haddress=msg.haddress;
+                           self.ruleForm.hrent=msg.hrent;//每月租金赋值
+                       }
                    }
                 });
 
