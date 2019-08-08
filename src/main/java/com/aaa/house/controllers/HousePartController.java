@@ -6,12 +6,18 @@ import com.aaa.house.entity.HouseContract;
 import com.aaa.house.service.HouseFurnitureService;
 import com.aaa.house.service.HouseService;
 import com.aaa.house.service.HouseStateService;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +36,7 @@ public class HousePartController {
      */
     @RequestMapping("/states")
     public Object queryStates(){
-        System.out.println("状态集合："+houseStateService.queryStates());
+//        System.out.println("状态集合："+houseStateService.queryStates());
         return houseStateService.queryStates();
     }
     /**
@@ -39,7 +45,7 @@ public class HousePartController {
      */
     @RequestMapping("/state2")
     public Object queryState2(){
-        System.out.println("待审核："+houseStateService.queryState2());
+//        System.out.println("待审核："+houseStateService.queryState2());
         return houseStateService.queryState2();
     }
 
@@ -76,8 +82,11 @@ public class HousePartController {
      * @return
      */
     @RequestMapping("/queryUnchecked")
-    public Object queryUnchecked(){
-        return houseStateService.queryUnchecked();
+    public Object queryUnchecked(@RequestBody Map map){
+        Map map1=new HashMap();
+        map1.put("uncheckedList",houseStateService.queryUnchecked(map));
+        map1.put("total",houseStateService.uncheckedCount(map));
+        return map1;
     }
 
     /**
@@ -89,14 +98,7 @@ public class HousePartController {
         int houseid = (int) map.get("houseid");
         return houseStateService.updateUnchecked(houseid);
     }
-    /**
-     * 查询出所有已出租的房源
-     * @return
-     */
-    @RequestMapping("/queryRented")
-    public Object queryRented(){
-        return houseStateService.queryRented();
-    }
+
 
     /**
      * 向房东表中添加一条信息
@@ -138,8 +140,11 @@ public class HousePartController {
      * @return
      */
     @RequestMapping("/queryChecked")
-    public Object queryChecked(){
-        return houseStateService.queryChecked();
+    public Object queryChecked(@RequestBody Map map){
+        Map map1=new HashMap();
+        map1.put("checkedList",houseStateService.queryChecked(map));
+        map1.put("total",houseStateService.checkedCount(map));
+        return map1;
     }
 
     /**
@@ -157,9 +162,22 @@ public class HousePartController {
      * @return
      */
     @RequestMapping("/queryReleased")
-    public Object queryReleased() {
-        System.out.println(houseStateService.queryReleased()+"....................");
-        return houseStateService.queryReleased();
+    public Object queryReleased(@RequestBody Map map) {
+        Map map1=new HashMap();
+        map1.put("releasedList",houseStateService.queryReleased(map));
+        map1.put("total",houseStateService.releasedCount(map));
+        return map1;
+    }
+    /**
+     * 查询出所有已出租的房源
+     * @return
+     */
+    @RequestMapping("/queryRented")
+    public Object queryRented(@RequestBody Map map){
+        Map map1=new HashMap();
+        map1.put("rentedList",houseStateService.queryRented(map));
+        map1.put("total",houseStateService.rentedCount(map));
+        return map1;
     }
     /**
      * 添加合同信息
@@ -168,7 +186,51 @@ public class HousePartController {
      */
     @RequestMapping("/addContract")
     public Object addContract(@RequestBody HouseContract houseContract){
-        return houseStateService.addContract(houseContract);
+        Integer houseid = houseContract.getHouseid();
+        houseStateService.addContract(houseContract);//向数据库保存数据
+        return  houseStateService.beRented(houseid);//修改房子的出租状态
+    }
+    /**
+     * 签订合同后将对应的房屋状态改为已出租
+     * 这里要通过房屋编号修改状态，注意：保存时获取的是合同这个实体
+     */
+//    @RequestMapping("/beRented")
+//    public int beRented(@RequestBody Integer houseid){
+////        Integer houseid = houseContract.getHouseid();
+//        return houseStateService.beRented(houseid);
+//    }
+
+    //根据数据的房屋编号，将相应的房东信息查询出来
+    @RequestMapping("/queryHost")
+    public Object queryHost(@RequestParam Integer houseid){
+        System.out.println(houseid + "............");
+        Integer state = houseStateService.queryState(houseid);//根据房屋编号查询出房屋状态
+        //判断状态，只要页面上添加房屋编号不为已发布状态的，都不应该回显相应信息
+        //即添加房屋编号后，房屋若为已发布状态，才执行下面代码
+        System.out.println(state);
+        if (state==6) {
+            //先根据房屋编号得到房屋部分信息
+            //再根据房东id向客户表中查询出房东信息，并返回
+            Map map = houseStateService.queryLandlord(houseid);//map中存放的有landlord,hadr,harea
+            Integer landlord = (Integer) map.get("landlord"); //先取出房东编号
+            Object o = map.get("hrent");
+            Map hostInfo = houseStateService.queryHost(landlord);//hostInfo中存放的有cname,cphone,ccard
+            //这里取出再存进去是因为向页面传送的是一个map,这样数据集中起来，页面上容易取到
+            hostInfo.put("hadr", map.get("hadr"));
+            hostInfo.put("harea", map.get("harea"));
+            hostInfo.put("hrent", o);
+            return hostInfo;
+        }else {
+            return 1;
+        }
+    }
+
+    //根据租客姓名查询出租客的信息
+    @RequestMapping("/queryRenter")
+    public Object queryRenter(@RequestParam String ename){
+        System.out.println(ename+".........");
+        Map renterInfo=houseStateService.queryRenter(ename);
+        return renterInfo;
     }
 
 }

@@ -22,6 +22,42 @@ public class HouseContract {
     private Integer houseid;//房屋编号
     private Integer csid;//合同状态
     private Date signdate;//合同签订日期
+    private Date endate;//合同截止日期
+    private Integer paytype;//付款方式（贷款、自付）
+    private String money;//应付金额
+    private String foregift;//应付租金（默认1000）
+
+    public Date getEndate() {
+        return endate;
+    }
+
+    public void setEndate(Date endate) {
+        this.endate = endate;
+    }
+
+    public Integer getPaytype() {
+        return paytype;
+    }
+
+    public void setPaytype(Integer paytype) {
+        this.paytype = paytype;
+    }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
+    }
+
+    public String getForegift() {
+        return foregift;
+    }
+
+    public void setForegift(String foregift) {
+        this.foregift = foregift;
+    }
 
     public Date getSigndate() {
         return signdate;
