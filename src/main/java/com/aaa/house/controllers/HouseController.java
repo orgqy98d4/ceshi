@@ -52,8 +52,9 @@ public class HouseController {
     @RequestMapping("/save")
     @Transactional
     public Object save(@RequestBody House house){
+
         //判断：如果页面上必填字段客户没有填写，就不能向数据库中存放
-        if (house.getHtitle()==null&&house.getHrent()==null&&house.getHadr()==null&&house.getHarea()==null&&house.getCname()==null&&house.getCphone()==null){
+        if (house.getHtitle()==null || house.getHrent()==null || house.getHadr()==null || house.getHarea()==null || house.getCname()==null || house.getCphone()==null){
             //必填字段有空值时，返回值为-1表示不可达
             return -1;
         }else{
@@ -115,32 +116,36 @@ public class HouseController {
      * @return
      */
     @RequestMapping("/saveFurniture")
-    public Object saveFurniture(HttpServletRequest request){
-        int result=0;
-        //通过参数名获取家具的编号，进行分割
-        String str=request.getParameter("furnitures");
-        //房子编号
-        int houseid = Integer.parseInt(request.getParameter("houseid"));
-        String[] strings = str.split(",");
-        System.out.println(strings);
+    public Object saveFurniture(@RequestBody House house, HttpServletRequest request){
+        if (house.getHtitle()==null || house.getHrent()==null || house.getHadr()==null || house.getHarea()==null || house.getCname()==null || house.getCphone()==null){
+            //必填字段有空值时，返回值为-1表示不可达
+            return -1;
+        }else {
+            int result = 0;
+            //通过参数名获取家具的编号，进行分割
+            String str = request.getParameter("furnitures");
+            //房子编号
+            int houseid = Integer.parseInt(request.getParameter("houseid"));
+            String[] strings = str.split(",");
+            System.out.println(strings);
 
-        //生成一个HouseFurniture对象，设置houseid
-        //每次循环都会创建一个HouseFurniture对象，然后设房间编号，家具编号，再同时存入数据
-        HouseFurniture houseFurniture1=null;
-        for (String string : strings) {
-            houseFurniture1=new HouseFurniture();
-            houseFurniture1.setHouseid(houseid);
-            houseFurniture1.setFurnitureid(Integer.valueOf(string));
-            result=houseService.saveFurniture(houseFurniture1);
-        }
-        //将家具编号存入HouseFurniture对象
+            //生成一个HouseFurniture对象，设置houseid
+            //每次循环都会创建一个HouseFurniture对象，然后设房间编号，家具编号，再同时存入数据
+            HouseFurniture houseFurniture1 = null;
+            for (String string : strings) {
+                houseFurniture1 = new HouseFurniture();
+                houseFurniture1.setHouseid(houseid);
+                houseFurniture1.setFurnitureid(Integer.valueOf(string));
+                result = houseService.saveFurniture(houseFurniture1);
+            }
+            //将家具编号存入HouseFurniture对象
 //        houseFurniture1.setFurnitureid(strings);
-        if (result>0){
-            return "true";
-        }else{
-            return "false";
+            if (result > 0) {
+                return "true";
+            } else {
+                return "false";
+            }
         }
-
     }
 
 //    /**

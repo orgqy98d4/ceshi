@@ -273,7 +273,9 @@
     <el-col :span="8" >
     <el-form-item>
         <el-button type="primary" @click="saveData">
-            <el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">提交</el-button>
+            <el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">
+                提交
+            </el-button>
         </el-button>
         <el-button type="primary" @click="loadData">重置</el-button>
     </el-form-item>
@@ -414,9 +416,15 @@
            },
            saveData:function () {
                var self=this;
+               // 插入房屋信息，因为是异步请求，
+               // 所以插入房屋时没有等待下边的插入房东信息及修改house表中的landlord,
+               // 所以在修改时会出现bug,
+               //解决方法：将插入房屋和同时修改landlord分别放在两个方法里
                axios.post("/demo4/house/save",this.ruleForm)
                    .then(function (response) {
-                       if (response.data ==1){
+                       if (response.data ==-1){
+                           self.$message.error('操作失败，或请填写必填字段');
+                       }else{
                            self.$message({
                                message: '恭喜你，操作成功',
                                type: 'success'
@@ -426,18 +434,16 @@
                                .then(function (response) {
                                    self.ruleForm.agentid=response.data.emp.enumber;
                                });
-                       }else{
-                           self.$message.error('操作失败，或请填写必填字段');
                        }
                    });
-               axios.post("/demo4/part/addHost",this.ruleForm)
-                   .then(function (response) {
-                       if (response.data==1){
-                           self.loadData();
-                       }else{
-                           self.$message.error('错了哦，操作失败');
-                       }
-                   });
+               // axios.post("/demo4/part/addHost",this.ruleForm)
+               //     .then(function (response) {
+               //         if (response.data==1){
+               //             self.loadData();
+               //         }else{
+               //             self.$message.error('错了哦，操作失败');
+               //         }
+               //     });
                this.imageUrl='';
            },
            saveFurniture:function(){
@@ -449,6 +455,14 @@
                // this.furnitureForm={houseid:Num,furnitureid:''}
 
                var self=this;
+               axios.post("/demo4/part/addHost",this.ruleForm)
+                   .then(function (response) {
+                       if (response.data==-1){
+                           self.loadData();
+                       }else{
+                           self.$message.error('错了哦，操作失败');
+                       }
+                   });
                // 写一个数组存入所有的家具编号
                var ids=[];
                $('input[name=\'checkbox\']:checked').each(function () {

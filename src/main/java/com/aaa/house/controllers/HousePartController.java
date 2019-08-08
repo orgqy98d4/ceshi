@@ -106,16 +106,22 @@ public class HousePartController {
      */
     @RequestMapping("/addHost")
     public int addHost(@RequestBody House house){
-        String cname = house.getCname();
-        Integer houseid = house.getHouseid();
-        int result=houseStateService.addHost(house);
-        //根据房东查询出对应房东的id
-        int id = houseStateService.getIdByCname(cname);
+        if (house.getHtitle()==null || house.getHrent()==null || house.getHadr()==null || house.getHarea()==null || house.getCname()==null || house.getCphone()==null){
+            //必填字段有空值时，返回值为-1表示不可达
+            return -1;
+        }else {
+            String cname = house.getCname();
+            Integer houseid = house.getHouseid();
+            int result=houseStateService.addHost(house);
+            //根据房东查询出对应房东的id
+            int id = houseStateService.getIdByCname(cname);
 //        System.out.println("房东id:"+id);
 //        System.out.println("房屋id:"+houseid);
-        houseStateService.setHostId(id,houseid);
+            houseStateService.setHostId(id,houseid);
 //        house.setLandlord(id);
-        return result;
+            return result;
+        }
+
     }
     /**
      *前台传过来驳回理由，再传来一个房子实体
