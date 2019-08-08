@@ -187,19 +187,4 @@ public class HouseServiceImpl implements HouseService {
         Integer cid = CusUtil.getCusFromSession().getId();
         return houseMapper.delFollow(cid,houseid);
     }
-
-    @Override
-    public Page myPostedHouse() {
-        Integer cid = CusUtil.getCusFromSession().getId();
-        List<House> list = houseMapper.myPostedHouse(cid);
-        for (House h : list) {
-            Integer hid = h.getHouseid();
-            List<String> houseInstallation = houseMapper.houseInstallation(hid);
-            h.setInstallation(houseInstallation);
-        }
-        int count = houseMapper.myPostedHouseCount(cid);
-        return new Page(list,count);
-    }
-
-
 }

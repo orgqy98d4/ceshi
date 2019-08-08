@@ -133,4 +133,6 @@ public interface HouseStateService {
      * @return
      */
     int conDelete(Integer id);
+
+
 }
