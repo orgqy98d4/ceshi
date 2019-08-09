@@ -233,9 +233,9 @@ public class HousePartController {
 
     //根据租客姓名查询出租客的信息,@RequestParam String ephone||,ephone
     @RequestMapping("/queryRenter")
-    public Object queryRenter(@RequestParam String ename){
-        System.out.println(ename+".........");
-        Map renterInfo=houseStateService.queryRenter(ename);
+    public Object queryRenter(@RequestParam String cnumber){
+        System.out.println(cnumber+".........");
+        Map renterInfo=houseStateService.queryRenter(cnumber);
         return renterInfo;
     }
 

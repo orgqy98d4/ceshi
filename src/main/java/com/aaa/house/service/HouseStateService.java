@@ -111,7 +111,7 @@ public interface HouseStateService {
     //再根据房东编号，向用户表中查询出房东信息
     Map queryHost(String cnumber);
     //根据租客姓名查询出租客的信息
-    Map queryRenter(String ename);
+    Map queryRenter(String cnumber);
     //根据房屋编号查询出房屋状态
     Integer queryState(Integer houseid);
 

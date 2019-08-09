@@ -142,12 +142,12 @@
         </el-col>
         <el-col :span="6">
             <el-form-item label="房屋楼层" prop="hfloor">
-                <el-input v-model="ruleForm.hfloor"></el-input>
+                <el-input v-model="ruleForm.hfloor" @blur="checkFloor"></el-input>
             </el-form-item>
         </el-col>
         <el-col :span="6">
             <el-form-item label="设定租金" prop="hrent">
-                <el-input v-model="ruleForm.hrent"></el-input>
+                <el-input v-model="ruleForm.hrent" @blur="checkHrent"></el-input>
             </el-form-item>
         </el-col>
     <!--</el-form>-->
@@ -161,7 +161,7 @@
     </el-col>
     <el-col :span="6">
         <el-form-item label="占地面积" prop="harea">
-            <el-input v-model="ruleForm.harea"></el-input>
+            <el-input v-model="ruleForm.harea" @blur="checkHarea"></el-input>
         </el-form-item>
     </el-col>
     <el-col :span="6">
@@ -401,6 +401,28 @@
                });
        },
        methods: {
+           checkFloor:function(){//验证楼层
+               var self=this;
+               if (self.ruleForm.hfloor>=50||self.ruleForm.hfloor<=-2){
+                   self.$message.error('楼层不合法，请重新输入！');
+                   self.ruleForm.hfloor='';
+               }
+           },
+           checkHrent:function(){//验证租金
+               var self=this;
+               if (self.ruleForm.hrent>=5000||self.ruleForm.hfloor<=0){
+                   self.$message.error('租金不合法，请重新输入！');
+                   self.ruleForm.hrent='';
+               }
+           },
+           checkHarea:function(){//验证房屋面积
+               var self=this;
+               if (self.ruleForm.harea>=300||self.ruleForm.hfloor<=0){
+                   self.$message.error('请输入真实的房屋面积！');
+                   self.ruleForm.harea='';
+               }
+           },
+
            loadData:function(){
                var self=this;
                var Num="";
