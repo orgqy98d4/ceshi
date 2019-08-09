@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加借贷表</title>
+    <link rel="icon" href="../../resources/images/favicon.ico"/>
+    <!--先引入vue.js库-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="../js/jquery-2.1.3.js"></script>
+    <!--穿梭框的layui样式库-->
+    <!--<link rel="stylesheet" href="../layui/css/layui.css" >-->
+    <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<!--<script src="../layui/layui.js" charset="utf-8"></script>-->
+<script>
+
+</script>
+
+<div id="app" class="div1">
+    <el-container>
+        <el-header>
+            <h1 style="font-family: 'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif">
+                添加借贷表</h1>
+        </el-header>
+        <el-main>
+            <el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-form">
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <el-form-item label="借贷编号" prop="jdid">
+                            <el-input v-model="form.jdid" readonly="readonly"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="合同编号" :label-width="formLabelWidth">
+                            <el-input v-model="form.contractid" placeholder=""  @change="showCon"></el-input>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <el-form-item label="借贷人姓名" prop="jdname">
+                            <el-input v-model="form.jdname" placeholder="如:张三，李四" readonly="readonly"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="借贷金额" prop="jdmoney">
+                            <el-input v-model="form.jdmoney" @change="aaa" id="rege"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <!--</el-form>-->
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <el-form-item label="借贷日期" :label-width="formLabelWidth">
+                            <el-date-picker
+                                    v-model="form.cdDate"
+                                    align="right"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    :picker-options="pickerOptions" @change="aaa">
+<!--                                readonly="readonly"-->
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="还款日期" :label-width="formLabelWidth">
+                            <el-date-picker
+                                    v-model="form.repaymentDate"
+                                    align="right"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    :picker-options="pickerOptions" @change="aaa"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <el-form-item label="利息" prop="jdinterest">
+                            <el-input v-model="form.jdinterest" placeholder="" readonly="readonly"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="还款总金额" prop="sum">
+                            <el-input v-model="form.sum" placeholder="" readonly="readonly"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <el-form-item label="是否还完" :label-width="formLabelWidth">
+                            <el-select v-model="form.auditid" placeholder="请选择">
+                                <el-option
+                                        v-for="item in optionsrole"
+                                        :key="item.auditid"
+                                        :label="item.audit"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <!--<el-form-item v-if="form.headPic" label="身份证照片" :label-width="formLabelWidth">
+                    <img v-if="form.headPic" :src="'/demo4/lend/show?fileName='+form.headPic" height="160px;" width="160px;">
+                </el-form-item>
+-->
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <!--                这是上传头像-->
+                        <el-form-item label="身份证照片" :label-width="formLabelWidth">
+                            <el-upload
+                                    name="headPic"
+                                    class="avatar-uploader"
+                                    action="/demo4/lend/uploadHeadPic"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccess"
+                                    :before-upload="beforeAvatarUpload">
+                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <!--第六行-->
+                <el-row :gutter="20" type="flex" justify="center">
+                    <el-col :span="8">
+                        <el-form-item>
+                            <el-button type="primary" @click="saveData">提交</el-button>
+                            <el-button type="primary" @click="loadData">重置</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+            </el-form>
+        </el-main>
+    </el-container>
+</div>
+
+<script>
+
+    // vue的数据处理
+    var vue = new Vue({
+        el: '#app',
+        data: {
+            tableData: [],
+            form: {
+                id: '',
+                jdid: '',
+                jdname: '',
+                cdDate: '',
+                repaymentDate: '',
+                jdmoney: '',
+                // jdinterest: document.getElementById(("jdmoney")).value * 0.6 * parseInt(("repaymentDate").value()-("cdDate").value()),
+                jdinterest: '',
+                sum:'',
+                headPic: '',
+                headPicName: '',
+                audit: '',
+                contractid: '',
+                visible: false
+            },
+            formLabelWidth: '120px',
+            pickerOptions: {
+                disabledDate: function (time) {
+                    return time.getTime() < Date.now();
+                },
+                shortcuts: [{
+                    text: '今天',
+                    onClick: function (picker) {
+                        picker.$emit('pick', new Date());
+                    }
+                }]
+            },
+            imageUrl: '',
+            url: ''
+
+        },
+        created:function(){
+            this.loadData();
+            var self = this;
+            //获取
+           /* axios.post('/demo4/lend/listCon')
+                .then(function (response) {
+                    self.options=response.data;
+                });*/
+            //获取所有还钱的状态
+            axios.post('/demo4/lend/listAudit')
+                .then(function (response) {
+                    self.optionsrole=response.data;
+                });
+
+        },
+        methods: {
+            aaa:function(){
+                var self=this;
+                var month=Math.floor((self.form.repaymentDate.getTime()-self.form.cdDate.getTime())/(24*60*60*30));
+                self.form.jdinterest=month/20;
+                self.form.sum=Number(self.form.jdmoney)+Number(self.form.jdinterest);
+            },
+            showCon:function(){
+                var self=this;
+                $.ajax({
+                    url:'/demo4/lend/listCon',
+                    type:'post',
+                    data:{contractid:this.form.contractid},
+                    dataType:'json',
+                    success:function (msg) {
+                        alert(msg[0].ename);
+                        self.form.jdname=msg[0].ename;//借贷人姓名
+                        self.form.jdmoney=msg[0].lendmoney;//借贷金额
+                        // self.form.cdDate=msg[0].signdate;//借贷日期
+                        // self.form.repaymentDate=msg[0].endate;//还款日期
+                        // var month=Math.floor((self.form.repaymentDate.getTime()-self.form.cdDate.getTime())/(24*60*60*30));
+                        // self.form.jdinterest=month/20;
+                        // self.form.sum=Number(self.form.jdmoney)+Number(self.form.jdinterest);
+                    }
+                });
+            },
+            /*onSubmit:function () {
+                var self=this;
+                var month=Math.floor((self.form.repaymentDate.getTime()-self.form.cdDate.getTime())/(24*60*60*30));
+                self.form.jdinterest=month/20;
+                self.form.sum=Number(self.form.jdmoney)+Number(self.form.jdinterest);
+            },*/
+            //添加借贷的方法
+            loadData: function () {
+                var self = this;
+                //生成随机数
+                var Num = "1314";
+                for (var i = 0; i < 4; i++) {
+                    Num += Math.floor(Math.random() * 10);
+                }
+                this.title = '添加借贷名额';
+                this.url = "/demo4/lend/save";
+                this.imageUrl = '';
+                //把缓存的数据清空
+                this.form = {
+                    id: '',
+                    jdid: Num,
+                    jdname: '',
+                    cdDate: '',
+                    repaymentDate: '',
+                    jdmoney: '',
+                    // jdinterest: document.getElementById(("jdmoney")).value + 0.06 * parseInt(("repaymentDate").value()-("cdDate").value()),
+                    jdinterest: '' ,
+                    sum:'',
+                    headPic: '',
+                    headPicName: '',
+                    audit: '',
+                    contractid: ''
+                };
+
+            },
+            //添加或者修改成功提示一下
+            saveData: function () {
+                var self = this;
+                axios.post(this.url, this.form)
+                    .then(function (response) {
+                        //如果添加或者修改成功
+                        if (response.data == 1) {
+                            self.$message({
+                                message: '恭喜你，操作成功!',
+                                type: 'success'
+                            });
+                            //刷新页面
+                            self.loadData();
+                        } else {
+                            self.$message.error('错了，重新操作!');
+                        }
+                    })
+            },
+            //头像上传成功的操作
+            handleAvatarSuccess: function (res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+                this.form.headPicName = file.response.originalFilename;
+                this.form.headPic = file.response.newFileName;
+            },
+            //头像上传之前做的操作
+            beforeAvatarUpload: function (file) {
+                var isJPG = file.type === 'image/jpeg';
+                var isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
+        },
+    })
+
+
+</script>
+
+</body>
+</html>
