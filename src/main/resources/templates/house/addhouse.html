@@ -136,7 +136,7 @@
         </el-form-item>
     </el-col>
         <el-col :span="6">
-            <el-form-item label="房屋描述" prop="htitle">
+            <el-form-item label="小区/格局" prop="htitle">
                 <el-input  v-model="ruleForm.htitle"placeholder="如:某小区，几室几厅"></el-input>
             </el-form-item>
         </el-col>
@@ -227,10 +227,15 @@
         </el-form-item>
     </el-col>
     <el-col :span="6">
-        <el-form-item label="房东姓名" prop="cname">
-            <el-input v-model="ruleForm.cname"></el-input>
+        <el-form-item label="房东编号" prop="cnumber">
+            <el-input v-model="ruleForm.cnumber" @blur="showCustomer"></el-input>
         </el-form-item>
     </el-col>
+    <!--<el-col :span="6">-->
+        <!--<el-form-item label="房东姓名" prop="cname">-->
+            <!--<el-input v-model="ruleForm.cname" @blur="showCustomer"></el-input>-->
+        <!--</el-form-item>-->
+    <!--</el-col>-->
     <el-col :span="6">
         <el-form-item label="房东电话" prop="cphone">
             <el-input v-model="ruleForm.cphone"></el-input>
@@ -273,7 +278,9 @@
     <el-col :span="8" >
     <el-form-item>
         <el-button type="primary" @click="saveData">
-            <el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">提交</el-button>
+            <el-button type="primary" @click="saveFurniture" style="margin:0px;padding:0px">
+                提交
+            </el-button>
         </el-button>
         <el-button type="primary" @click="loadData">重置</el-button>
     </el-form-item>
@@ -324,6 +331,7 @@
                // furnitures:[],
                headPic:'',
                headPicName:'',
+               cnumber:'',
                cname:'',
                cphone:''
            },
@@ -357,7 +365,7 @@
            },
            pickerOptions:{
                disabledDate:function(time) {
-                   return time.getTime() > Date.now();
+                   return time.getTime() != Date.now();
                },
                shortcuts: [{
                    text: '今天',
@@ -401,7 +409,7 @@
                }
                this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-                   releasedate:'', hdesc:'',leaseWay:'',cname:'', cphone:'',agentid:''
+                   releasedate:'', hdesc:'',leaseWay:'',cnumber:'',cname:'', cphone:'',agentid:''
                };
                // 向房子家具中间表中存入的数据
                this.furnitureForm={houseid:Num,furnitureid:''};
@@ -412,12 +420,32 @@
                    checkbox[i].checked=false;
                }
            },
+           showCustomer:function(){//判断该房东信息是否存在
+               var self=this;
+               $.ajax({
+                   url:'/demo4/part/queryCustomer',
+                   type:'post',
+                   data:{cnumber:this.ruleForm.cnumber},//,ephone:this.ruleForm.ephone
+                   dataType:'json',
+                   success:function (msg) {
+                      self.ruleForm.cphone=msg.cphone;
+                       // self.ruleForm.ename=msg.cname;
+                       // self.ruleForm.ephone=msg.cphone;
+                       // self.ruleForm.eid=msg.ccard;
+                       // self.ruleForm.eaddress=msg.eaddress;
+                   }
+               });
+
+           },
            saveData:function () {
                var self=this;
+               // 插入房屋信息，因为是异步请求，
+               // 所以插入房屋时没有等待下边的插入房东信息及修改house表中的landlord,
+               // 所以在修改时会出现bug,
+               //解决方法：将插入房屋和同时修改landlord分别放在两个方法里
                axios.post("/demo4/house/save",this.ruleForm)
                    .then(function (response) {
-
-                       if (response.data==1){
+                       if (response.data == 1){
                            self.$message({
                                message: '恭喜你，操作成功',
                                type: 'success'
@@ -428,17 +456,17 @@
                                    self.ruleForm.agentid=response.data.emp.enumber;
                                });
                        }else{
-                           self.$message.error('错了哦，操作失败');
+                           self.$message.error('操作失败，或请填写必填字段');
                        }
                    });
-               axios.post("/demo4/part/addHost",this.ruleForm)
-                   .then(function (response) {
-                       if (response.data==1){
-                           self.loadData();
-                       }else{
-                           self.$message.error('错了哦，操作失败');
-                       }
-                   });
+               // axios.post("/demo4/part/addHost",this.ruleForm)
+               //     .then(function (response) {
+               //         if (response.data==1){
+               //             self.loadData();
+               //         }else{
+               //             self.$message.error('错了哦，操作失败');
+               //         }
+               //     });
                this.imageUrl='';
            },
            saveFurniture:function(){
@@ -450,6 +478,14 @@
                // this.furnitureForm={houseid:Num,furnitureid:''}
 
                var self=this;
+               // axios.post("/demo4/part/addHost",this.ruleForm)
+               //     .then(function (response) {
+               //         if (response.data==1){
+               //             self.loadData();
+               //         }else{
+               //             self.$message.error('错了哦，操作失败');
+               //         }
+               //     });
                // 写一个数组存入所有的家具编号
                var ids=[];
                $('input[name=\'checkbox\']:checked').each(function () {
