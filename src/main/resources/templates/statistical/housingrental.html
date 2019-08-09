@@ -65,6 +65,7 @@
     var myChart = echarts.init(document.getElementById('main'));
     var zcVal=[];
     var srVal=[];
+    var slVal=[];
     var currentYear=new Date().getFullYear();
 
     getData(currentYear,0);
@@ -82,11 +83,13 @@
                 var xData=[];
                 var yData1=[];
                 var yData2=[];
+                var yData3=[];
                 for (var i = 0; i < data.length; i++) {
                     var obj = data[i];
                     xData.push(obj.months);
                     yData1.push(obj.zc);
                     yData2.push(obj.sr);
+                    yData3.push(obj.sl);
                 }
 
                 // 指定图表的配置项和数据
@@ -99,7 +102,7 @@
                         trigger: 'axis'
                     },
                     legend: {
-                        data:['支出','收入']
+                        data:['支出','收入','房源数量']
                     },
                     toolbox: {
                         show : true,
@@ -143,6 +146,21 @@
                             name:'收入',
                             type:'bar',
                             data:yData2,
+                            markPoint : {
+                                data : [
+                                    {type:"max",name:"最大值"},
+                                    {type:"min",name:"最小值"}
+                                ]
+                            },
+                            markLine : {
+                                data : [
+                                    {type : 'average', name : '平均值'}
+                                ]
+                            }
+                        },{
+                            name:'房源数量',
+                            type:'bar',
+                            data:yData3,
                             markPoint : {
                                 data : [
                                     {type:"max",name:"最大值"},

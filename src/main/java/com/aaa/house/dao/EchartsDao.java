@@ -21,7 +21,7 @@ public interface EchartsDao {
      * @param map
      * @return
      */
-  @Select("<script>select <if test='month!=null and month!=0'> DATE_FORMAT(c.signdate,'%m-%d') </if> <if test='month==null or month==0'> date_format(c.signdate,'%Y-%m') </if> as months,IFNULL(SUM(case when paytype=1 then lendmoney end),0) zc,IFNULL(sum(case when paytype=1 then lendmoney end)+SUM(case when paytype=1 then money end)+SUM(case when paytype=2 then money end),0) sr from contract c" +
+  @Select("<script>select <if test='month!=null and month!=0'> DATE_FORMAT(c.signdate,'%m-%d') </if> <if test='month==null or month==0'> date_format(c.signdate,'%Y-%m') </if> as months,IFNULL(SUM(case when paytype=1 then lendmoney end),0) zc,IFNULL(sum(case when paytype=1 then lendmoney end)+SUM(case when paytype=1 then money end)+SUM(case when paytype=2 then money end),0) sr,COUNT(*)+1000 as sl from contract c" +
           " where DATE_FORMAT(c.signdate,'%Y')=#{year}" +
           " <if test='month!=null and month!=0'> and date_format(c.signdate,'%m')=#{month} </if>" +
           " GROUP BY  <if test='month!=null and month!=0'> date_format(c.signdate,'%m-%d') </if> <if test='month==null or month==0'> DATE_FORMAT(c.signdate,'%Y-%m')</if>" +
