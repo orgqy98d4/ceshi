@@ -1,6 +1,7 @@
 package com.aaa.house.service;
 
 import com.aaa.house.dao.HouseStateMapper;
+import com.aaa.house.entity.Customer;
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseContract;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,8 +182,8 @@ public class HouseStateServiceImpl implements HouseStateService {
     }
     //再根据房东编号，向用户表中查询出房东信息
     @Override
-    public Map queryHost(Integer landlord) {
-        return houseStateMapper.queryHost(landlord);
+    public Map queryHost(String cnumber) {
+        return houseStateMapper.queryHost(cnumber);
     }
     //根据租客姓名查询出租客的信息
     @Override
@@ -194,5 +195,43 @@ public class HouseStateServiceImpl implements HouseStateService {
     @Override
     public Integer queryState(Integer houseid) {
         return houseStateMapper.queryState(houseid);
+    }
+    /**
+     * 获取合同列表
+     * @param map
+     * @return
+     */
+    @Override
+    public List<Map> getAll(Map map) {
+        return houseStateMapper.getAll(map);
+    }
+
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    @Override
+    public int queryContractCont(Map map) {
+
+        return houseStateMapper.queryContractCont(map);
+    }
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    @Override
+    public int conDelete(Integer id) {
+        return houseStateMapper.conDelete(id);
+    }
+
+    //根据房东姓名查询是否存在该条信息
+    @Override
+    public Customer queryCustomer(String cnumber) {
+//        houseStateMapper.queryCustomer(cnumber);
+        return houseStateMapper.queryCustomer(cnumber);
     }
 }

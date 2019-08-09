@@ -11,7 +11,7 @@ public class House {
 
     private Integer houseid;//房屋编号
 
-    private Integer landlord;//房东编号
+    private String cnumber;//房东编号
 
     private String htitle;//房屋简述
 
@@ -134,12 +134,12 @@ public class House {
         this.houseid = houseid;
     }
 
-    public Integer getLandlord() {
-        return landlord;
+    public String getCnumber() {
+        return cnumber;
     }
 
-    public void setLandlord(Integer landlord) {
-        this.landlord = landlord;
+    public void setCnumber(String cnumber) {
+        this.cnumber = cnumber;
     }
 
     public String getHtitle() {
