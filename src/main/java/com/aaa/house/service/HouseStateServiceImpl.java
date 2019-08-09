@@ -187,8 +187,8 @@ public class HouseStateServiceImpl implements HouseStateService {
     }
     //根据租客姓名查询出租客的信息
     @Override
-    public Map queryRenter(String ename) {
-        return houseStateMapper.queryRenter(ename);
+    public Map queryRenter(String cnumber) {
+        return houseStateMapper.queryRenter(cnumber);
     }
 
     //根据房屋编号查询出房屋状态

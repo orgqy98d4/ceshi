@@ -128,6 +128,11 @@
                         <el-input  v-model="ruleForm.houseid" @blur="showHost"></el-input>
                     </el-form-item>
                 </el-col>
+                <el-col :span="6">
+                    <el-form-item label="租客编号" prop="cnumber">
+                        <el-input v-model="ruleForm.cnumber" @blur="showRenter"></el-input>
+                    </el-form-item>
+                </el-col>
             </el-row>
 
             <!--第二行-->
@@ -158,7 +163,7 @@
             <el-row :gutter="20">
                 <el-col :span="6">
                     <el-form-item label="租客姓名" prop="ename">
-                        <el-input v-model="ruleForm.ename" @blur="showRenter"></el-input>
+                        <el-input v-model="ruleForm.ename" ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -268,6 +273,8 @@
                 contractid:'',
                 houseid:'',
                 agentid:'',
+                cnumber:'',
+
                 hrent:'',//每月租金
                 hname:'',
                 hphone:'',
@@ -308,7 +315,10 @@
                 ],
                 eaddress: [
                     {required: true, message: '请输入租客地址', trigger: 'blur'}
-                ]
+                ],
+                cnumber:[
+                    {required: true, message: '请输入租客编号', trigger: 'blur'}
+                ],
             },
             pickerOptions:{
                 disabledDate:function(time) {
@@ -346,8 +356,12 @@
                 for (var i = 0; i < 8; i++) {
                     Num+=Math.floor(Math.random()*10);
                 }
+                axios.post('/demo4/getName')
+                    .then(function (response) {
+                        self.ruleForm.agentid=response.data.emp.enumber;
+                    });
                 this.ruleForm={
-                    contractid:Num, houseid:'', agentid:'',
+                    contractid:Num, houseid:'', agentid:self.ruleForm.agentid,cnumber:'',
                     hname:'', hphone:'', haddress:'', hid:'',
                     ename:'', ephone:'', eaddress:'', eid:'',
                     hmeter:'', hlocation:'', signdate:'', endate:'',
@@ -384,7 +398,7 @@
                 $.ajax({
                     url:'/demo4/part/queryRenter',
                     type:'post',
-                    data:{ename:self.ruleForm.ename},//,ephone:this.ruleForm.ephone
+                    data:{cnumber:self.ruleForm.cnumber},//,ephone:this.ruleForm.ephone|ename:self.ruleForm.ename
                     dataType:'json',
                     success:function (msg) {
                         self.ruleForm.ename=msg.cname;
