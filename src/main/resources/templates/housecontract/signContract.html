@@ -222,7 +222,7 @@
             <!--第五行-->
             <el-row :gutter="20">
                 <el-col :span="6">
-                    <el-form-item label="付款方式" prop="paytype">
+                    <el-form-item label="付款类型" prop="paytype">
                         <template>
                             <el-radio v-model="ruleForm.paytype" label="1">贷款</el-radio>
                             <el-radio v-model="ruleForm.paytype" label="2">自付</el-radio>
@@ -245,6 +245,11 @@
                 <el-col :span="6">
                     <el-form-item label="需付押金(元)" prop="foregift">
                         <el-input v-model="ruleForm.foregift" >1000</el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item label="贷款金额(元)" prop="foregift">
+                        <el-input v-model="ruleForm.lendmoney" @blur="checkLendmoney"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -293,7 +298,8 @@
 
                 paytype:'1',
                 money: '',
-                foregift: '1000'
+                foregift: '1000',
+                lendmoney:''
 
             },
             formLabelWidth: '120px',
@@ -409,6 +415,13 @@
                 });
 
             },
+            checkLendmoney:function(){//验证贷款金额合法
+                var self=this;
+                if (self.ruleForm.lendmoney>self.ruleForm.hrent||self.ruleForm.lendmoney<0){
+                    self.$message.error('贷款金额不合理，请重新输入！');
+                    self.ruleForm.lendmoney='';
+                }
+            },
             addContract:function () {//提交合同
                 var self=this;
                 axios.post("/demo4/part/addContract",this.ruleForm)
@@ -431,7 +444,11 @@
             showHrent:function () {//计算租金
                 var self=this;
                 var time= Math.floor((self.ruleForm.endate.getTime()-self.ruleForm.signdate.getTime())/(24*60*60*1000*30));
-                self.ruleForm.money=time*self.ruleForm.hrent;
+                if (time<1){
+                    self.ruleForm.money=self.ruleForm.hrent*1;
+                } else {
+                    self.ruleForm.money=time*self.ruleForm.hrent;
+                }
             }
 
         }
