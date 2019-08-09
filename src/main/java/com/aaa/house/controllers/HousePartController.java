@@ -233,10 +233,33 @@ public class HousePartController {
 
     //根据租客姓名查询出租客的信息
     @RequestMapping("/queryRenter")
-    public Object queryRenter(@RequestParam String ename){
+    public Object queryRenter(@RequestParam String ename,@RequestParam String ephone){
         System.out.println(ename+".........");
-        Map renterInfo=houseStateService.queryRenter(ename);
+        Map renterInfo=houseStateService.queryRenter(ename,ephone);
         return renterInfo;
+    }
+
+    /**
+     * 合同列表
+     * @param map
+     * @return
+     */
+    @RequestMapping("/page")
+    public Object getAll(@RequestBody Map map){
+        Map mapResult=new HashMap();
+        mapResult.put("conList",houseStateService.getAll(map));
+        mapResult.put("total",houseStateService.queryContractCont(map));
+        return mapResult;
+    }
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    @RequestMapping("/conDelete")
+    public Object conDelete(@RequestParam Integer id){
+        return houseStateService.conDelete(id);
     }
 
 }

@@ -290,7 +290,7 @@
     </select>
     <!--根据租客姓名查询出租客的信息-->
     <select id="queryRenter" parameterType="java.lang.String" resultType="map">
-        select cname,cphone,ccard,caddress eaddress from customer where cname=#{ename}
+        select cname,cphone,ccard,caddress eaddress from customer where cname=#{ename} and cphone=#{ephone}
     </select>
   <!--根据房屋编号，查询房屋状态，如果是已出租状态，就让其向页面传送一个错误-->
   <select id="queryState" parameterType="java.lang.Integer" resultType="java.lang.Integer">

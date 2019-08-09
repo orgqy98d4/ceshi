@@ -123,11 +123,31 @@ public interface HouseStateMapper {
     //再根据房东编号，向用户表中查询出房东信息
     Map queryHost(Integer landlord);
     //根据租客姓名查询出租客的信息
-    Map queryRenter(String ename);
+    Map queryRenter(String ename,String ephone);
     //根据房屋编号查询出房屋状态
     Integer queryState(Integer houseid);
 
-    //查询出客户表中所有的id
-    @Select("select id from customer")
-    Integer[] cusId();
+    /**
+     * 获取合同列表
+     * @param map
+     * @return
+     */
+    List<Map> getAll(Map map);
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    int queryContractCont(Map map);
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    @Update("update contract set paytype=5 where id=#{id}")
+    int conDelete(Integer id);
+
+
 }

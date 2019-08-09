@@ -186,8 +186,8 @@ public class HouseStateServiceImpl implements HouseStateService {
     }
     //根据租客姓名查询出租客的信息
     @Override
-    public Map queryRenter(String ename) {
-        return houseStateMapper.queryRenter(ename);
+    public Map queryRenter(String ename,String ephone) {
+        return houseStateMapper.queryRenter(ename,ephone);
     }
 
     //根据房屋编号查询出房屋状态
@@ -195,10 +195,35 @@ public class HouseStateServiceImpl implements HouseStateService {
     public Integer queryState(Integer houseid) {
         return houseStateMapper.queryState(houseid);
     }
-
-    //查询出客户表中所有的id
+    /**
+     * 获取合同列表
+     * @param map
+     * @return
+     */
     @Override
-    public Integer[] cusId() {
-        return houseStateMapper.cusId();
+    public List<Map> getAll(Map map) {
+        return houseStateMapper.getAll(map);
+    }
+
+
+    /**
+     * 查询出来总数量
+     * @param map
+     * @return
+     */
+    @Override
+    public int queryContractCont(Map map) {
+
+        return houseStateMapper.queryContractCont(map);
+    }
+
+    /**
+     * 删除合同
+     * @param id
+     * @return
+     */
+    @Override
+    public int conDelete(Integer id) {
+        return houseStateMapper.conDelete(id);
     }
 }
