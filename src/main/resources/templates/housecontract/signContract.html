@@ -284,7 +284,7 @@
                 signdate:'',
                 endate:'',
 
-                paytype:'2',
+                paytype:'1',
                 money: '',
                 foregift: '1000'
 
@@ -351,7 +351,7 @@
                     hname:'', hphone:'', haddress:'', hid:'',
                     ename:'', ephone:'', eaddress:'', eid:'',
                     hmeter:'', hlocation:'', signdate:'', endate:'',
-                    paytype:'2', money: '', foregift: ''
+                    paytype:'1', money: '', foregift: ''
                 }
             },
             // 根据房屋编号获取到房东id，根据房东id在用户表中查询出对应的信息
@@ -384,7 +384,7 @@
                 $.ajax({
                     url:'/demo4/part/queryRenter',
                     type:'post',
-                    data:{ename:this.ruleForm.ename,ephone:this.ruleForm.ephone},
+                    data:{ename:self.ruleForm.ename},//,ephone:this.ruleForm.ephone
                     dataType:'json',
                     success:function (msg) {
                         self.ruleForm.ename=msg.cname;

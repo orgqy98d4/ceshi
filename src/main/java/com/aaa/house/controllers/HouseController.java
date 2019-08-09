@@ -62,28 +62,28 @@ public class HouseController {
 //        }else{
 //            Map map=new HashMap();
 //            map.put("house",house);
-        int result=0;
-        houseService.insertSelective(house);//这一步向房屋表中存入数据，跟客户的数据操作应该不影响
-        Integer houseid = house.getHouseid();//这一步，获取房屋编号，应该也不影响
-        String cname = house.getCname();
+//        int result=0;
+       return houseService.insertSelective(house);//这一步向房屋表中存入数据，跟客户的数据操作应该不影响
+//        Integer houseid = house.getHouseid();//这一步，获取房屋编号，应该也不影响
+//        String cname = house.getCname();
         //判断如果一个房东想要发布第二套房屋，那么房屋表中的landlord要存进两个吗，理论上是不可以的
         //由于这边偷懒用的是id而不是编号，所以可能显得不是很唯一，应该判断一下房东编号是否存在
-        int cusId= houseStateService.getIdByCname(cname);
+//        int cusId= houseStateService.getIdByCname(cname);
         //从客户表中查出的该id，如果其结果大于0，说明该结果是正确存在的，前提保证该字段为主键自增，不可重复
 //        Integer[] cusIds = houseStateService.cusId();
 //        for (Integer id : cusIds) {
 //            if (id==cusId){
-            if (cusId > 0){ //如果
-                houseStateService.setHostId(cusId,houseid);//这是在客户表中已有该房源的房东信息时，才这样进行设置
-            }else{
-                result=houseStateService.addHost(house);
+//            if (cusId > 0){ //如果
+//                houseStateService.setHostId(cusId,houseid);//这是在客户表中已有该房源的房东信息时，才这样进行设置
+//            }else{
+//                result=houseStateService.addHost(house);
                 //根据房东查询出对应房东的id2
                 //客户表中不存在该用户，需要获取新加入的客户的id2，进而修改房屋表中的landlord
-                int id2 = houseStateService.getIdByCname(cname);
-                houseStateService.setHostId(id2,houseid);
+//                int id2 = houseStateService.getIdByCname(cname);
+//                houseStateService.setHostId(id2,houseid);
 //            }
-        }
-        return result;
+//        }
+//        return result;
 //        }
     }
     /**
@@ -196,6 +196,7 @@ public class HouseController {
      */
     @RequestMapping("houseDetail")
     public Map<String, Object> houseDetail(Integer id) {
+        System.out.println();
         return houseService.houseDetail(id);
     }
 

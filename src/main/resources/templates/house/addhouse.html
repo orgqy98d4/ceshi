@@ -227,10 +227,15 @@
         </el-form-item>
     </el-col>
     <el-col :span="6">
-        <el-form-item label="房东姓名" prop="cname">
-            <el-input v-model="ruleForm.cname"></el-input>
+        <el-form-item label="房东编号" prop="cnumber">
+            <el-input v-model="ruleForm.cnumber" @blur="showCustomer"></el-input>
         </el-form-item>
     </el-col>
+    <!--<el-col :span="6">-->
+        <!--<el-form-item label="房东姓名" prop="cname">-->
+            <!--<el-input v-model="ruleForm.cname" @blur="showCustomer"></el-input>-->
+        <!--</el-form-item>-->
+    <!--</el-col>-->
     <el-col :span="6">
         <el-form-item label="房东电话" prop="cphone">
             <el-input v-model="ruleForm.cphone"></el-input>
@@ -326,6 +331,7 @@
                // furnitures:[],
                headPic:'',
                headPicName:'',
+               cnumber:'',
                cname:'',
                cphone:''
            },
@@ -403,7 +409,7 @@
                }
                this.ruleForm={id:'', houseid:Num, htitle:'', hadr:'',state:'2',
                    hrent:'', headPic:'',headPicName:'', hfloor:'', harea:'', orientation:'',
-                   releasedate:'', hdesc:'',leaseWay:'',cname:'', cphone:'',agentid:''
+                   releasedate:'', hdesc:'',leaseWay:'',cnumber:'',cname:'', cphone:'',agentid:''
                };
                // 向房子家具中间表中存入的数据
                this.furnitureForm={houseid:Num,furnitureid:''};
@@ -414,6 +420,23 @@
                    checkbox[i].checked=false;
                }
            },
+           showCustomer:function(){//判断该房东信息是否存在
+               var self=this;
+               $.ajax({
+                   url:'/demo4/part/queryCustomer',
+                   type:'post',
+                   data:{cnumber:this.ruleForm.cnumber},//,ephone:this.ruleForm.ephone
+                   dataType:'json',
+                   success:function (msg) {
+                      self.ruleForm.cphone=msg.cphone;
+                       // self.ruleForm.ename=msg.cname;
+                       // self.ruleForm.ephone=msg.cphone;
+                       // self.ruleForm.eid=msg.ccard;
+                       // self.ruleForm.eaddress=msg.eaddress;
+                   }
+               });
+
+           },
            saveData:function () {
                var self=this;
                // 插入房屋信息，因为是异步请求，
@@ -422,7 +445,7 @@
                //解决方法：将插入房屋和同时修改landlord分别放在两个方法里
                axios.post("/demo4/house/save",this.ruleForm)
                    .then(function (response) {
-                       if (response.data >= 0){
+                       if (response.data == 1){
                            self.$message({
                                message: '恭喜你，操作成功',
                                type: 'success'

@@ -218,9 +218,9 @@ public class HousePartController {
             //先根据房屋编号得到房屋部分信息
             //再根据房东id向客户表中查询出房东信息，并返回
             Map map = houseStateService.queryLandlord(houseid);//map中存放的有landlord,hadr,harea
-            Integer landlord = (Integer) map.get("landlord"); //先取出房东编号
+            String cnumber = (String) map.get("cnumber"); //先取出房东编号
             Object o = map.get("hrent");
-            Map hostInfo = houseStateService.queryHost(landlord);//hostInfo中存放的有cname,cphone,ccard
+            Map hostInfo = houseStateService.queryHost(cnumber);//hostInfo中存放的有cname,cphone,ccard
             //这里取出再存进去是因为向页面传送的是一个map,这样数据集中起来，页面上容易取到
             hostInfo.put("hadr", map.get("hadr"));
             hostInfo.put("harea", map.get("harea"));
@@ -231,11 +231,11 @@ public class HousePartController {
         }
     }
 
-    //根据租客姓名查询出租客的信息
+    //根据租客姓名查询出租客的信息,@RequestParam String ephone||,ephone
     @RequestMapping("/queryRenter")
-    public Object queryRenter(@RequestParam String ename,@RequestParam String ephone){
+    public Object queryRenter(@RequestParam String ename){
         System.out.println(ename+".........");
-        Map renterInfo=houseStateService.queryRenter(ename,ephone);
+        Map renterInfo=houseStateService.queryRenter(ename);
         return renterInfo;
     }
 
@@ -260,6 +260,14 @@ public class HousePartController {
     @RequestMapping("/conDelete")
     public Object conDelete(@RequestParam Integer id){
         return houseStateService.conDelete(id);
+    }
+
+    //根据房东姓名查询是否存在该条信息
+    @RequestMapping("/queryCustomer")
+    public Object queryCustomer(@RequestParam String cnumber){
+        System.out.println(cnumber+".........");
+        return houseStateService.queryCustomer(cnumber);
+
     }
 
 }

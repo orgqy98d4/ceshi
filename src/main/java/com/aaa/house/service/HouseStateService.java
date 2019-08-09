@@ -1,5 +1,6 @@
 package com.aaa.house.service;
 
+import com.aaa.house.entity.Customer;
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseContract;
 
@@ -108,9 +109,9 @@ public interface HouseStateService {
     //根据房屋编号，向房屋表中查询出房东id
     Map queryLandlord(Integer houseid);
     //再根据房东编号，向用户表中查询出房东信息
-    Map queryHost(Integer landlord);
+    Map queryHost(String cnumber);
     //根据租客姓名查询出租客的信息
-    Map queryRenter(String ename,String ephone);
+    Map queryRenter(String ename);
     //根据房屋编号查询出房屋状态
     Integer queryState(Integer houseid);
 
@@ -136,5 +137,6 @@ public interface HouseStateService {
      */
     int conDelete(Integer id);
 
-
+    //根据房东姓名查询是否存在该条信息
+    Customer queryCustomer(String cnumber);
 }

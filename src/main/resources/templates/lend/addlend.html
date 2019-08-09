@@ -240,7 +240,7 @@
                     data:{contractid:this.form.contractid},
                     dataType:'json',
                     success:function (msg) {
-                        alert(msg[0].ename);
+                        // alert(msg[0].ename);
                         self.form.jdname=msg[0].ename;//借贷人姓名
                         self.form.jdmoney=msg[0].lendmoney;//借贷金额
                         // self.form.cdDate=msg[0].signdate;//借贷日期

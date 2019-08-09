@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.aaa.house.entity.House">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="houseid" jdbcType="INTEGER" property="houseid" />
-    <result column="landlord" jdbcType="INTEGER" property="landlord" />
+    <result column="cnumber" jdbcType="VARCHAR" property="cnumber" />
     <result column="htitle" jdbcType="VARCHAR" property="htitle" />
     <result column="hadr" jdbcType="VARCHAR" property="hadr" />
     <result column="hrent" jdbcType="INTEGER" property="hrent" />
@@ -24,14 +24,14 @@
 
   </resultMap>
   <sql id="Base_Column_List">
-    id, houseid, landlord, htitle, hadr, hrent, state, headPic,headPicName, hfloor, harea, orientation,
+    id, houseid, cnumber, htitle, hadr, hrent, state, headPic,headPicName, hfloor, harea, orientation,
     releasedate, hdesc, agentid, tenantid, cimg, examine
   </sql>
     <!--根据条件查询所有符合的房屋信息-->
     <select id="queryHouses" resultType="map" parameterType="map">
       select hhs.*,cu.cname from
       (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
-      hhs join customer cu on hhs.landlord=cu.id
+      hhs join customer cu on hhs.cnumber=cu.cnumber
         <where>
             <!--根据房屋小区、地址查询-->
             <if test="hrent!=null and hrent!=''">
@@ -64,7 +64,7 @@
     <!--计算房屋总数-->
     <select id="queryHouseCount" resultType="int">
       select count(*) from (select h.*, hs.name  from house h join house_state hs on h.state=hs.id)
-      hhs join customer cu on hhs.landlord=cu.id
+      hhs join customer cu on hhs.cnumber=cu.cnumber
       <where>
         <!--根据房屋小区、地址查询-->
         <if test="hrent!=null and hrent!=''">
@@ -84,13 +84,13 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.aaa.house.entity.House">
-    insert into house (id, houseid, landlord, 
+    insert into house (id, houseid, cnumber,
       htitle, hadr, hrent, 
       state, headPic,headPicName, hfloor,
       harea, orientation, releasedate, 
       hdesc, agentid, tenantid, 
       cimg, examine)
-    values (#{id,jdbcType=INTEGER}, #{houseid,jdbcType=INTEGER}, #{landlord,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{houseid,jdbcType=INTEGER}, #{cnumber,jdbcType=INTEGER},
       #{htitle,jdbcType=VARCHAR}, #{hadr,jdbcType=VARCHAR}, #{hrent,jdbcType=INTEGER}, 
       #{state,jdbcType=INTEGER}, #{headPic,jdbcType=VARCHAR}, #{headPicName,jdbcType=VARCHAR},#{hfloor,jdbcType=INTEGER},
       #{harea,jdbcType=VARCHAR}, #{orientation,jdbcType=VARCHAR}, #{releasedate,jdbcType=DATE}, 
@@ -106,8 +106,8 @@
       <if test="houseid != null">
         houseid,
       </if>
-      <if test="landlord != null">
-        landlord,
+      <if test="cnumber != null">
+        cnumber,
       </if>
       <if test="htitle != null">
         htitle,
@@ -165,8 +165,8 @@
       <if test="houseid != null">
         #{houseid,jdbcType=INTEGER},
       </if>
-      <if test="landlord != null">
-        #{landlord,jdbcType=INTEGER},
+      <if test="cnumber != null">
+        #{cnumber,jdbcType=VARCHAR},
       </if>
       <if test="htitle != null">
         #{htitle,jdbcType=VARCHAR},
@@ -278,7 +278,7 @@
   <update id="updateByPrimaryKey" parameterType="com.aaa.house.entity.House">
     update house
     set houseid = #{houseid,jdbcType=INTEGER},
-      landlord = #{landlord,jdbcType=INTEGER},
+      cnumber = #{cnumber,jdbcType=VARCHAR},
       htitle = #{htitle,jdbcType=VARCHAR},
       hadr = #{hadr,jdbcType=VARCHAR},
       hrent = #{hrent,jdbcType=INTEGER},

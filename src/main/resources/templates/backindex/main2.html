@@ -27,24 +27,41 @@
         }
 
         .el-carousel__item:nth-child(2n) {
-            background-image: url("http://localhost:8888/demo4/resources/images/houses/zufang3.jpg");
+            background-image: url("http://192.168.11.125:8888/demo4/resources/images/houses/zufang4.jpg");
             /*background-color: #99a9bf;*/
         }
 
         .el-carousel__item:nth-child(2n+1) {
-            background-image: url("http://localhost:8888/demo4/resources/images/houses/zufang1.jpg");
+            background-image: url("http://192.168.11.125:8888/demo4/resources/images/houses2/zufang1.jpg");
             /*background-color: #d3dce6;*/
         }
+        .el-calendar-table {
+            table-layout: fixed;
+            width: 100%;
+            width: 500px;
+            height: 500px;
+            background: pink;
+            position: fixed;
+            right: 0px;
+        }
+        #div2{
+            position: relative;
+            top:500px;
+            left:0px;
+        }
+        #clock{
+            positive:relative;
+            top:550px;
+            left:0px;
+        }
     </style>
+    <link rel="stylesheet" href="/demo4/css/demo1.css">
 </head>
 <body>
     <div id="app">
-        <template>
-            <div>
-                <span>为了无法计算的价值，选择更加舒适的生活</span>
-                <el-divider content-position="right">在这里租房</el-divider>
-            </div>
-        </template>
+        <!--<template>-->
+            <!---->
+        <!--</template>-->
         <!--卡片式图片轮播-->
         <template>
             <el-carousel :interval="4000" type="card" height="200px">
@@ -52,7 +69,14 @@
                     <h3 class="medium">{{ item }}</h3>
                 </el-carousel-item>
             </el-carousel>
+            <div id="div2">
+                <span>为了无法计算的价值，选择更加舒适的生活</span>
+                <el-divider content-position="right">在这里租房</el-divider>
+            </div>
         </template>
+
+        <div id="clock"></div>
+        <script src="/demo4/js/demo.js"></script>
 
         <el-calendar v-model="value"></el-calendar>
     </div>

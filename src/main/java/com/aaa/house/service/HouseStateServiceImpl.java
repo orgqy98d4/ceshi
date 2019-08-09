@@ -1,6 +1,7 @@
 package com.aaa.house.service;
 
 import com.aaa.house.dao.HouseStateMapper;
+import com.aaa.house.entity.Customer;
 import com.aaa.house.entity.House;
 import com.aaa.house.entity.HouseContract;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,13 +182,13 @@ public class HouseStateServiceImpl implements HouseStateService {
     }
     //再根据房东编号，向用户表中查询出房东信息
     @Override
-    public Map queryHost(Integer landlord) {
-        return houseStateMapper.queryHost(landlord);
+    public Map queryHost(String cnumber) {
+        return houseStateMapper.queryHost(cnumber);
     }
     //根据租客姓名查询出租客的信息
     @Override
-    public Map queryRenter(String ename,String ephone) {
-        return houseStateMapper.queryRenter(ename,ephone);
+    public Map queryRenter(String ename) {
+        return houseStateMapper.queryRenter(ename);
     }
 
     //根据房屋编号查询出房屋状态
@@ -225,5 +226,12 @@ public class HouseStateServiceImpl implements HouseStateService {
     @Override
     public int conDelete(Integer id) {
         return houseStateMapper.conDelete(id);
+    }
+
+    //根据房东姓名查询是否存在该条信息
+    @Override
+    public Customer queryCustomer(String cnumber) {
+//        houseStateMapper.queryCustomer(cnumber);
+        return houseStateMapper.queryCustomer(cnumber);
     }
 }
