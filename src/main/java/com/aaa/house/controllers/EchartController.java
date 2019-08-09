@@ -24,16 +24,16 @@ import java.util.Map;
 public class EchartController {
 
 
-    /*@Autowired
-    private EchartsService echartsService;*/
+    @Autowired
+    private EchartsService echartsService;
     /**
      * 返回展示数据
      * @return
      */
     @RequestMapping("getDataA")
     public Object getEchartDataA(@RequestParam Map mapParam){
-       // return  echartsService.getDataA(mapParam);
-        List<Map> mapList = new ArrayList<>();
+        return  echartsService.getDataA(mapParam);
+       /* List<Map> mapList = new ArrayList<>();
         //[4300, 10000, 28000, 35000, 50000, 19000]
         //[5000, 14000, 28000, 31000, 42000, 21000],
         Map map =new HashMap();
@@ -65,7 +65,7 @@ public class EchartController {
         map5.put("hk",19000);
         map5.put("fk",21000);
         mapList.add(map5);
-        return mapList;
+        return mapList;*/
     }
 
 }
