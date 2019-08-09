@@ -190,7 +190,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public Page myPostedHouse() {
-        Integer cid = CusUtil.getCusFromSession().getId();
+        /*Integer cid = CusUtil.getCusFromSession().getId();
         List<House> list = houseMapper.myPostedHouse(cid);
         for (House h : list) {
             Integer hid = h.getHouseid();
@@ -198,7 +198,17 @@ public class HouseServiceImpl implements HouseService {
             h.setInstallation(houseInstallation);
         }
         int count = houseMapper.myPostedHouseCount(cid);
+        return new Page(list,count);*/
+        String cnumber = CusUtil.getCusFromSession().getCnumber();
+        List<House> list = houseMapper.myPostedHouse(cnumber);
+        for (House h : list) {
+            Integer hid = h.getHouseid();
+            List<String> houseInstallation = houseMapper.houseInstallation(hid);
+            h.setInstallation(houseInstallation);
+        }
+        int count = houseMapper.myPostedHouseCount(cnumber);
         return new Page(list,count);
+
     }
 
 
